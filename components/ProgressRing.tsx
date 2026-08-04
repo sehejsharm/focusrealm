@@ -1,0 +1,66 @@
+interface Props {
+  /** 0–100. */
+  percent: number;
+  size?: number;
+  stroke?: number;
+  label?: string;
+  sublabel?: string;
+  className?: string;
+}
+
+/** Circular progress used for the live task and the five-star score. */
+export default function ProgressRing({
+  percent,
+  size = 96,
+  stroke = 9,
+  label,
+  sublabel,
+  className = "text-emerald-500",
+}: Props) {
+  const clamped = Math.max(0, Math.min(100, percent));
+  const radius = (size - stroke) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference * (1 - clamped / 100);
+
+  return (
+    <div
+      className="relative shrink-0"
+      style={{ width: size, height: size }}
+      role="img"
+      aria-label={`${Math.round(clamped)} percent${label ? ` — ${label}` : ""}`}
+    >
+      <svg width={size} height={size} className="-rotate-90" aria-hidden>
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          strokeWidth={stroke}
+          className="stroke-stone-200"
+        />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="none"
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          className={`${className} stroke-current transition-[stroke-dashoffset] duration-500`}
+        />
+      </svg>
+      <span className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="font-mono text-xl leading-none font-black text-stone-900">
+          {Math.round(clamped)}
+          <span className="text-xs">%</span>
+        </span>
+        {sublabel && (
+          <span className="mt-0.5 text-[10px] leading-none font-bold text-stone-400 uppercase">
+            {sublabel}
+          </span>
+        )}
+      </span>
+    </div>
+  );
+}

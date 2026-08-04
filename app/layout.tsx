@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import AppShell from "@/components/AppShell";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,13 +14,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Focus Realm · Staff",
+  title: "Mise · Staff",
   description:
-    "Your assigned SOPs and tasks. Review, complete, and the read receipt is filed automatically.",
+    "Your shift, the standards behind it, and the record it builds — for hotel floor teams.",
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0f172a",
+  themeColor: "#1c1917",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -35,7 +36,9 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <AppShell>{children}</AppShell>
+      </body>
     </html>
   );
 }
