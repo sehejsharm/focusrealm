@@ -1,128 +1,87 @@
-# Mise · Staff role
+# Focus Realm
 
-Mobile-first, responsive UI for the **Staff** role of Mise, a hotel-operations
-app for floor teams. Built around one persona working one shift: Maya Fernando,
-Room Attendant, Housekeeping, Aurora Grand Colombo, Sunday 07:00–15:30.
+A mobile-first SOP execution app for the deskless hospitality workforce —
+housekeeping, F&B, and maintenance staff working on the floor, plus the
+managers and authors who support them. Built around **strategic
+minimalism**: this is not a course catalog or an LMS, it's a single-task
+tool that asks nothing of the person holding the phone.
 
-## Information architecture
+The prototype is constrained to a phone-width frame (`max-w-md`) at every
+breakpoint, since every screen here is designed for a device in one hand.
 
-Five primary sections, plus screens reached from inside those flows.
+## Three isolated portals
 
-| Section | Route | What it holds |
-|---|---|---|
-| **Today** | `/` | Greeting, next timed task with a live progress ring and countdown, shift-rhythm timeline, supervisor presence and chat |
-| **My shift** | `/shift` | Live task card, shift at a glance, the full chronological duty plan, supervisor note, handover link |
-| **SOPs** | `/library` | Searchable standards library, filtered by job role or hashtag |
-| **Courses** | `/courses` | Operating briefs — PDF, video and deck per brief, with an inline readiness check |
-| **Service record** | `/progress` | Five-star ready score, live four-phase breakdown, supervisor comments, verified credentials |
+A bottom navigation bar switches between three self-contained portals —
+they don't share data or state.
 
-The Courses section carries its own sub-navigation:
+### Staff — `/staff`
 
-| | Route | |
-|---|---|---|
-| **Paths** | `/paths` | Locked, sequential curriculum unlocked step by step by supervisor sign-off |
-| **Forums** | `/forums` | Per-SOP Q&A between staff and supervisors |
-| **Feedback** | `/feedback` | Rate a brief and route a suggestion back to its author |
-| **Notifications** | `/notifications` | Assignments, supervisor feedback and reminders across in-platform, email and WhatsApp |
+- **Home** — the One-Task Dashboard. One massive card, the priority task
+  for the shift, nothing else. When the queue is empty: "You're all caught
+  up!"
+- **Directory** — `/staff/directory`, a 2×2 "ATM grid" of color-coded
+  category tiles (Rooms, Food, Maintenance, Guest Service) for browsing
+  without a search bar, plus a floating microphone button for voice search.
+- **Execution loop** — `/staff/sop/[id]`: tap the task → checklist with a
+  video placeholder → one Yes/No verification question → **swipe right to
+  complete** (a phone-call-style slider, not a checkbox) → success state →
+  back to Home.
 
-Two staff flows sit outside the main navigation:
+### Manager — `/manager`
 
-- **Shift handover** (`/handover`) — unfinished work, guest promises and blocked
-  rooms, gated behind a pre-send checklist.
-- **Service recovery** (`/service-recovery`) — the guided Listen → Acknowledge →
-  Resolve → Follow up workflow, with the staff member's spend authorisation
-  limit and a shared incident timeline.
+Exception-based auditing. Apple-style progress rings show overall shift
+compliance at the top; below, a roster that shows *only* the staff who are
+non-compliant — nothing else. Each row has a one-tap WhatsApp-style nudge
+button that fires a toast ("Automated reminder sent to [Name]."). If there
+are no exceptions, the screen shows a success graphic and "All systems
+optimal. No exceptions."
 
-## The SOP / task engine
+### Author — `/author`
 
-Every standard (for example `HSK-101` Guest Room Reset & Release) carries a
-target time, a fixed set of steps, and four phases: **Prepare, Perform, Verify,
-Release**.
+The Studio: a linear 1-2-3 wizard that can't be overcomplicated.
 
-- `/sop/[id]` reviews the standard — every phase, why-it-matters callouts, demo
-  clips, photo-evidence markers, and the questions others asked about it.
-- `/sop/[id]/practice` is the live task runner: countdown against the target
-  time, phase-by-phase checklist with running progress, demo clips inline,
-  photo capture (`accept="image/*" capture="environment"`), and a line to the
-  on-shift supervisor.
+1. **Upload Media** — a large drag/tap-to-upload zone (video or PDF).
+2. **Details** — Title and Brief Instructions.
+3. **Deploy** — `[Select Department]` / `[Select Shift or Location]`
+   dropdowns (never a name picker), with a live "This SOP will be deployed
+   to N matching staff members" readout, and a full-width **Publish &
+   Deploy** button that opens a confirmation modal.
 
-A step marked for photo evidence **cannot be ticked until the photo is
-captured** — quality proof is a gate, not a suggestion.
+## Stack
 
-## Role switching
-
-The sidebar's top-left control is the Staff/Manager/Author switch. Only the
-Staff role is built here; the other two are listed and visibly locked rather
-than hidden, so the control reads honestly.
-
-## Responsive behaviour
-
-| Breakpoint | Layout | Navigation |
-|---|---|---|
-| Mobile (< 640 px) | 1-column card stack | Fixed bottom bar, condensed top identity header |
-| Tablet (640–1024 px) | 2-column grid | Fixed bottom bar |
-| Desktop (> 1024 px) | 3-column grid, `max-w-6xl` content | Persistent left sidebar |
-
-Every interactive element is at least **56 × 56 px**, verified in-browser at all
-three breakpoints. No page scrolls horizontally; the filter rails and Courses
-sub-nav scroll inside their own containers.
-
-## Status colours
-
-| Colour | Class | Meaning |
-|---|---|---|
-| 🔴 Red | `bg-rose-500` | Due next |
-| 🟡 Amber | `bg-amber-500` | In progress |
-| 🟢 Green | `bg-emerald-500` | Released / verified |
-| 🔵 Blue | `bg-sky-500` | Scheduled |
-
-## Getting started
+Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · lucide-react.
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open <http://localhost:3000>. There is no login — the app opens on Today, and
-the persona is selected by the role switcher, matching the real product.
+Open <http://localhost:3000> — it redirects straight to the Staff portal.
 
 ## Structure
 
 ```
 app/
-  page.tsx                    Today
-  shift/page.tsx              My shift
-  library/page.tsx            SOPs
-  sop/[id]/page.tsx           Standard detail
-  sop/[id]/practice/page.tsx  Live task runner
-  courses/page.tsx            Operating briefs + readiness checks
-  paths/ forums/ feedback/ notifications/
-  progress/page.tsx           Service record
-  handover/ service-recovery/
+  page.tsx                    Redirects to /staff
+  staff/page.tsx               Home — the One-Task Dashboard
+  staff/directory/page.tsx     ATM grid + voice search FAB
+  staff/sop/[id]/page.tsx      Checklist → verify → swipe to complete
+  manager/page.tsx             Exception-based compliance dashboard
+  author/page.tsx              Linear SOP builder
 components/
-  AppShell.tsx        Sidebar, mobile header, bottom bar
-  RoleSwitcher.tsx    Staff / Manager / Author
-  ShiftTaskCard.tsx   One timed room task
-  ProgressRing.tsx    Live progress and score rings
-  Countdown.tsx       Ticking clock against a target time
-  ReadinessCheck.tsx  Inline multiple-choice check
-  FlagChips.tsx       VIP, family arrival, do-not-enter, …
-  SubNav.tsx  PageHeader.tsx
+  BottomNav.tsx        Staff / Manager / Author switcher
+  StaffTabs.tsx         Home / Directory switch inside the Staff portal
+  SwipeToComplete.tsx   The swipe-to-complete slider
 lib/
-  types.ts  data.ts  store.tsx  nav.ts  ui.ts
+  types.ts  data.ts  store.tsx  ui.ts
 ```
 
 ## Notes
 
-- **No backend.** Checklist ticks, photo captures, readiness passes, read
-  notifications, handover and recovery state persist to `localStorage` through
-  `useSyncExternalStore`, so server and client renders agree. Replacing
-  `lib/store.tsx` with a real API is the only change needed.
-- **Countdowns start on mount**, seeded from a fixed value, so the first paint
-  is deterministic and hydration never mismatches.
-- **Light theme only**, deliberately: this is used on the floor in daylight.
-
-## Stack
-
-Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · lucide-react.
-Vercel-standard layout; `npm run build` and `npm run lint` are clean.
+- **No backend.** Staff task completion persists to `localStorage` via
+  `useSyncExternalStore` (`lib/store.tsx`) so it survives a refresh; a
+  "Reset demo tasks" link appears once something's been completed, purely
+  for re-running the prototype. Manager and Author state is in-memory only,
+  since they're demo dashboards with no shared source of truth here.
+- **Portals are isolated by design** — matching the brief, none of the
+  three reads another's state.
