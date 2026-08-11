@@ -1,128 +1,131 @@
-# Mise · Staff role
+# Focus Realm Hospitality — marketing site
 
-Mobile-first, responsive UI for the **Staff** role of Mise, a hotel-operations
-app for floor teams. Built around one persona working one shift: Maya Fernando,
-Room Attendant, Housekeeping, Aurora Grand Colombo, Sunday 07:00–15:30.
+The public site for **Focus Realm Hospitality**, the service execution platform
+for hotel operations. Tagline: _Every shift, five-star._
 
-## Information architecture
+This repository contains the marketing site only. The product prototype lives
+separately at <https://fr2-b6s.pages.dev/>.
 
-Five primary sections, plus screens reached from inside those flows.
+## Positioning discipline
 
-| Section | Route | What it holds |
-|---|---|---|
-| **Today** | `/` | Greeting, next timed task with a live progress ring and countdown, shift-rhythm timeline, supervisor presence and chat |
-| **My shift** | `/shift` | Live task card, shift at a glance, the full chronological duty plan, supervisor note, handover link |
-| **SOPs** | `/library` | Searchable standards library, filtered by job role or hashtag |
-| **Courses** | `/courses` | Operating briefs — PDF, video and deck per brief, with an inline readiness check |
-| **Service record** | `/progress` | Five-star ready score, live four-phase breakdown, supervisor comments, verified credentials |
+This is **not** an LMS and not a training platform. The category is
+**Service Execution Platform** — "the operating system for hotel service
+standards".
 
-The Courses section carries its own sub-navigation:
+| Use | Avoid |
+|---|---|
+| standards, operating briefs, timed tasks, evidence, service record, readiness | course, module, learner, training platform, LMS |
 
-| | Route | |
-|---|---|---|
-| **Paths** | `/paths` | Locked, sequential curriculum unlocked step by step by supervisor sign-off |
-| **Forums** | `/forums` | Per-SOP Q&A between staff and supervisors |
-| **Feedback** | `/feedback` | Rate a brief and route a suggestion back to its author |
-| **Notifications** | `/notifications` | Assignments, supervisor feedback and reminders across in-platform, email and WhatsApp |
+`Courses` / `Modules` are acceptable as in-product screen labels only, never at
+the category or positioning level. Any copy change that reintroduces LMS
+language is a regression — the wording lives in `lib/content.ts` and
+`lib/site.ts`, so it is reviewable in one place.
 
-Two staff flows sit outside the main navigation:
+## Routes
 
-- **Shift handover** (`/handover`) — unfinished work, guest promises and blocked
-  rooms, gated behind a pre-send checklist.
-- **Service recovery** (`/service-recovery`) — the guided Listen → Acknowledge →
-  Resolve → Follow up workflow, with the staff member's spend authorisation
-  limit and a shared incident timeline.
+| Route | Purpose |
+|---|---|
+| `/` | The mechanism, three interfaces, six pains, positioning, demo property, buyers, team, FAQ |
+| `/platform` | Deep dive on Staff, Manager and Author interfaces with every product screen |
+| `/problems` | The six pains in full — Status Quo → Impact Chain → The Wound → The Answer |
+| `/about` | The thesis, why this is not an LMS, the four build principles |
+| `/team` | Founding team |
+| `/team/[slug]` | Individual profiles — `sehej-sharma`, `ali-electricwala`, `aditya-mishra` |
+| `/demo` | Book a walkthrough (form) |
+| `/contact` | Contact the founders (form) |
 
-## The SOP / task engine
+Generated automatically: `/sitemap.xml`, `/robots.txt`, `/manifest.webmanifest`,
+`/icon`, `/apple-icon`, `/opengraph-image`, and a per-person OG card at
+`/team/[slug]/opengraph-image`.
 
-Every standard (for example `HSK-101` Guest Room Reset & Release) carries a
-target time, a fixed set of steps, and four phases: **Prepare, Perform, Verify,
-Release**.
+## Set this before launch
 
-- `/sop/[id]` reviews the standard — every phase, why-it-matters callouts, demo
-  clips, photo-evidence markers, and the questions others asked about it.
-- `/sop/[id]/practice` is the live task runner: countdown against the target
-  time, phase-by-phase checklist with running progress, demo clips inline,
-  photo capture (`accept="image/*" capture="environment"`), and a line to the
-  on-shift supervisor.
+**`NEXT_PUBLIC_SITE_URL`** — the production origin, e.g.
+`https://www.focusrealm.com`. Every canonical tag, sitemap URL, Open Graph URL
+and JSON-LD `@id` derives from it (`lib/site.ts`). Without it the site falls
+back to `https://www.focusrealm.com`, and on Vercel it will use
+`VERCEL_PROJECT_PRODUCTION_URL` if that is set.
 
-A step marked for photo evidence **cannot be ticked until the photo is
-captured** — quality proof is a gate, not a suggestion.
+Add it in Vercel → Project → Settings → Environment Variables, for Production
+and Preview.
 
-## Role switching
+## SEO
 
-The sidebar's top-left control is the Staff/Manager/Author switch. Only the
-Staff role is built here; the other two are listed and visibly locked rather
-than hidden, so the control reads honestly.
+On-page:
 
-## Responsive behaviour
+- Unique `title` + `description` + self-referencing canonical on every route.
+- `title.template` in the root layout so every page reads `Page · Focus Realm Hospitality`.
+- Keyword sets per route targeting `service execution platform`,
+  `SOP management system for hotels`, `hotel SOP software`,
+  `SOP development system`, plus founder-name queries.
+- Semantic heading order, one `h1` per page, descriptive `alt` text on all
+  product screenshots, breadcrumb navigation on inner pages.
+- Every reveal animation degrades to visible content — a `<noscript>` style
+  block in the root layout unhides everything if JS fails, so crawlers and
+  no-JS clients always get the copy.
 
-| Breakpoint | Layout | Navigation |
-|---|---|---|
-| Mobile (< 640 px) | 1-column card stack | Fixed bottom bar, condensed top identity header |
-| Tablet (640–1024 px) | 2-column grid | Fixed bottom bar |
-| Desktop (> 1024 px) | 3-column grid, `max-w-6xl` content | Persistent left sidebar |
+Structured data (`lib/seo.ts`), emitted as one `@graph` per page:
 
-Every interactive element is at least **56 × 56 px**, verified in-browser at all
-three breakpoints. No page scrolls horizontally; the filter rails and Courses
-sub-nav scroll inside their own containers.
+- `Organization` + `WebSite` + `SoftwareApplication` site-wide, with
+  `founder` / `employee` edges pointing at the person nodes.
+- `Person` on each `/team/[slug]`, wrapped in `ProfilePage`, with `worksFor`
+  back-referencing the organisation. This is what earns a
+  "X is the Co-Founder & CEO of Focus Realm Hospitality" style answer.
+- `FAQPage` on the home page, `ItemList` for the six pains on `/problems`,
+  `ContactPage` + `ContactPoint` on `/contact`, `BreadcrumbList` on inner pages.
 
-## Status colours
+Off-page work the site cannot do for itself — do these after the domain is live:
 
-| Colour | Class | Meaning |
-|---|---|---|
-| 🔴 Red | `bg-rose-500` | Due next |
-| 🟡 Amber | `bg-amber-500` | In progress |
-| 🟢 Green | `bg-emerald-500` | Released / verified |
-| 🔵 Blue | `bg-sky-500` | Scheduled |
+1. Verify the property in Google Search Console and Bing Webmaster Tools, then
+   submit `/sitemap.xml`. Add the verification token to `metadata.verification`
+   in `app/layout.tsx`.
+2. Claim the Google Business Profile and the LinkedIn company page, then add
+   every profile URL to `site.sameAs` in `lib/site.ts` — `sameAs` is how the
+   entity graph gets corroborated.
+3. Add each founder's LinkedIn to their `Person` node the same way.
+4. Point the domain at Vercel with `www` → apex (or the reverse) as a permanent
+   redirect so link equity lands on one hostname.
 
-## Getting started
+## Design system
+
+Dark base, brand blues taken from the FR mark. Tokens live in `app/globals.css`
+under `@theme`; nothing hardcodes a hex outside that file except two intentional
+uses of `#ff9b9b` for "the wound" copy.
+
+Motion is CSS-driven with `IntersectionObserver` triggers and one
+`requestAnimationFrame` scroll-progress hook — no animation library. Every
+animation is disabled under `prefers-reduced-motion: reduce`.
+
+```
+app/                  routes + metadata files
+components/fx/        Reveal, Aurora, SpotlightCard, CountUp, scroll hooks
+components/home/      Hero, Mechanism, RoleShowcase, PainSnowball, NotAnLms, …
+components/site/      Header, Footer, Logo
+components/ui/        Button, Section, DeviceFrame, PageHero
+components/forms/     LeadForm + field primitives
+lib/site.ts           URLs, brand strings, navigation
+lib/content.ts        pains, roles, screens, team, personas, FAQs
+lib/seo.ts            metadata helper + JSON-LD builders
+assets/platform/      product screenshots (statically imported by next/image)
+```
+
+## Forms
+
+`/demo` and `/contact` validate in the browser and hand off to the visitor's
+mail client with a structured body — there is no backend yet. To wire a real
+inbox, replace the `handoff` block in `components/forms/LeadForm.tsx` with a
+`POST` to a route handler; the field specs already describe the payload.
+
+## Local development
 
 ```bash
 npm install
-npm run dev
+npm run dev     # http://localhost:3000
+npm run build
+npm run lint
 ```
-
-Open <http://localhost:3000>. There is no login — the app opens on Today, and
-the persona is selected by the role switcher, matching the real product.
-
-## Structure
-
-```
-app/
-  page.tsx                    Today
-  shift/page.tsx              My shift
-  library/page.tsx            SOPs
-  sop/[id]/page.tsx           Standard detail
-  sop/[id]/practice/page.tsx  Live task runner
-  courses/page.tsx            Operating briefs + readiness checks
-  paths/ forums/ feedback/ notifications/
-  progress/page.tsx           Service record
-  handover/ service-recovery/
-components/
-  AppShell.tsx        Sidebar, mobile header, bottom bar
-  RoleSwitcher.tsx    Staff / Manager / Author
-  ShiftTaskCard.tsx   One timed room task
-  ProgressRing.tsx    Live progress and score rings
-  Countdown.tsx       Ticking clock against a target time
-  ReadinessCheck.tsx  Inline multiple-choice check
-  FlagChips.tsx       VIP, family arrival, do-not-enter, …
-  SubNav.tsx  PageHeader.tsx
-lib/
-  types.ts  data.ts  store.tsx  nav.ts  ui.ts
-```
-
-## Notes
-
-- **No backend.** Checklist ticks, photo captures, readiness passes, read
-  notifications, handover and recovery state persist to `localStorage` through
-  `useSyncExternalStore`, so server and client renders agree. Replacing
-  `lib/store.tsx` with a real API is the only change needed.
-- **Countdowns start on mount**, seeded from a fixed value, so the first paint
-  is deterministic and hydration never mismatches.
-- **Light theme only**, deliberately: this is used on the floor in daylight.
 
 ## Stack
 
-Next.js 16 (App Router) · TypeScript · Tailwind CSS v4 · lucide-react.
-Vercel-standard layout; `npm run build` and `npm run lint` are clean.
+Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind CSS v4.
+All 21 routes prerender statically — no server runtime needed to host it.

@@ -1,0 +1,163 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+
+import Reveal from "@/components/fx/Reveal";
+import SpotlightCard from "@/components/fx/SpotlightCard";
+import { ArrowRight, ButtonLink } from "@/components/ui/Button";
+import PageHero from "@/components/ui/PageHero";
+import { Container, Rule, SectionHeading } from "@/components/ui/Section";
+import { personas, team } from "@/lib/content";
+import { breadcrumbSchema, jsonLdGraph, personSchema, webPageSchema } from "@/lib/seo";
+import { site } from "@/lib/site";
+
+const title = "Team — the founders of Focus Realm Hospitality";
+const description =
+  "Focus Realm Hospitality was founded by Sehej Sharma (Co-Founder & CEO) and Ali Electricwala (Co-Founder & COO), with Aditya Mishra as Chief Technology Officer. Meet the team building the service execution platform for hotel operations.";
+
+export const metadata: Metadata = {
+  title,
+  description,
+  keywords: [
+    "Focus Realm team",
+    "Sehej Sharma",
+    "Sehej Sharma Focus Realm",
+    "Ali Electricwala",
+    "Aditya Mishra",
+    "Focus Realm Hospitality founders",
+    "Focus Realm CEO",
+  ],
+  alternates: { canonical: "/team" },
+  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/team", type: "website" },
+};
+
+export default function TeamPage() {
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLdGraph(
+            webPageSchema({ path: "/team", name: title, description }),
+            breadcrumbSchema([{ name: "Team", path: "/team" }]),
+            ...team.map((person) => personSchema(person.slug)),
+          ),
+        }}
+      />
+
+      <PageHero
+        eyebrow="Founding team"
+        breadcrumb={[{ label: "Team" }]}
+        titleLines={[
+          <>Three people.</>,
+          <>
+            One <span className="text-gradient">discipline.</span>
+          </>,
+        ]}
+        lede="Focus Realm Hospitality is built by a founding team that has spent its time in the same argument: what can we remove and still have the standard execute? Everything on this platform survived that question."
+      />
+
+      {/* Profiles */}
+      <section className="relative pb-8">
+        <Container>
+          <div className="space-y-5">
+            {team.map((person, index) => (
+              <Reveal key={person.slug} delay={index * 80}>
+                <SpotlightCard as="article" className="panel group overflow-hidden">
+                  <Link
+                    href={`/team/${person.slug}`}
+                    className="grid gap-8 p-8 sm:p-10 lg:grid-cols-[0.34fr_0.66fr] lg:items-start"
+                  >
+                    <div>
+                      <span className="flex size-20 items-center justify-center rounded-3xl border border-brand-bright/25 bg-linear-to-br from-brand/30 to-brand-deep/20 font-mono text-[1.3rem] text-white">
+                        {person.initials}
+                      </span>
+                      <h2 className="mt-6 text-[clamp(1.5rem,3vw,2.1rem)] leading-tight font-semibold text-white">
+                        {person.name}
+                      </h2>
+                      <p className="mt-2.5 font-mono text-[0.62rem] tracking-[0.14em] text-brand-ice uppercase">
+                        {person.role}
+                      </p>
+                      <span className="mt-6 inline-flex items-center gap-2 text-[0.85rem] text-brand-cyan transition-all duration-500 group-hover:gap-3">
+                        Read full profile
+                        <ArrowRight className="size-3.5" />
+                      </span>
+                    </div>
+
+                    <div>
+                      <p className="border-l-2 border-brand/40 pl-5 text-[clamp(1.05rem,2vw,1.3rem)] leading-snug font-medium text-white">
+                        &ldquo;{person.quote}&rdquo;
+                      </p>
+                      <p className="mt-6 text-[0.95rem] leading-relaxed text-muted">{person.bio[0]}</p>
+                      <ul className="mt-6 flex flex-wrap gap-2">
+                        {person.focus.map((focus) => (
+                          <li
+                            key={focus}
+                            className="rounded-full border border-line bg-white/[0.02] px-3 py-1.5 text-[0.72rem] text-faint"
+                          >
+                            {focus}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </Link>
+                </SpotlightCard>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <Rule className="mt-16" />
+
+      {/* Demo personas — the other five names in every Focus Realm conversation */}
+      <section className="relative overflow-hidden py-24 sm:py-28">
+        <Container>
+          <SectionHeading
+            eyebrow="The other five names"
+            title="And the people we"
+            accent="build for."
+            body="Our demo environment carries five fixed personas. They are fictional, and they are the people whose shift the product is actually designed around."
+          />
+
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {personas.map((persona, index) => (
+              <Reveal key={persona.name} delay={index * 70}>
+                <div className="panel flex items-center gap-4 p-5">
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand/18 font-mono text-[0.75rem] text-brand-ice">
+                    {persona.initials}
+                  </span>
+                  <div>
+                    <p className="text-[0.92rem] font-medium text-white">{persona.name}</p>
+                    <p className="mt-0.5 text-[0.78rem] text-faint">
+                      {persona.role} · {persona.role_interface} interface
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal delay={200} className="mt-14">
+            <div className="panel flex flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center">
+              <div>
+                <p className="text-[1.2rem] font-semibold text-white">Talk to the founding team directly.</p>
+                <p className="mt-2 text-[0.92rem] text-muted">
+                  Early conversations go straight to the people building it.
+                </p>
+              </div>
+              <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+                <ButtonLink href="/demo">
+                  Book a demo
+                  <ArrowRight />
+                </ButtonLink>
+                <ButtonLink href="/contact" variant="outline">
+                  Contact us
+                </ButtonLink>
+              </div>
+            </div>
+          </Reveal>
+        </Container>
+      </section>
+    </>
+  );
+}
