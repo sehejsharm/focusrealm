@@ -4,15 +4,16 @@ import Link from "next/link";
 import Reveal from "@/components/fx/Reveal";
 import SpotlightCard from "@/components/fx/SpotlightCard";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
+import Avatar from "@/components/ui/Avatar";
 import PageHero from "@/components/ui/PageHero";
 import { Container, Rule, SectionHeading } from "@/components/ui/Section";
 import { personas, team } from "@/lib/content";
 import { breadcrumbSchema, jsonLdGraph, personSchema, webPageSchema } from "@/lib/seo";
-import { site } from "@/lib/site";
+import { site, siteUrl } from "@/lib/site";
 
 const title = "Team — the founders of Focus Realm Hospitality";
 const description =
-  "Focus Realm Hospitality was founded by Sehej Sharma (Co-Founder & CEO) and Ali Electricwala (Co-Founder & COO), with Aditya Mishra as Chief Technology Officer. Meet the team building the service execution platform for hotel operations.";
+  "Focus Realm Hospitality was founded by Sehej Sharma (Co-Founder & CEO), Ali Electricwala (Co-Founder & COO) and Aditya Mishra (Co-Founder & CTO). Meet the founders building the service execution platform for hotel operations.";
 
 export const metadata: Metadata = {
   title,
@@ -39,6 +40,16 @@ export default function TeamPage() {
           __html: jsonLdGraph(
             webPageSchema({ path: "/team", name: title, description }),
             breadcrumbSchema([{ name: "Team", path: "/team" }]),
+            {
+              "@type": "ItemList",
+              name: `Founders of ${site.name}`,
+              itemListElement: team.map((person, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                url: `${siteUrl}/team/${person.slug}`,
+                name: `${person.name} — ${person.role}`,
+              })),
+            },
             ...team.map((person) => personSchema(person.slug)),
           ),
         }}
@@ -68,9 +79,13 @@ export default function TeamPage() {
                     className="grid gap-8 p-8 sm:p-10 lg:grid-cols-[0.34fr_0.66fr] lg:items-start"
                   >
                     <div>
-                      <span className="flex size-20 items-center justify-center rounded-3xl border border-brand-bright/25 bg-linear-to-br from-brand/30 to-brand-deep/20 font-mono text-[1.3rem] text-white">
-                        {person.initials}
-                      </span>
+                      <Avatar
+                        person={person}
+                        className="size-24"
+                        rounded="rounded-3xl"
+                        sizes="192px"
+                        priority={index === 0}
+                      />
                       <h2 className="mt-6 text-[clamp(1.5rem,3vw,2.1rem)] leading-tight font-semibold text-white">
                         {person.name}
                       </h2>
@@ -84,7 +99,10 @@ export default function TeamPage() {
                     </div>
 
                     <div>
-                      <p className="border-l-2 border-brand/40 pl-5 text-[clamp(1.05rem,2vw,1.3rem)] leading-snug font-medium text-white">
+                      <p className="text-[clamp(1.15rem,2.2vw,1.5rem)] leading-snug font-semibold text-white">
+                        {person.headline}
+                      </p>
+                      <p className="mt-5 border-l-2 border-brand/40 pl-5 text-[0.98rem] leading-relaxed text-paper italic">
                         &ldquo;{person.quote}&rdquo;
                       </p>
                       <p className="mt-6 text-[0.95rem] leading-relaxed text-muted">{person.bio[0]}</p>
@@ -147,7 +165,7 @@ export default function TeamPage() {
               </div>
               <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
                 <ButtonLink href="/demo">
-                  Book a demo
+                  Book a 15-min demo
                   <ArrowRight />
                 </ButtonLink>
                 <ButtonLink href="/contact" variant="outline">

@@ -4,7 +4,7 @@ import Reveal from "@/components/fx/Reveal";
 import { LogoMark } from "@/components/site/Logo";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import { Container, Eyebrow } from "@/components/ui/Section";
-import { footerNav, site } from "@/lib/site";
+import { footerNav, legalNav, site } from "@/lib/site";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -31,13 +31,13 @@ export default function Footer() {
                 <span className="text-gradient"> We will show you the record it writes.</span>
               </h2>
               <p className="mt-5 max-w-xl text-[1rem] leading-relaxed text-muted">
-                A thirty-minute walkthrough on the three role interfaces, run against a live property
-                environment — then a pilot scoped to your floors, your standards and your shift patterns.
+                Fifteen minutes on the three role interfaces, run against a live property environment — then a
+                pilot scoped to your floors, your standards and your shift patterns.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-stretch">
               <ButtonLink href="/demo" size="lg">
-                Book a demo
+                Book a 15-min demo
                 <ArrowRight />
               </ButtonLink>
               <ButtonLink href="/contact" variant="outline" size="lg">
@@ -111,21 +111,28 @@ export default function Footer() {
           </span>
         </Reveal>
 
-        <div className="mt-10 flex flex-col gap-4 border-t border-line pt-7 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col gap-5 border-t border-line pt-7 lg:flex-row lg:items-center lg:justify-between">
           <p className="text-[0.78rem] text-faint">
             © {year} {site.legalName}. A service execution platform — not a learning management system.
           </p>
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+
+          <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            {legalNav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-[0.78rem] text-muted transition-colors hover:text-white"
+              >
+                {item.label}
+              </Link>
+            ))}
             <a
               href={`mailto:${site.email}`}
               className="text-[0.78rem] text-muted transition-colors hover:text-white"
             >
               {site.email}
             </a>
-            <span className="font-mono text-[0.66rem] tracking-[0.14em] text-faint uppercase">
-              Colombo · Remote
-            </span>
-          </div>
+          </nav>
         </div>
       </Container>
     </footer>

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import Aurora from "@/components/fx/Aurora";
 import Reveal from "@/components/fx/Reveal";
 import SpotlightCard from "@/components/fx/SpotlightCard";
+import Avatar from "@/components/ui/Avatar";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import { Container, Eyebrow, Rule } from "@/components/ui/Section";
 import { team } from "@/lib/content";
@@ -23,15 +24,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!person) return {};
 
   // The first sentence is written to be the search snippet.
-  const description = `${person.name} is the ${person.role} of ${site.name}, the service execution platform for hotel operations. ${person.focus.join(", ")}.`;
+  const description = `${person.name} is the ${person.role} of ${site.name}, the service execution platform for hotel operations. ${person.headline}`;
+  const first = person.name.split(" ")[0];
 
   return {
-    title: `${person.name} — ${person.shortRole}`,
+    title: `${person.name} — ${person.shortRole}, ${site.name}`,
     description,
     keywords: [
       person.name,
       `${person.name} ${site.shortName}`,
       `${person.name} ${person.shortRole}`,
+      `who is ${person.name}`,
+      `${person.name} founder`,
+      `${first} ${site.shortName}`,
       `${site.name} ${person.shortRole}`,
       ...person.focus,
     ],
@@ -111,9 +116,13 @@ export default async function PersonPage({ params }: Props) {
           <div className="grid gap-12 lg:grid-cols-[0.38fr_0.62fr] lg:gap-16">
             <div className="lg:sticky lg:top-28 lg:self-start">
               <Reveal>
-                <span className="flex size-24 items-center justify-center rounded-[1.75rem] border border-brand-bright/25 bg-linear-to-br from-brand/30 to-brand-deep/20 font-mono text-[1.6rem] text-white">
-                  {person.initials}
-                </span>
+                <Avatar
+                  person={person}
+                  className="size-32 sm:size-40"
+                  rounded="rounded-[1.75rem]"
+                  sizes="(max-width: 640px) 128px, 160px"
+                  priority
+                />
               </Reveal>
               <Reveal delay={80}>
                 <h1 className="mt-7 text-[clamp(2.1rem,4.6vw,3.2rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-white">
@@ -166,10 +175,31 @@ export default async function PersonPage({ params }: Props) {
                 </p>
               </Reveal>
 
+              <Reveal delay={120}>
+                <p className="mt-5 text-[1.02rem] leading-relaxed text-brand-ice">{person.headline}</p>
+              </Reveal>
+
               <div className="mt-8 space-y-6">
                 {person.bio.map((paragraph, index) => (
-                  <Reveal key={index} delay={120 + index * 70}>
+                  <Reveal key={index} delay={160 + index * 60}>
                     <p className="text-[1rem] leading-relaxed text-muted">{paragraph}</p>
+                  </Reveal>
+                ))}
+              </div>
+
+              {/* How they operate */}
+              <Reveal delay={300}>
+                <h2 className="mt-12 font-mono text-[0.6rem] tracking-[0.16em] text-faint uppercase">
+                  How {person.name.split(" ")[0]} operates
+                </h2>
+              </Reveal>
+              <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                {person.traits.map((trait, index) => (
+                  <Reveal key={trait.title} delay={340 + index * 70}>
+                    <SpotlightCard className="panel h-full p-5">
+                      <h3 className="text-[0.95rem] font-semibold text-white">{trait.title}</h3>
+                      <p className="mt-2 text-[0.86rem] leading-relaxed text-muted">{trait.body}</p>
+                    </SpotlightCard>
                   </Reveal>
                 ))}
               </div>
@@ -234,9 +264,7 @@ export default async function PersonPage({ params }: Props) {
                 <SpotlightCard as="article" className="panel group h-full">
                   <Link href={`/team/${other.slug}`} className="block p-7">
                     <div className="flex items-center gap-4">
-                      <span className="flex size-12 items-center justify-center rounded-xl border border-brand-bright/25 bg-linear-to-br from-brand/30 to-brand-deep/20 font-mono text-[0.85rem] text-white">
-                        {other.initials}
-                      </span>
+                      <Avatar person={other} className="size-12" rounded="rounded-xl" sizes="96px" />
                       <div>
                         <p className="text-[1.05rem] font-semibold text-white">{other.name}</p>
                         <p className="mt-1 font-mono text-[0.58rem] tracking-[0.14em] text-brand-ice uppercase">

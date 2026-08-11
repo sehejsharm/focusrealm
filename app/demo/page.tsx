@@ -10,9 +10,9 @@ import { property, roles } from "@/lib/content";
 import { breadcrumbSchema, jsonLdGraph, webPageSchema } from "@/lib/seo";
 import { site } from "@/lib/site";
 
-const title = "Book a demo";
+const title = "Book a 15-minute demo";
 const description =
-  "Book a thirty-minute walkthrough of the Focus Realm service execution platform: the staff mobile interface, the manager service picture and the author workspace, run live against a 468-room demo property — then a pilot scoped to your own standards.";
+  "Book a 15-minute walkthrough of the Focus Realm service execution platform: the staff mobile interface, the manager service picture and the author workspace, run live against a real shift — then a pilot scoped to your own standards.";
 
 export const metadata: Metadata = {
   title,
@@ -58,25 +58,25 @@ const fields: FieldSpec[] = [
 const agenda = [
   {
     step: "01",
-    minutes: "0–5 min",
+    minutes: "0–3 min",
     title: "Your floor, not our slides",
     body: "Which of the six pains is loudest, which departments carry it, and what the current evidence trail actually looks like.",
   },
   {
     step: "02",
-    minutes: "5–15 min",
+    minutes: "3–8 min",
     title: "Staff, live on a phone",
     body: `A timed task on ${roles[0].persona}'s shift at ${property.name} — countdown running, photo gate blocking the step, supervisor sign-off attaching.`,
   },
   {
     step: "03",
-    minutes: "15–25 min",
+    minutes: "8–12 min",
     title: "Manager and Author",
     body: "The live service picture, assignment without chasing, and how a standard is written and published straight into tonight's shift.",
   },
   {
     step: "04",
-    minutes: "25–30 min",
+    minutes: "12–15 min",
     title: "Pilot shape",
     body: "One property, your standards, thirty days, and the specific evidence you would be holding at the end of it.",
   },
@@ -99,7 +99,7 @@ export default function DemoPage() {
         eyebrow="Walkthrough & pilot"
         breadcrumb={[{ label: "Book a demo" }]}
         titleLines={[
-          <>Thirty minutes.</>,
+          <>Fifteen minutes.</>,
           <>
             One real <span className="text-gradient">shift.</span>
           </>,
@@ -124,7 +124,7 @@ export default function DemoPage() {
             {/* Agenda */}
             <div id="what-you-see" className="scroll-mt-28">
               <Reveal>
-                <Eyebrow>What the thirty minutes covers</Eyebrow>
+                <Eyebrow>What the fifteen minutes covers</Eyebrow>
               </Reveal>
 
               <ol className="mt-8 space-y-1">
@@ -162,7 +162,7 @@ export default function DemoPage() {
                     </p>
                     <p className="mt-2.5 text-[0.98rem] font-medium text-white">{property.name}</p>
                     <p className="mt-1.5 text-[0.85rem] leading-relaxed text-faint">
-                      {property.rooms} rooms · {property.staff} staff · {property.floors} guest floors.
+                      {property.staff} staff · {property.floors} guest floors · one shift.
                       Fictional, and identical in every demo we run.
                     </p>
                   </div>

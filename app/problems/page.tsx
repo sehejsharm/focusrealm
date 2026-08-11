@@ -203,7 +203,7 @@ export default function ProblemsPage() {
                   <ArrowRight />
                 </ButtonLink>
                 <ButtonLink href="/demo" variant="outline" size="lg">
-                  Book a demo
+                  Book a 15-min demo
                 </ButtonLink>
               </div>
             </Reveal>

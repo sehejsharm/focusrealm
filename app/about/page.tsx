@@ -173,7 +173,7 @@ export default function AboutPage() {
 
       <DemoProperty />
 
-      <TeamStrip />
+      <TeamStrip order="canonical" />
 
       <section className="relative overflow-hidden pb-24 sm:pb-32">
         <Container>
@@ -190,7 +190,7 @@ export default function AboutPage() {
               </div>
               <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
                 <ButtonLink href="/demo">
-                  Book a demo
+                  Book a 15-min demo
                   <ArrowRight />
                 </ButtonLink>
                 <ButtonLink href="/contact" variant="outline">

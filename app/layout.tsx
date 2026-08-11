@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import Footer from "@/components/site/Footer";
 import Header from "@/components/site/Header";
+import StickyCta from "@/components/site/StickyCta";
 import { jsonLdGraph, organizationSchema, softwareSchema, websiteSchema } from "@/lib/seo";
 import { site, siteUrl } from "@/lib/site";
 
@@ -98,6 +99,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main id="main">{children}</main>
         <Footer />
+        <StickyCta />
       </body>
     </html>
   );

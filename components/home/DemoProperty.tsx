@@ -5,10 +5,10 @@ import { Container, Eyebrow } from "@/components/ui/Section";
 import { personas, property } from "@/lib/content";
 
 const figures = [
-  { value: property.rooms, label: "Rooms" },
   { value: property.staff, label: "Staff on the platform" },
   { value: property.floors, label: "Guest floors" },
   { value: property.routes, label: "Live product routes" },
+  { value: 5, label: "Fixed personas" },
 ];
 
 /**
@@ -32,10 +32,9 @@ export default function DemoProperty() {
             </Reveal>
             <Reveal delay={160}>
               <p className="mt-6 max-w-xl text-[1rem] leading-relaxed text-muted">
-                {property.name} is a {property.rooms}-room property in {property.location} with{" "}
-                {property.staff} staff across {property.floors} guest floors. It is fictional and it is
-                consistent — the same rooms, the same shift, the same five people, every single time we show the
-                platform.
+                {property.name} is a full-service property in {property.location} with {property.staff} staff
+                across {property.floors} guest floors. It is fictional and it is consistent — the same rooms,
+                the same shift, the same five people, every single time we show the platform.
               </p>
             </Reveal>
             <Reveal delay={220}>

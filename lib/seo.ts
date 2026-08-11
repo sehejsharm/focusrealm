@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { faqs, property, team } from "@/lib/content";
+import { faqs, property, team, testimonials } from "@/lib/content";
 import { absoluteUrl, site, siteUrl } from "@/lib/site";
 
 type PageMetaInput = {
@@ -85,6 +85,13 @@ export const organizationSchema = {
     .filter((person) => person.role.includes("Co-Founder"))
     .map((person) => ({ "@id": `${siteUrl}/team/${person.slug}#person` })),
   employee: team.map((person) => ({ "@id": `${siteUrl}/team/${person.slug}#person` })),
+  brand: { "@type": "Brand", name: site.shortName, logo: absoluteUrl("/logo.svg") },
+  numberOfEmployees: { "@type": "QuantitativeValue", minValue: 3 },
+  makesOffer: {
+    "@type": "Offer",
+    itemOffered: { "@id": softwareId },
+    description: "Single-property pilot of the Focus Realm service execution platform.",
+  },
   areaServed: [
     { "@type": "Place", name: "Asia" },
     { "@type": "Place", name: "Middle East" },
@@ -139,15 +146,37 @@ export function personSchema(slug: string) {
     "@type": "Person",
     "@id": `${siteUrl}/team/${person.slug}#person`,
     name: person.name,
+    givenName: person.name.split(" ")[0],
+    familyName: person.name.split(" ").slice(1).join(" "),
     url: absoluteUrl(`/team/${person.slug}`),
     jobTitle: person.role,
-    description: `${person.name} is the ${person.role} of ${site.name}, the ${site.category.toLowerCase()} for hotel operations.`,
+    description: `${person.name} is the ${person.role} of ${site.name}, the ${site.category.toLowerCase()} for hotel operations. ${person.headline}`,
     worksFor: { "@id": organizationId },
     affiliation: { "@id": organizationId },
-    knowsAbout: person.focus,
+    memberOf: { "@id": organizationId },
+    knowsAbout: [...person.focus, "hotel service standards", "SOP execution", "hospitality operations"],
+    ...(person.photo ? { image: absoluteUrl(person.photo.src) } : {}),
+    ...(person.sameAs?.length ? { sameAs: person.sameAs } : {}),
     mainEntityOfPage: { "@id": `${siteUrl}/team/${person.slug}#webpage` },
   };
 }
+
+/** All three founders, for pages that should answer a founder-name query. */
+export function allPeopleSchema() {
+  return team.map((person) => personSchema(person.slug)).filter(Boolean);
+}
+
+/**
+ * Client words as schema.org Review nodes attached to the organisation.
+ * No aggregateRating — self-published ratings are not eligible for rich
+ * results and claiming one would be dishonest anyway.
+ */
+export const reviewSchema = testimonials.map((item) => ({
+  "@type": "Review",
+  itemReviewed: { "@id": organizationId },
+  reviewBody: item.quote,
+  author: { "@type": "Organization", name: item.author },
+}));
 
 export function breadcrumbSchema(trail: { name: string; path: string }[]) {
   return {
@@ -197,7 +226,7 @@ export const faqSchema = {
 export const demoPropertySchema = {
   "@type": "CreativeWork",
   name: `${property.name} demo environment`,
-  description: `Every Focus Realm demonstration runs against a single consistent fictional property: ${property.name}, ${property.location} — ${property.rooms} rooms and ${property.staff} staff across ${property.floors} guest floors.`,
+  description: `Every Focus Realm demonstration runs against a single consistent fictional property: ${property.name}, ${property.location} — ${property.staff} staff across ${property.floors} guest floors.`,
 } as const;
 
 /** Serialises a JSON-LD @graph for injection into a page. */

@@ -96,7 +96,7 @@ export default function Header() {
                   `inline-flex` would win the display cascade. */}
               <span className="hidden sm:block">
                 <ButtonLink href="/demo" size="md">
-                  Book a demo
+                  Book a 15-min demo
                   <ArrowRight />
                 </ButtonLink>
               </span>
@@ -163,7 +163,7 @@ export default function Header() {
           </ul>
           <div className="mt-9 flex flex-col gap-3">
             <ButtonLink href="/demo" size="lg" className="w-full">
-              Book a demo
+              Book a 15-min demo
               <ArrowRight />
             </ButtonLink>
             <ButtonLink href="/platform" variant="outline" size="lg" className="w-full">

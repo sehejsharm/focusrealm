@@ -1,7 +1,7 @@
 import Reveal from "@/components/fx/Reveal";
 import SpotlightCard from "@/components/fx/SpotlightCard";
 import { Container, SectionHeading } from "@/components/ui/Section";
-import { buyers, references } from "@/lib/content";
+import { buyers, clients } from "@/lib/content";
 
 const stack = [
   { label: "Runs on", value: "Google Cloud · Firebase" },
@@ -74,14 +74,21 @@ export default function Buyers() {
               <p className="font-mono text-[0.58rem] tracking-[0.16em] text-brand-ice uppercase">
                 Where we are working
               </p>
-              <ul className="mt-5 space-y-4">
-                {references.map((reference) => (
-                  <li key={reference.name} className="border-b border-line pb-4 last:border-b-0 last:pb-0">
-                    <p className="text-[0.98rem] font-medium text-white">{reference.name}</p>
-                    <p className="mt-1 font-mono text-[0.58rem] tracking-[0.12em] text-brand-cyan uppercase">
-                      {reference.status}
-                    </p>
-                    <p className="mt-1.5 text-[0.82rem] text-faint">{reference.note}</p>
+              <ul className="mt-5 space-y-3.5">
+                {clients.map((client) => (
+                  <li
+                    key={client.name}
+                    className="flex items-baseline justify-between gap-4 border-b border-line pb-3.5 last:border-b-0 last:pb-0"
+                  >
+                    <span className="flex flex-col">
+                      <span className="text-[0.92rem] font-medium text-white">{client.name}</span>
+                      {client.note ? (
+                        <span className="mt-0.5 text-[0.76rem] text-faint">{client.note}</span>
+                      ) : null}
+                    </span>
+                    <span className="shrink-0 text-right font-mono text-[0.55rem] tracking-[0.1em] text-brand-cyan uppercase">
+                      {client.segment}
+                    </span>
                   </li>
                 ))}
               </ul>

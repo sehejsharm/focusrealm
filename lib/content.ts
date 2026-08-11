@@ -72,7 +72,7 @@ export const pains: Pain[] = [
       "Your best operator spends the shift being a lookup table instead of running the floor.",
     answer:
       "The standard is in the task, so the routine 90% never needs a human decision. The supervisor gets the exceptions and nothing else.",
-    metric: "1 supervisor · 42 staff · 468 rooms",
+    metric: "1 supervisor · 42 staff · 14 floors",
   },
   {
     id: "ghost-sop",
@@ -374,7 +374,6 @@ export const vocabulary = [
 export const property = {
   name: "Aurora Grand Colombo",
   location: "Colombo, Sri Lanka",
-  rooms: 468,
   staff: 42,
   floors: 14,
   routes: 27,
@@ -398,11 +397,25 @@ export type Person = {
   role: string;
   shortRole: string;
   initials: string;
+  /**
+   * Drop a square portrait at assets/team/<slug>.jpg and import it here.
+   * Until one exists the monogram avatar renders instead.
+   */
+  photo?: StaticImageData;
+  headline: string;
   bio: string[];
   focus: string[];
+  traits: { title: string; body: string }[];
   quote: string;
+  /** Public profiles. Emitted as schema.org sameAs — the strongest signal
+   *  tying a founder's name query to this site. Add the real URLs. */
+  sameAs?: string[];
 };
 
+/**
+ * Canonical order — Sehej first. This is the order used on /team and /about.
+ * The home page uses `teamHomeOrder` so the CEO sits centre of the three-up.
+ */
 export const team: Person[] = [
   {
     slug: "sehej-sharma",
@@ -410,12 +423,34 @@ export const team: Person[] = [
     role: "Co-Founder & Chief Executive Officer",
     shortRole: "Co-Founder & CEO",
     initials: "SS",
+    headline: "The trailblazer who decided the standard belongs inside the shift.",
     bio: [
-      "Sehej Sharma is the Co-Founder and Chief Executive Officer of Focus Realm Hospitality, the service execution platform for hotel operations. He leads the company's positioning, product thesis and go-to-market.",
-      "He is the author of the thesis the platform is built on: that a standard which does not live inside the timed task is not a standard, it is a document. Under his direction, Focus Realm retired the training-platform framing entirely and rebuilt the company around service execution and evidence.",
-      "He works directly with general managers, HR directors and heads of learning across the hospitality sector, where the same six pains recur in every property — supervisor bottleneck, ghost SOP, invisible performance gap, attrition bleed, star rating ceiling and audit ambush.",
+      "Sehej Sharma is the Co-Founder and Chief Executive Officer of Focus Realm Hospitality, the service execution platform for hotel operations. He sets the company's direction, owns its positioning, and leads it from the front of the room — in front of general managers, HR directors and heads of learning who have heard every training pitch there is.",
+      "He is the author of the thesis the entire platform is built on: a standard that does not live inside the timed task is not a standard, it is a document. That idea was not a refinement of an existing category — it was a rejection of one. Under his direction Focus Realm retired its training-platform framing completely and rebuilt around service execution and evidence, a call that cost the company an easier story and bought it a defensible one.",
+      "That is the pattern in how he leads. He is execution-first: an opinion that has not been shipped, sold or survived contact with a real floor does not count. He would rather take a decision on Monday and be corrected by Thursday than hold a committee until the quarter closes. It makes him a fast, deliberate risk-taker — the kind who moves a whole company off a comfortable category because the uncomfortable one is true.",
+      "He is also, unusually for a founder at this stage, disciplined about language. He polices the vocabulary of the company personally, because he understands that positioning is not marketing decoration — it is the constraint that decides what gets built. Every word on this site passed through that filter.",
+      "He works property by property, floor by floor, with the operators who carry the consequence: the general manager whose rating is capped by inconsistency, the HR director watching institutional knowledge walk out the door, the L&D head whose sessions have attendance sheets and no execution signal. The six pains Focus Realm sells against were not workshopped. He collected them one conversation at a time.",
+      "The ambition is not a better tool for hotels. It is the operating layer that hotel service standards run on — a category Focus Realm intends to define and then own.",
     ],
-    focus: ["Positioning & category", "Product thesis", "Go-to-market", "Hospitality partnerships"],
+    traits: [
+      {
+        title: "Trailblazer",
+        body: "Named and built a category rather than competing inside one that already had incumbents and rules he did not agree with.",
+      },
+      {
+        title: "Execution first",
+        body: "Ideas are cheap and he treats them that way. What counts is shipped, on a floor, with evidence attached.",
+      },
+      {
+        title: "Deliberate risk-taker",
+        body: "Retired a working, sellable framing mid-flight because the honest one would compound and the comfortable one would not.",
+      },
+      {
+        title: "Visionary operator",
+        body: "Holds the ten-year picture — standards as infrastructure — and the Tuesday-morning decision in the same head.",
+      },
+    ],
+    focus: ["Category & positioning", "Product thesis", "Go-to-market", "Hospitality partnerships", "Founder-led sales"],
     quote:
       "Standards stop being a document nobody reads the moment they become the unit of work a staff member is doing right now.",
   },
@@ -425,31 +460,67 @@ export const team: Person[] = [
     role: "Co-Founder & Chief Operating Officer",
     shortRole: "Co-Founder & COO",
     initials: "AE",
+    headline: "The operator who makes a standard survive week three.",
     bio: [
-      "Ali Electricwala is the Co-Founder and Chief Operating Officer of Focus Realm Hospitality. He owns how the platform actually lands inside a working hotel — pilot design, rollout, and the operating discipline that makes a standard stick past week three.",
-      "His work starts where most operations software stops: the floor. Shift patterns, supervisor load, the realities of a 468-room property running on mobile data. Every pilot Focus Realm runs is scoped so that a property sees evidence accumulating inside the first thirty days.",
-      "He leads commercial operations and customer success, and translates what the floor reports back into the roadmap.",
+      "Ali Electricwala is the Co-Founder and Chief Operating Officer of Focus Realm Hospitality. He owns how the platform actually lands inside a working hotel — pilot design, rollout, and the operating discipline that keeps a standard alive after the launch enthusiasm wears off.",
+      "His work starts where most operations software stops: the floor. Shift patterns, supervisor load, the realities of a large property running on staff-owned phones and mobile data. Every pilot Focus Realm runs is scoped so that a property sees evidence accumulating inside the first thirty days — not a rollout plan, actual timestamped proof.",
+      "He leads commercial operations and customer success, and he is the route by which the floor's reality gets back into the roadmap. When a standard is being worked around rather than worked, he is usually the first person in the company to know.",
+    ],
+    traits: [
+      {
+        title: "Rollout discipline",
+        body: "Designs pilots backwards from the evidence a property must be holding on day thirty.",
+      },
+      {
+        title: "Floor-level realism",
+        body: "Scopes to the shift that exists, not the org chart that describes it.",
+      },
+      {
+        title: "Customer proximity",
+        body: "Stays close enough to the property to hear a standard failing before a report does.",
+      },
     ],
     focus: ["Pilot design & rollout", "Customer success", "Commercial operations", "Property onboarding"],
-    quote:
-      "A standard that survives week three is an operating decision, not a document decision.",
+    quote: "A standard that survives week three is an operating decision, not a document decision.",
   },
   {
     slug: "aditya-mishra",
     name: "Aditya Mishra",
-    role: "Chief Technology Officer",
-    shortRole: "CTO",
+    role: "Co-Founder & Chief Technology Officer",
+    shortRole: "Co-Founder & CTO",
     initials: "AM",
+    headline: "The architect who removes things until the task is all that is left.",
     bio: [
-      "Aditya Mishra is the Chief Technology Officer of Focus Realm Hospitality. He drives the platform's subtraction-first design principle: every screen earns its place, and anything that does not help a staff member finish the task in front of them gets removed.",
-      "He architected Focus Realm as three deliberately separate role interfaces — a mobile-first staff experience built for a 340px viewport, a desktop-primary manager surface, and a desktop-only authoring workspace — rather than one responsive compromise.",
-      "The platform runs on Google Cloud and Firebase, web-based on standard browsers and mobile data, with no high-end hardware and no PMS integration required at this stage. That is a deliberate constraint: the product has to work on the phone a room attendant already owns.",
+      "Aditya Mishra is the Co-Founder and Chief Technology Officer of Focus Realm Hospitality. He drives the platform's subtraction-first design principle: every screen earns its place, and anything that does not help a staff member finish the task in front of them gets removed before it ships.",
+      "He architected Focus Realm as three deliberately separate role interfaces — a mobile-first staff experience built for a 340px viewport, a desktop-primary manager surface, and a desktop-only authoring workspace — rather than one responsive layout that would have been cheaper to build and worse in all three postures.",
+      "The platform runs on Google Cloud and Firebase: web-based, on standard browsers over mobile data, with no high-end hardware and no PMS integration required at this stage. That is a deliberate constraint, not a gap. The product has to work on the phone a room attendant already owns, in daylight, on hotel wifi — and if it does not work there, it does not work.",
+    ],
+    traits: [
+      {
+        title: "Subtraction first",
+        body: "Measures a release by what came out of it as much as what went in.",
+      },
+      {
+        title: "Constraint-led architecture",
+        body: "Three interfaces instead of one compromise, because the postures have nothing in common.",
+      },
+      {
+        title: "Built for the worst device",
+        body: "Targets the cheapest phone on the weakest network, so everything above it is free.",
+      },
     ],
     focus: ["Subtraction-first design", "Platform architecture", "Google Cloud & Firebase", "Mobile performance"],
     quote:
       "The hardest engineering problem here is a 340px screen held in one hand, in daylight, on hotel wifi.",
   },
 ];
+
+/** Home-page order: the CEO sits in the centre of the three-up. */
+export const teamHomeOrder: Person[] = [team[1], team[0], team[2]];
+
+export function personBySlug(slug: string) {
+  return team.find((entry) => entry.slug === slug);
+}
 
 /* ------------------------------------------------------------------ *
  * Market & references.
@@ -473,16 +544,126 @@ export const buyers = [
   },
 ] as const;
 
-export const references = [
+/**
+ * Trusted-by strip. Add a logo at assets/clients/<file>.png and import it as
+ * `logo` — the wordmark tile renders until one exists.
+ */
+export type Client = {
+  name: string;
+  segment: string;
+  logo?: StaticImageData;
+  note?: string;
+};
+
+export const clients: Client[] = [
   {
-    name: "Clarks Hotels & Resorts",
-    status: "Commercial proposal issued",
-    note: "Multi-property group engagement.",
+    name: "Clarks Amer",
+    segment: "Hotel chains",
+    note: "Hotel & Brij Convention Centre",
+  },
+  { name: "Renu Mehra's", segment: "Corporate trainers", note: "'ALL' of finesse" },
+  { name: "D.A.V. Sr. Sec. School", segment: "Reputed schools", note: "Jaipur" },
+  { name: "Recharga", segment: "Fast-growing startups" },
+  { name: "TwoKey", segment: "Premium SaaS teams" },
+  { name: "The Hosteller", segment: "Distributed properties" },
+];
+
+/**
+ * Client words, quoted as given. The Clarks quote predates the repositioning
+ * and uses the retired category noun — it is left verbatim because a
+ * testimonial is attributed speech, not our own positioning.
+ */
+export const testimonials = [
+  {
+    quote:
+      "Focus Realm provided a flexible LMS solution that improved staff training, automated compliance tracking, and enhanced reporting efficiency across multiple hotel properties.",
+    author: "Clarks Hotels & Resorts",
+    role: "Multi-property hotel group",
+    tag: "Multi-property operations",
   },
   {
-    name: "The Hosteller",
-    status: "Early client reference",
-    note: "Distributed-property operator.",
+    quote:
+      "Focus Realm helped us implement outcome-driven AI training programs, significantly improving employee efficiency, engagement, and real-world AI adoption.",
+    author: "TwoKey",
+    role: "SaaS product team",
+    tag: "Capability & upskilling",
+  },
+] as const;
+
+/* ------------------------------------------------------------------ *
+ * Sales material: what changes, and what we are not.
+ * ------------------------------------------------------------------ */
+
+export const outcomes = [
+  {
+    stat: "Day 1",
+    label: "New joiners executing to spec",
+    body: "No two-week shadow. The standard is on the phone, timed, with the evidence gate in place from the first room.",
+  },
+  {
+    stat: "30 days",
+    label: "Defensible evidence in hand",
+    body: "A pilot is scoped so a property is holding timestamped photo and sign-off history before the first month closes.",
+  },
+  {
+    stat: "0",
+    label: "Integrations required",
+    body: "No PMS project, no hardware, no IT lead time. Standard browsers on the phones your team already carries.",
+  },
+  {
+    stat: "1 screen",
+    label: "The whole service picture",
+    body: "Readiness, service health and guest signal together, so the next decision carries its property context.",
+  },
+] as const;
+
+export const comparison = {
+  columns: ["Paper, Excel & WhatsApp", "A generic LMS", "Focus Realm"],
+  rows: [
+    {
+      criterion: "Where the standard lives",
+      values: ["A binder near the linen store", "A course a staff member watched once", "Inside the timed task, on shift"],
+    },
+    {
+      criterion: "What completion proves",
+      values: ["Someone said it was done", "Someone finished a module", "The step was executed, with a photo"],
+    },
+    {
+      criterion: "Evidence capture",
+      values: ["Photos scattered in chat", "Quiz scores", "Mandatory per-step, timestamped"],
+    },
+    {
+      criterion: "Supervisor load",
+      values: ["Every question routes through one person", "Unchanged — it is not an ops tool", "Exceptions only; routine work clears itself"],
+    },
+    {
+      criterion: "Audit preparation",
+      values: ["A week of assembling a folder", "Attendance reports nobody asked for", "A filter on data you already hold"],
+    },
+    {
+      criterion: "When a good person leaves",
+      values: ["The knowledge leaves too", "The course stays; the execution does not", "The standard stays, and still executes"],
+    },
+  ],
+} as const;
+
+/** Objection handling — the four things buyers actually push back on. */
+export const objections = [
+  {
+    q: "“Our staff will not use another app.”",
+    a: "They are not adopting an app, they are opening the task they were already assigned. One screen, one thumb, the timer already running. If it needs training to use, we built it wrong.",
+  },
+  {
+    q: "“We already have an LMS.”",
+    a: "Keep it. An LMS records that someone consumed a course. Focus Realm records that room 208 was reset to standard at 08:36 with a photo attached. Those answer different questions, and only one of them survives an audit.",
+  },
+  {
+    q: "“IT will take six months to approve this.”",
+    a: "There is nothing to approve. No PMS integration, no server, no hardware — a browser on the phones your team already owns. Pilots start on a property, not on a roadmap.",
+  },
+  {
+    q: "“Our standards are not written down properly yet.”",
+    a: "That is the normal starting point. Bring the standard nobody follows and we will author it live on the call — instruction, reference photo, checklist, evidence gates — and put it on a phone before we hang up.",
   },
 ] as const;
 

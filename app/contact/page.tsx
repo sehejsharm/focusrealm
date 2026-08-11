@@ -153,10 +153,10 @@ export default function ContactPage() {
               <Reveal delay={240}>
                 <div className="panel p-6">
                   <p className="font-mono text-[0.58rem] tracking-[0.14em] text-faint uppercase">Based in</p>
-                  <p className="mt-3 text-[0.95rem] text-paper">Colombo, Sri Lanka · working remotely</p>
+                  <p className="mt-3 text-[0.95rem] text-paper">Remote-first · India</p>
                   <p className="mt-2 text-[0.85rem] leading-relaxed text-faint">
-                    Priority markets are travel, hospitality and hotels across Asia and the Middle East, but we
-                    take calls from wherever the shift is.
+                    Priority markets are travel, hospitality and hotels across India, the wider Asia region and
+                    the Middle East — but we take calls from wherever the shift is.
                   </p>
                 </div>
               </Reveal>
@@ -187,7 +187,7 @@ export default function ContactPage() {
                 title: "If you already know the pain",
                 body: "Skip the discovery call. Book the walkthrough and bring the standard nobody follows.",
                 href: "/demo",
-                cta: "Book a demo",
+                cta: "Book a 15-min demo",
               },
             ].map((item, index) => (
               <Reveal key={item.title} delay={index * 90}>

@@ -192,7 +192,7 @@ export default function PlatformPage() {
                   Open prototype
                 </ButtonLink>
                 <ButtonLink href="/demo">
-                  Book a demo
+                  Book a 15-min demo
                   <ArrowRight />
                 </ButtonLink>
               </div>

@@ -31,8 +31,11 @@ language is a regression — the wording lives in `lib/content.ts` and
 | `/about` | The thesis, why this is not an LMS, the four build principles |
 | `/team` | Founding team |
 | `/team/[slug]` | Individual profiles — `sehej-sharma`, `ali-electricwala`, `aditya-mishra` |
-| `/demo` | Book a walkthrough (form) |
+| `/demo` | Book a 15-minute walkthrough (form) |
 | `/contact` | Contact the founders (form) |
+| `/privacy` | Privacy Policy |
+| `/terms` | Terms of Service |
+| `/cookies` | Cookie Policy |
 
 Generated automatically: `/sitemap.xml`, `/robots.txt`, `/manifest.webmanifest`,
 `/icon`, `/apple-icon`, `/opengraph-image`, and a per-person OG card at
@@ -48,6 +51,33 @@ back to `https://www.focusrealm.com`, and on Vercel it will use
 
 Add it in Vercel → Project → Settings → Environment Variables, for Production
 and Preview.
+
+### Confirm before launch — legal
+
+`lib/site.ts` exports a `legal` object whose strings appear **verbatim** in the
+Privacy Policy and Terms of Service. Have these confirmed by counsel:
+
+| Field | Current value | Why it matters |
+|---|---|---|
+| `entity` | Focus Realm Hospitality | Named as the controller and as the contracting party |
+| `jurisdiction` | India | Governing law clause in the Terms |
+| `courts` | Jaipur, Rajasthan, India | Exclusive jurisdiction clause |
+| `registeredAddress` | *(empty)* | Only rendered when set. A registered address is expected in a privacy policy |
+| `effectiveDate` | 11 August 2026 | Shown at the top of every policy — bump it when you change a policy |
+
+The liability cap in the Terms names a figure in ₹; change the currency if the
+contracting entity is not Indian.
+
+### Images to add
+
+Two directories carry drop-in slots with their own instructions:
+
+- `assets/team/` — founder portraits. Adding one also populates the `image`
+  field in that founder's `Person` structured data.
+- `assets/clients/` — client logos for the trusted-by strip.
+
+Both render a designed fallback until a file exists, so nothing is broken
+without them.
 
 ## SEO
 
@@ -68,10 +98,15 @@ Structured data (`lib/seo.ts`), emitted as one `@graph` per page:
 
 - `Organization` + `WebSite` + `SoftwareApplication` site-wide, with
   `founder` / `employee` edges pointing at the person nodes.
-- `Person` on each `/team/[slug]`, wrapped in `ProfilePage`, with `worksFor`
-  back-referencing the organisation. This is what earns a
-  "X is the Co-Founder & CEO of Focus Realm Hospitality" style answer.
-- `FAQPage` on the home page, `ItemList` for the six pains on `/problems`,
+- `Person` on each `/team/[slug]`, wrapped in `ProfilePage`, with `worksFor`,
+  `memberOf` and `affiliation` back-referencing the organisation. This is what
+  earns a "X is the Co-Founder & CEO of Focus Realm Hospitality" style answer.
+- **All three founders are also declared on the home page**, so a founder-name
+  query can resolve to `/` as well as to the profile. Each profile page's
+  meta description opens with the literal sentence
+  "<Name> is the <Role> of Focus Realm Hospitality" — written to be the snippet.
+- `FAQPage` on the home page, `ItemList` for the six pains on `/problems` and
+  for the founders on `/team`, `Review` nodes for the client testimonials,
   `ContactPage` + `ContactPoint` on `/contact`, `BreadcrumbList` on inner pages.
 
 Off-page work the site cannot do for itself — do these after the domain is live:
@@ -82,9 +117,20 @@ Off-page work the site cannot do for itself — do these after the domain is liv
 2. Claim the Google Business Profile and the LinkedIn company page, then add
    every profile URL to `site.sameAs` in `lib/site.ts` — `sameAs` is how the
    entity graph gets corroborated.
-3. Add each founder's LinkedIn to their `Person` node the same way.
+3. **Add each founder's LinkedIn (and X, GitHub, personal site) to the
+   `sameAs` array on their entry in `lib/content.ts`.** This is the single
+   highest-leverage step for the "search a founder's name and this site comes
+   up" goal: the profile page already claims the relationship, and `sameAs`
+   is what lets Google confirm it against a profile it already trusts. Then
+   make each founder's LinkedIn headline read
+   "Co-Founder & CEO at Focus Realm Hospitality" and link the website field
+   back to their `/team/<slug>` page, so the corroboration runs both ways.
 4. Point the domain at Vercel with `www` → apex (or the reverse) as a permanent
    redirect so link equity lands on one hostname.
+5. Get the founders' names onto third-party pages that already rank — podcast
+   guest bios, conference speaker pages, press mentions, Crunchbase — each
+   linking to `/team/<slug>`. Structured data states the fact; external links
+   are what make Google believe it.
 
 ## Design system
 

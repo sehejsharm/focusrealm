@@ -32,13 +32,27 @@ export const site = {
     "Focus Realm Hospitality is a mobile-first service execution platform for hotel operations. The standard lives inside the timed task, completing the task captures photo and supervisor evidence, and that evidence compounds into an audit-ready service record.",
   shortDescription:
     "The service execution platform for hotel operations. Standards inside timed tasks, evidence captured automatically, an audit-ready service record.",
-  email: "hello@focusrealm.com",
-  demoEmail: "demo@focusrealm.com",
+  email: "hello@focusrealm.org",
+  demoEmail: "demo@focusrealm.org",
+  privacyEmail: "privacy@focusrealm.org",
   prototypeUrl: "https://fr2-b6s.pages.dev/",
   founded: "2024",
-  locality: "Colombo",
-  country: "LK",
+  /** Public profiles for the company. Emitted as schema.org sameAs. */
   sameAs: [] as string[],
+} as const;
+
+/**
+ * Legal identity. These strings appear verbatim in the Privacy Policy and
+ * Terms of Service, so confirm each one with counsel before launch.
+ * `registeredAddress` is only rendered when it is non-empty.
+ */
+export const legal = {
+  entity: "Focus Realm Hospitality",
+  jurisdiction: "India",
+  courts: "Jaipur, Rajasthan, India",
+  registeredAddress: "",
+  effectiveDate: "11 August 2026",
+  dataProtectionLaws: "the Digital Personal Data Protection Act, 2023 (India) and, where it applies, the UK GDPR and EU GDPR",
 } as const;
 
 export const nav = [
@@ -83,12 +97,18 @@ export const footerNav = [
   {
     heading: "Get started",
     links: [
-      { href: "/demo", label: "Book a demo" },
+      { href: "/demo", label: "Book a 15-min demo" },
       { href: "/demo#what-you-see", label: "What a demo covers" },
       { href: site.prototypeUrl, label: "Live prototype", external: true },
       { href: "/sitemap.xml", label: "Sitemap", external: true },
     ],
   },
+] as const;
+
+export const legalNav = [
+  { href: "/privacy", label: "Privacy Policy" },
+  { href: "/terms", label: "Terms of Service" },
+  { href: "/cookies", label: "Cookie Policy" },
 ] as const;
 
 export function absoluteUrl(path = "/") {

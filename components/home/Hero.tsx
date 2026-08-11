@@ -73,10 +73,10 @@ function LiveCountdown() {
 }
 
 const stats = [
-  { value: 3, label: "Role interfaces", suffix: "" },
-  { value: property.routes, label: "Product routes live", suffix: "" },
-  { value: property.rooms, label: "Rooms in the demo property", suffix: "" },
-  { value: 100, label: "Steps with evidence attached", suffix: "%" },
+  { value: 3, label: "Role interfaces, built separately", suffix: "" },
+  { value: property.routes, label: "Product routes live today", suffix: "" },
+  { value: 15, label: "Minutes to see it on a real shift", suffix: " min" },
+  { value: 100, label: "Evidence-gated steps, no exceptions", suffix: "%" },
 ];
 
 export default function Hero() {
@@ -123,7 +123,7 @@ export default function Hero() {
             <Reveal delay={540}>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <ButtonLink href="/demo" size="lg">
-                  Book a demo
+                  Book a 15-min demo
                   <ArrowRight />
                 </ButtonLink>
                 <ButtonLink href="/platform" variant="outline" size="lg">
