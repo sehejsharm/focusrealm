@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { faqs, property, team, testimonials } from "@/lib/content";
+import { teamPhoto } from "@/lib/team-photos";
 import { absoluteUrl, site, siteUrl } from "@/lib/site";
 
 type PageMetaInput = {
@@ -167,7 +168,12 @@ export function personSchema(slug: string) {
     affiliation: { "@id": organizationId },
     memberOf: { "@id": organizationId },
     knowsAbout: [...person.focus, "hotel service standards", "SOP execution", "hospitality operations"],
-    ...(person.photo ? { image: absoluteUrl(person.photo.src) } : {}),
+    // Only emitted once a portrait exists in public/team/ — a 404 in
+    // structured data is worse than omitting the property.
+    ...(() => {
+      const photo = person.photo?.src ?? teamPhoto(person.slug);
+      return photo ? { image: absoluteUrl(photo) } : {};
+    })(),
     ...(person.sameAs?.length ? { sameAs: person.sameAs } : {}),
     mainEntityOfPage: { "@id": `${siteUrl}/team/${person.slug}#webpage` },
   };
