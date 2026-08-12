@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
 
-import Buyers from "@/components/home/Buyers";
 import Comparison from "@/components/home/Comparison";
-import DemoProperty from "@/components/home/DemoProperty";
 import Faq from "@/components/home/Faq";
 import Hero from "@/components/home/Hero";
 import Mechanism from "@/components/home/Mechanism";
-import NotAnLms from "@/components/home/NotAnLms";
 import PainSnowball from "@/components/home/PainSnowball";
 import RoleShowcase from "@/components/home/RoleShowcase";
 import TeamStrip from "@/components/home/TeamStrip";
@@ -78,14 +75,11 @@ export default function HomePage() {
       <Hero />
       <TrustedBy />
       <Mechanism />
-      <RoleShowcase />
       <Rule />
+      <RoleShowcase />
       <PainSnowball />
-      <NotAnLms />
       <Comparison />
       <Testimonials />
-      <DemoProperty />
-      <Buyers />
       <TeamStrip />
       <Faq />
     </>

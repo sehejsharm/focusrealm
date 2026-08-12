@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
 import Reveal from "@/components/fx/Reveal";
-import SpotlightCard from "@/components/fx/SpotlightCard";
+import PainChain from "@/components/viz/PainChain";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import PageHero from "@/components/ui/PageHero";
 import { Container, Eyebrow, Rule } from "@/components/ui/Section";
-import { buyers, pains } from "@/lib/content";
+import { pains } from "@/lib/content";
 import { breadcrumbSchema, jsonLdGraph, webPageSchema } from "@/lib/seo";
 import { site } from "@/lib/site";
 
@@ -59,177 +59,73 @@ export default function ProblemsPage() {
         eyebrow="The case"
         breadcrumb={[{ label: "Problems" }]}
         titleLines={[
-          <>Six pains.</>,
-          <>
-            They do not sit <span className="text-gradient">side by side.</span>
-          </>,
+          <>Six problems.</>,
           <>
             They <span className="text-gradient">compound.</span>
           </>,
         ]}
-        lede="We never open with features. We open with the snowball — because in a working property these six do not queue politely. Each one makes the next one worse, and by the time the audit lands you are carrying all six at once."
+        lede="In a working property these do not queue politely. Each one makes the next one worse."
       />
 
-      {/* Chain overview */}
-      <Container className="pb-6">
+      <Container className="pb-10">
         <Reveal>
-          <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {pains.map((pain) => (
-              <li key={pain.id}>
-                <a
-                  href={`#${pain.id}`}
-                  className="group flex items-center gap-4 rounded-xl border border-line bg-white/[0.02] px-4 py-3.5 transition-all duration-500 hover:border-brand-bright/40 hover:bg-brand/8"
-                >
-                  <span className="font-mono text-[0.68rem] text-brand-ice">{pain.index}</span>
-                  <span className="text-[0.9rem] text-paper transition-colors group-hover:text-white">
-                    {pain.name}
-                  </span>
-                  <span className="ml-auto text-brand-cyan opacity-0 transition-all duration-500 group-hover:translate-x-1 group-hover:opacity-100">
-                    <ArrowRight className="size-3.5" />
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ol>
+          <PainChain />
         </Reveal>
       </Container>
 
-      {/* Full detail */}
-      <div className="py-12 sm:py-16">
-        {pains.map((pain, index) => (
-          <section
-            key={pain.id}
-            id={pain.id}
-            className="relative scroll-mt-28 border-t border-line py-16 sm:py-20"
-          >
-            <Container>
-              <div className="grid gap-10 lg:grid-cols-[0.42fr_0.58fr] lg:gap-16">
-                <div className="lg:sticky lg:top-28 lg:self-start">
-                  <Reveal>
-                    {/* Chapter numeral. Kept at /40 so it clears 3:1 as large text — the
-                        ghost weight it used to have failed contrast. */}
-                    <span aria-hidden className="font-mono text-[clamp(3.5rem,9vw,7rem)] leading-none font-semibold text-white/40">
-                      {pain.index}
-                    </span>
-                  </Reveal>
-                  <Reveal delay={60}>
-                    <h2 className="mt-2 text-[clamp(1.8rem,3.8vw,2.9rem)] leading-[1.04] font-semibold text-white">
-                      {pain.name}
-                    </h2>
-                  </Reveal>
-                  <Reveal delay={120}>
-                    <p className="mt-5 inline-flex rounded-full border border-line px-3 py-1.5 font-mono text-[0.58rem] tracking-[0.12em] text-brand-ice uppercase">
-                      {pain.metric}
-                    </p>
-                  </Reveal>
-                  {index < pains.length - 1 ? (
-                    <Reveal delay={180}>
-                      <p className="mt-8 max-w-xs text-[0.82rem] leading-relaxed text-faint">
-                        Which feeds directly into{" "}
-                        <a href={`#${pains[index + 1].id}`} className="text-brand-ice underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white">
-                          {pains[index + 1].name.toLowerCase()}
-                        </a>
-                        .
-                      </p>
-                    </Reveal>
-                  ) : null}
-                </div>
-
-                <div className="space-y-8">
-                  <Reveal>
-                    <div>
-                      <p className="font-mono text-[0.58rem] tracking-[0.16em] text-faint uppercase">
-                        Status quo
-                      </p>
-                      <p className="mt-3 text-[1.02rem] leading-relaxed text-muted">{pain.statusQuo}</p>
-                    </div>
-                  </Reveal>
-                  <Reveal delay={80}>
-                    <div>
-                      <p className="font-mono text-[0.58rem] tracking-[0.16em] text-faint uppercase">
-                        Impact chain
-                      </p>
-                      <p className="mt-3 text-[1.02rem] leading-relaxed text-muted">{pain.impactChain}</p>
-                    </div>
-                  </Reveal>
-                  <Reveal delay={160}>
-                    <div className="border-l-2 border-[#ff9b9b]/50 pl-5">
-                      <p className="font-mono text-[0.58rem] tracking-[0.16em] uppercase text-[#ff9b9b]">
-                        The wound
-                      </p>
-                      <p className="mt-3 text-[clamp(1.15rem,2.2vw,1.5rem)] leading-snug font-medium text-white">
-                        {pain.wound}
-                      </p>
-                    </div>
-                  </Reveal>
-                  <Reveal delay={220}>
-                    <SpotlightCard className="rounded-2xl border border-brand-bright/25 bg-brand/8 p-6">
-                      <p className="font-mono text-[0.58rem] tracking-[0.16em] text-brand-cyan uppercase">
-                        How Focus Realm answers it
-                      </p>
-                      <p className="mt-3 text-[0.98rem] leading-relaxed text-paper">{pain.answer}</p>
-                    </SpotlightCard>
-                  </Reveal>
-                </div>
-              </div>
-            </Container>
-          </section>
-        ))}
-      </div>
-
       <Rule />
 
-      {/* One mechanism */}
-      <section className="relative overflow-hidden py-24 sm:py-32">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,color-mix(in_oklab,var(--color-brand)_12%,transparent),transparent)]"
-        />
+      {/* Detail, two lines per pain */}
+      <div className="py-16 sm:py-20">
         <Container>
-          <div className="mx-auto max-w-3xl text-center">
-            <Reveal>
-              <Eyebrow className="justify-center">The answer</Eyebrow>
-            </Reveal>
-            <Reveal delay={80}>
-              <h2 className="mt-6 text-[clamp(2rem,4.8vw,3.4rem)] leading-[1.04] font-semibold text-white">
-                Six pains. One mechanism.
-              </h2>
-            </Reveal>
-            <Reveal delay={140}>
-              <p className="mx-auto mt-6 max-w-2xl text-[1.05rem] leading-relaxed text-muted">
-                Standard inside the task → evidence generated automatically → service record that compounds. Not
-                six modules bolted together. One loop, installed once, that stops the snowball at the point it
-                forms.
-              </p>
-            </Reveal>
-            <Reveal delay={200}>
-              <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-                <ButtonLink href="/platform" size="lg">
-                  See how it works
-                  <ArrowRight />
-                </ButtonLink>
-                <ButtonLink href="/demo" variant="outline" size="lg">
-                  Book a 15-min demo
-                </ButtonLink>
-              </div>
-            </Reveal>
-          </div>
+          <Reveal>
+            <Eyebrow>In full</Eyebrow>
+          </Reveal>
 
-          <div className="mt-20 grid gap-5 lg:grid-cols-3">
-            {buyers.map((buyer, index) => (
-              <Reveal key={buyer.title} delay={index * 90}>
-                <div className="panel h-full p-7">
-                  <h3 className="text-[1.05rem] font-semibold text-white">{buyer.title}</h3>
-                  <p className="mt-4 text-[0.88rem] leading-relaxed text-muted">{buyer.pain}</p>
-                  <p className="mt-4 border-t border-line pt-4 text-[0.88rem] leading-relaxed text-paper">
-                    {buyer.win}
+          <dl className="mt-10 divide-y divide-line border-y border-line">
+            {pains.map((pain) => (
+              // Reveal renders the div itself, so the structure stays a valid
+              // dl > div > dt + dd — no wrapper between them.
+              <Reveal
+                key={pain.id}
+                as="div"
+                id={pain.id}
+                className="grid scroll-mt-28 gap-4 py-8 lg:grid-cols-[0.3fr_0.7fr] lg:gap-10"
+              >
+                <dt>
+                  <span className="flex items-baseline gap-3">
+                    <span className="font-mono text-[0.62rem] tabular-nums text-brand-cyan">
+                      {pain.index}
+                    </span>
+                    <span className="text-[1.15rem] leading-tight font-semibold text-white">
+                      {pain.name}
+                    </span>
+                  </span>
+                  <span className="mt-2.5 block font-mono text-[0.55rem] tracking-[0.12em] text-faint uppercase">
+                    {pain.metric}
+                  </span>
+                </dt>
+                <dd className="grid gap-4 sm:grid-cols-2 sm:gap-8">
+                  <p className="text-[0.92rem] leading-relaxed text-muted">{pain.statusQuo}</p>
+                  <p className="border-l border-brand/45 pl-4 text-[0.92rem] leading-relaxed text-paper">
+                    {pain.answer}
                   </p>
-                </div>
+                </dd>
               </Reveal>
             ))}
-          </div>
+          </dl>
+
+          <Reveal delay={80} className="mt-12 flex flex-col gap-3 sm:flex-row">
+            <ButtonLink href="/demo" size="lg">
+              Book a 15-min demo
+              <ArrowRight />
+            </ButtonLink>
+            <ButtonLink href="/platform" variant="outline" size="lg">
+              See the platform
+            </ButtonLink>
+          </Reveal>
         </Container>
-      </section>
+      </div>
     </>
   );
 }
