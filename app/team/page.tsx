@@ -11,9 +11,13 @@ import { personas, team } from "@/lib/content";
 import { breadcrumbSchema, jsonLdGraph, personSchema, webPageSchema } from "@/lib/seo";
 import { site, siteUrl } from "@/lib/site";
 
-const title = "Team — the founders of Focus Realm Hospitality";
+// The layout template appends "· Focus Realm", so the title must not repeat it.
+const title = "Founding team & leadership";
 const description =
+  "Focus Realm Hospitality was founded by Sehej Sharma (CEO), Ali Electricwala (COO) and Aditya Mishra (CTO). Meet the founders behind the platform.";
+const ogDescription =
   "Focus Realm Hospitality was founded by Sehej Sharma (Co-Founder & CEO), Ali Electricwala (Co-Founder & COO) and Aditya Mishra (Co-Founder & CTO). Meet the founders building the service execution platform for hotel operations.";
+const pageName = "The founders of Focus Realm Hospitality";
 
 export const metadata: Metadata = {
   title,
@@ -28,7 +32,8 @@ export const metadata: Metadata = {
     "Focus Realm CEO",
   ],
   alternates: { canonical: "/team" },
-  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/team", type: "website" },
+  openGraph: { title: `${pageName} · ${site.shortName}`, description: ogDescription, url: "/team", type: "website" },
+  twitter: { card: "summary_large_image", description: ogDescription },
 };
 
 export default function TeamPage() {
@@ -38,7 +43,7 @@ export default function TeamPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: jsonLdGraph(
-            webPageSchema({ path: "/team", name: title, description }),
+            webPageSchema({ path: "/team", name: pageName, description }),
             breadcrumbSchema([{ name: "Team", path: "/team" }]),
             {
               "@type": "ItemList",

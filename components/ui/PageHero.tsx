@@ -27,7 +27,7 @@ export default function PageHero({
           <nav aria-label="Breadcrumb" className="mb-8">
             <ol className="flex flex-wrap items-center gap-2 font-mono text-[0.62rem] tracking-[0.14em] uppercase">
               <li>
-                <Link href="/" className="text-faint transition-colors hover:text-brand-ice">
+                <Link href="/" className="inline-flex min-h-11 items-center text-faint transition-colors hover:text-brand-ice">
                   Home
                 </Link>
               </li>
@@ -37,11 +37,11 @@ export default function PageHero({
                     /
                   </span>
                   {crumb.href ? (
-                    <Link href={crumb.href} className="text-faint transition-colors hover:text-brand-ice">
+                    <Link href={crumb.href} className="inline-flex min-h-11 items-center text-faint transition-colors hover:text-brand-ice">
                       {crumb.label}
                     </Link>
                   ) : (
-                    <span className="text-paper">{crumb.label}</span>
+                    <span className="inline-flex min-h-11 items-center text-paper">{crumb.label}</span>
                   )}
                 </li>
               ))}
@@ -54,7 +54,7 @@ export default function PageHero({
         </Reveal>
 
         <h1 className="mt-7 max-w-4xl text-[clamp(2.4rem,5.6vw,4.4rem)] leading-[1] font-semibold tracking-[-0.04em] text-white">
-          <MaskedLines lines={titleLines} stagger={110} />
+          <MaskedLines lines={titleLines} stagger={80} immediate />
         </h1>
 
         {lede ? (

@@ -2,24 +2,32 @@
  * The FR mark, drawn as strokes so it stays crisp at 20px and 200px and
  * never depends on a webfont having loaded.
  */
-export function LogoMark({ className = "size-9" }: { className?: string }) {
+export function LogoMark({
+  className = "size-9",
+  /** Set when a visible wordmark sits beside it — the mark must not add a
+   *  second, differently-worded name to the link's accessible name. */
+  decorative = false,
+}: {
+  className?: string;
+  decorative?: boolean;
+}) {
   return (
     <svg
       viewBox="0 0 48 48"
       className={className}
-      role="img"
-      aria-label="Focus Realm"
+      {...(decorative ? { "aria-hidden": true } : { role: "img", "aria-label": "Focus Realm" })}
       fill="none"
     >
       <defs>
+        {/* Gold from the product's logo tile; plate from its sidebar teal. */}
         <linearGradient id="fr-mark-stroke" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#4f9cff" />
-          <stop offset="55%" stopColor="#1d7bff" />
-          <stop offset="100%" stopColor="#0b4fcc" />
+          <stop offset="0%" stopColor="#e7cd7c" />
+          <stop offset="55%" stopColor="#dbbc5f" />
+          <stop offset="100%" stopColor="#c9a94a" />
         </linearGradient>
         <linearGradient id="fr-mark-plate" x1="0" y1="0" x2="0.6" y2="1">
-          <stop offset="0%" stopColor="#0d2144" />
-          <stop offset="100%" stopColor="#050b18" />
+          <stop offset="0%" stopColor="#1d4044" />
+          <stop offset="100%" stopColor="#0b2126" />
         </linearGradient>
       </defs>
 
@@ -64,12 +72,11 @@ export default function Logo({
 }) {
   return (
     <span className={`flex items-center gap-3 ${className}`}>
-      <LogoMark className={markClassName} />
+      <LogoMark className={markClassName} decorative={showWordmark} />
       {showWordmark ? (
         <span className="flex flex-col leading-none">
           <span className="text-[0.98rem] font-semibold tracking-[-0.02em] text-white">
-            Focus Realm
-            <span className="text-brand-ice/70"> Hospitality</span>
+            Focus Realm <span className="text-brand-ice">Hospitality</span>
           </span>
           {showTagline ? (
             <span className="mt-1 font-mono text-[0.6rem] tracking-[0.16em] text-faint uppercase">

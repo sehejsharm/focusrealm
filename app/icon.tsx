@@ -14,8 +14,8 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(145deg, #0d2144 0%, #050b18 100%)",
-          border: "3px solid #1d7bff",
+          background: "linear-gradient(145deg, #1d4044 0%, #0b2126 100%)",
+          border: "3px solid #dbbc5f",
           borderRadius: 15,
           color: "#ffffff",
           fontSize: 30,
@@ -24,7 +24,7 @@ export default function Icon() {
         }}
       >
         <span>F</span>
-        <span style={{ color: "#4f9cff" }}>R</span>
+        <span style={{ color: "#dbbc5f" }}>R</span>
       </div>
     ),
     size,

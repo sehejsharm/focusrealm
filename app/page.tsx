@@ -23,10 +23,13 @@ import {
 } from "@/lib/seo";
 import { site } from "@/lib/site";
 
+const ogDescription =
+  "Focus Realm Hospitality is the service execution platform for hotel operations. The SOP lives inside the timed task, photo and supervisor evidence is captured automatically, and it compounds into an audit-ready service record. Founded by Sehej Sharma, Ali Electricwala and Aditya Mishra.";
+
 export const metadata: Metadata = {
-  title: `${site.name} — Service Execution Platform for Hotels`,
-  description:
-    "Focus Realm Hospitality is the service execution platform for hotel operations. The SOP lives inside the timed task, photo and supervisor evidence is captured automatically, and it compounds into an audit-ready service record. Founded by Sehej Sharma, Ali Electricwala and Aditya Mishra. Every shift, five-star.",
+  // Absolute so the layout template does not append the company name twice.
+  title: { absolute: `${site.name} — Hotel SOP Execution Platform` },
+  description: site.shortDescription,
   keywords: [
     "Focus Realm",
     "Focus Realm Hospitality",
@@ -43,10 +46,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   openGraph: {
     title: `${site.name} — the operating system for hotel service standards`,
-    description: site.shortDescription,
+    description: ogDescription,
     url: "/",
     type: "website",
   },
+  twitter: { card: "summary_large_image", description: ogDescription },
 };
 
 export default function HomePage() {

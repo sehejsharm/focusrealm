@@ -16,8 +16,10 @@ type Options = {
  * every reveal self-contained instead of routed through a provider.
  */
 export function useInView<T extends HTMLElement = HTMLDivElement>({
-  threshold = 0.15,
-  rootMargin = "0px 0px -12% 0px",
+  // Fire as soon as any sliver of the element is near the viewport. Waiting
+  // for 15% of a tall block meant headlines sat mid-reveal at rest.
+  threshold = 0,
+  rootMargin = "120px 0px 120px 0px",
   once = true,
 }: Options = {}) {
   const ref = useRef<T | null>(null);
@@ -26,6 +28,9 @@ export function useInView<T extends HTMLElement = HTMLDivElement>({
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
+
+    // IntersectionObserver delivers an initial observation on observe(), so
+    // anything already on screen at mount reveals on the next frame.
 
     // No observer support: show the content rather than leave it hidden.
     if (typeof IntersectionObserver === "undefined") {

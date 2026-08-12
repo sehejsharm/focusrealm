@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { ArrowRight, ButtonLink } from "@/components/ui/Button";
+import { ButtonLink } from "@/components/ui/Button";
 
 /**
  * Mobile conversion bar. Appears once the reader is past the hero and hides
@@ -37,11 +37,10 @@ export default function StickyCta() {
       <div className="flex items-center gap-3">
         <p className="min-w-0 flex-1 text-[0.78rem] leading-tight text-muted">
           <span className="block font-medium text-white">See it on a real shift.</span>
-          15 minutes, no feature tour.
+          No feature tour.
         </p>
         <ButtonLink href="/demo" size="md" className="shrink-0" tabIndex={shown ? undefined : -1}>
-          Book demo
-          <ArrowRight />
+          Book a 15-min demo
         </ButtonLink>
       </div>
     </div>

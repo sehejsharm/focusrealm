@@ -46,7 +46,7 @@ export default function PainSnowball() {
   }, [isDesktop]);
 
   // Dwell on the first and last card rather than moving from frame zero.
-  const travel = Math.min(1, Math.max(0, (progress - 0.06) / 0.86));
+  const travel = Math.min(1, Math.max(0, (progress - 0.04) / 0.9));
   const shift = isDesktop ? travel * maxShift : 0;
   const activeIndex = Math.min(pains.length - 1, Math.round(travel * (pains.length - 1)));
 
@@ -90,7 +90,7 @@ export default function PainSnowball() {
                       style={{
                         borderColor: reached
                           ? "color-mix(in oklab, var(--color-brand-bright) 60%, transparent)"
-                          : "color-mix(in oklab, #8fd3ff 14%, transparent)",
+                          : "var(--color-line)",
                         background: reached ? "color-mix(in oklab, var(--color-brand) 22%, transparent)" : "transparent",
                         color: reached ? "#fff" : "var(--color-faint)",
                       }}
@@ -120,8 +120,8 @@ export default function PainSnowball() {
       </Container>
 
       {/* Pinned travel */}
-      <div ref={ref} className="relative mt-10 lg:h-[460vh]">
-        <div className="lg:sticky lg:top-0 lg:flex lg:h-dvh lg:items-center">
+      <div ref={ref} className="relative mt-10 lg:h-[300vh]">
+        <div className="lg:sticky lg:top-0 lg:flex lg:min-h-dvh lg:items-center lg:py-24">
           <div ref={viewportRef} className="w-full overflow-hidden">
             <div
               ref={trackRef}
@@ -151,7 +151,7 @@ export default function PainSnowball() {
                     />
 
                     <div className="flex items-start justify-between gap-4">
-                      <span className="font-mono text-[2.6rem] leading-none font-semibold text-white/12">
+                      <span aria-hidden className="font-mono text-[2.6rem] leading-none font-semibold text-white/40">
                         {pain.index}
                       </span>
                       <span className="rounded-full border border-line px-2.5 py-1 font-mono text-[0.55rem] tracking-[0.1em] text-brand-ice uppercase">

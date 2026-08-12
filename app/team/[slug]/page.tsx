@@ -24,11 +24,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!person) return {};
 
   // The first sentence is written to be the search snippet.
-  const description = `${person.name} is the ${person.role} of ${site.name}, the service execution platform for hotel operations. ${person.headline}`;
+  // Under 155 so it is not truncated, and it opens with the sentence a
+  // "who is <name>" query should be answered with.
+  const description = `${person.name} is the ${person.role} of ${site.name}, the service execution platform for hotel operations.`;
+  const ogDescription = `${description} ${person.headline}`;
   const first = person.name.split(" ")[0];
 
   return {
-    title: `${person.name} — ${person.shortRole}, ${site.name}`,
+    title: `${person.name} — ${person.shortRole}`,
     description,
     keywords: [
       person.name,
@@ -44,13 +47,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       type: "profile",
       title: `${person.name} — ${person.shortRole}, ${site.name}`,
-      description,
+      description: ogDescription,
       url: `/team/${person.slug}`,
     },
     twitter: {
       card: "summary_large_image",
       title: `${person.name} — ${person.shortRole}, ${site.name}`,
-      description,
+      description: ogDescription,
     },
   };
 }
@@ -92,7 +95,7 @@ export default async function PersonPage({ params }: Props) {
           <nav aria-label="Breadcrumb" className="mb-8">
             <ol className="flex flex-wrap items-center gap-2 font-mono text-[0.62rem] tracking-[0.14em] uppercase">
               <li>
-                <Link href="/" className="text-faint transition-colors hover:text-brand-ice">
+                <Link href="/" className="inline-flex min-h-11 items-center text-faint transition-colors hover:text-brand-ice">
                   Home
                 </Link>
               </li>
@@ -100,7 +103,7 @@ export default async function PersonPage({ params }: Props) {
                 <span aria-hidden className="text-brand/50">
                   /
                 </span>
-                <Link href="/team" className="text-faint transition-colors hover:text-brand-ice">
+                <Link href="/team" className="inline-flex min-h-11 items-center text-faint transition-colors hover:text-brand-ice">
                   Team
                 </Link>
               </li>
@@ -108,7 +111,7 @@ export default async function PersonPage({ params }: Props) {
                 <span aria-hidden className="text-brand/50">
                   /
                 </span>
-                <span className="text-paper">{person.name}</span>
+                <span className="inline-flex min-h-11 items-center text-paper">{person.name}</span>
               </li>
             </ol>
           </nav>

@@ -11,7 +11,21 @@ import { roles } from "@/lib/content";
 
 const routeFor = { staff: "/staff/today", manager: "/manager/overview", author: "/author/create" } as const;
 
-export default function RoleShowcase({ withHeading = true }: { withHeading?: boolean }) {
+export default function RoleShowcase({
+  withHeading = true,
+  /**
+   * When the section renders its own <h2>, the role headline sits below it as
+   * an <h3>. Without that <h2> (as on /platform, where the page <h1> is the
+   * nearest ancestor heading) the role headline has to be the <h2> or the
+   * document skips a level.
+   */
+  headingLevel = withHeading ? 3 : 2,
+}: {
+  withHeading?: boolean;
+  headingLevel?: 2 | 3;
+}) {
+  const RoleHeading = (headingLevel === 2 ? "h2" : "h3") as "h2" | "h3";
+  const CapabilityHeading = (headingLevel === 2 ? "h3" : "h4") as "h3" | "h4";
   const [roleIndex, setRoleIndex] = useState(0);
   const [screenIndex, setScreenIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -118,10 +132,10 @@ export default function RoleShowcase({ withHeading = true }: { withHeading?: boo
             <p className="font-mono text-[0.62rem] tracking-[0.16em] text-brand-ice uppercase">
               {role.deviceLabel}
             </p>
-            <h3 className="mt-4 text-[clamp(1.6rem,3.2vw,2.4rem)] leading-[1.06] font-semibold text-white">
+            <RoleHeading className="mt-4 text-[clamp(1.6rem,3.2vw,2.4rem)] leading-[1.06] font-semibold text-white">
               {role.headline}
               <span className="text-gradient"> {role.headlineAccent}</span>
-            </h3>
+            </RoleHeading>
             <p className="mt-5 text-[0.98rem] leading-relaxed text-muted">{role.summary}</p>
 
             <div className="mt-6 flex items-center gap-3 rounded-xl border border-line bg-white/[0.03] px-4 py-3">
@@ -144,7 +158,7 @@ export default function RoleShowcase({ withHeading = true }: { withHeading?: boo
                   className="border-l border-line pl-5"
                   style={{ animation: `rise-in 0.7s var(--ease-out-expo) ${140 + index * 90}ms both` }}
                 >
-                  <h4 className="text-[0.92rem] font-medium text-white">{capability.title}</h4>
+                  <CapabilityHeading className="text-[0.92rem] font-medium text-white">{capability.title}</CapabilityHeading>
                   <p className="mt-1.5 text-[0.85rem] leading-relaxed text-faint">{capability.body}</p>
                 </li>
               ))}
@@ -160,7 +174,7 @@ export default function RoleShowcase({ withHeading = true }: { withHeading?: boo
             >
               <div
                 aria-hidden
-                className="pointer-events-none absolute inset-0 opacity-40 [background-image:linear-gradient(to_right,color-mix(in_oklab,#8fd3ff_7%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklab,#8fd3ff_7%,transparent)_1px,transparent_1px)] [background-size:44px_44px]"
+                className="pointer-events-none absolute inset-0 opacity-40 [background-image:linear-gradient(to_right,color-mix(in_oklab,#94d4c1_7%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklab,#94d4c1_7%,transparent)_1px,transparent_1px)] [background-size:44px_44px]"
               />
               <span className="absolute top-4 left-5 z-10 font-mono text-[0.55rem] tracking-[0.16em] text-faint uppercase">
                 {role.name} · {role.device === "phone" ? "mobile" : "desktop"}
@@ -217,7 +231,9 @@ export default function RoleShowcase({ withHeading = true }: { withHeading?: boo
               </div>
               <p className="mt-1 text-[0.82rem] text-faint">{role.screens[screenIndex].caption}</p>
 
-              <div className="mt-4 flex gap-2" role="group" aria-label={`${role.name} screens`}>
+              {/* The button itself is 44px tall so the tap target is real;
+                  the visible indicator is a 4px bar centred inside it. */}
+              <div className="-my-3 flex gap-2" role="group" aria-label={`${role.name} screens`}>
                 {role.screens.map((screen, index) => (
                   <button
                     key={screen.title}
@@ -225,13 +241,17 @@ export default function RoleShowcase({ withHeading = true }: { withHeading?: boo
                     onClick={() => setScreenIndex(index)}
                     aria-label={`Show ${screen.title}`}
                     aria-current={index === screenIndex}
-                    className="group relative h-1 flex-1 overflow-hidden rounded-full bg-white/10 transition-colors hover:bg-white/20"
+                    className="group flex h-11 flex-1 items-center"
                   >
                     <span
-                      className="absolute inset-y-0 left-0 rounded-full bg-linear-to-r from-brand to-brand-cyan transition-all duration-500"
-                      style={{ width: index === screenIndex ? "100%" : index < screenIndex ? "100%" : "0%" }}
-                    />
-                    <span className="absolute -inset-y-3 inset-x-0" />
+                      aria-hidden
+                      className="relative h-1 w-full overflow-hidden rounded-full bg-white/12 transition-colors group-hover:bg-white/25"
+                    >
+                      <span
+                        className="absolute inset-y-0 left-0 rounded-full bg-linear-to-r from-brand to-brand-cyan transition-all duration-500"
+                        style={{ width: index <= screenIndex ? "100%" : "0%" }}
+                      />
+                    </span>
                   </button>
                 ))}
               </div>

@@ -108,7 +108,8 @@ export default function Hero() {
                     standards.
                   </span>,
                 ]}
-                stagger={110}
+                stagger={80}
+                immediate
               />
             </h1>
 

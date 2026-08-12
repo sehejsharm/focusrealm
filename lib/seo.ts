@@ -92,11 +92,23 @@ export const organizationSchema = {
     itemOffered: { "@id": softwareId },
     description: "Single-property pilot of the Focus Realm service execution platform.",
   },
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      email: site.email,
+      url: absoluteUrl("/demo"),
+      availableLanguage: ["English"],
+      areaServed: "Worldwide",
+    },
+  ],
   areaServed: [
     { "@type": "Place", name: "Asia" },
     { "@type": "Place", name: "Middle East" },
     { "@type": "Place", name: "Worldwide" },
   ],
+  // Fill site.sameAs in lib/site.ts with the LinkedIn, X and Crunchbase URLs.
+  // Emitting an empty array is worse than omitting the property.
   ...(site.sameAs.length > 0 ? { sameAs: site.sameAs } : {}),
 } as const;
 
@@ -116,7 +128,7 @@ export const softwareSchema = {
   name: site.name,
   applicationCategory: "BusinessApplication",
   applicationSubCategory: "Service Execution Platform",
-  operatingSystem: "Web browser, iOS, Android",
+  operatingSystem: "Web",
   url: siteUrl,
   description: site.description,
   featureList: [

@@ -13,6 +13,8 @@ import { site } from "@/lib/site";
 
 const title = "About Focus Realm Hospitality";
 const description =
+  "Why Focus Realm Hospitality exists: a standard that does not live inside the timed task is not a standard, it is a document. Our category and principles.";
+const ogDescription =
   "Focus Realm Hospitality builds the service execution platform for hotel operations — founded on one thesis: a standard that does not live inside the timed task is not a standard, it is a document. Our category, our principles and the team behind them.";
 
 export const metadata: Metadata = {
@@ -26,7 +28,8 @@ export const metadata: Metadata = {
     "hotel operations software company",
   ],
   alternates: { canonical: "/about" },
-  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/about", type: "website" },
+  openGraph: { title: `${title} · ${site.shortName}`, description: ogDescription, url: "/about", type: "website" },
+  twitter: { card: "summary_large_image", description: ogDescription },
 };
 
 const principles = [
@@ -159,7 +162,7 @@ export default function AboutPage() {
             {principles.map((principle, index) => (
               <Reveal key={principle.number} delay={index * 90}>
                 <SpotlightCard className="panel flex h-full flex-col p-8">
-                  <span className="font-mono text-[2.4rem] leading-none font-semibold text-white/12">
+                  <span aria-hidden className="font-mono text-[2.4rem] leading-none font-semibold text-white/40">
                     {principle.number}
                   </span>
                   <h3 className="mt-6 text-[1.2rem] leading-snug font-semibold text-white">{principle.title}</h3>

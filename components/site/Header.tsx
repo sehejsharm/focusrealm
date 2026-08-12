@@ -60,7 +60,7 @@ export default function Header() {
           }`}
         >
           <div className="mx-auto flex h-18 w-full max-w-[1240px] items-center justify-between gap-4 px-5 sm:px-8">
-            <Link href="/" className="shrink-0" aria-label="Focus Realm Hospitality — home">
+            <Link href="/" className="flex min-h-11 shrink-0 items-center">
               <Logo markClassName="size-9" />
             </Link>
 

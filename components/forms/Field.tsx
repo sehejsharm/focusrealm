@@ -3,7 +3,7 @@
 import type { ComponentProps, ReactNode } from "react";
 
 const control =
-  "w-full rounded-xl border border-line bg-white/[0.03] px-4 py-3 text-[0.92rem] text-paper placeholder:text-faint/70 transition-all duration-300 outline-none focus:border-brand-bright/70 focus:bg-brand/8 focus:ring-2 focus:ring-brand/25";
+  "w-full rounded-xl border border-line bg-white/[0.03] px-4 py-3 text-[0.92rem] text-paper placeholder:text-faint/75 transition-all duration-300 outline-none focus:border-brand-bright/70 focus:bg-brand/10 focus:ring-2 focus:ring-brand/30 disabled:opacity-60 aria-[invalid=true]:border-[#ff9b9b]/70 aria-[invalid=true]:bg-[#ff9b9b]/[0.06]";
 
 function Wrapper({
   label,
@@ -24,16 +24,25 @@ function Wrapper({
     <div>
       <label
         htmlFor={htmlFor}
-        className="flex items-baseline justify-between gap-3 font-mono text-[0.6rem] tracking-[0.14em] text-brand-ice uppercase"
+        className="flex items-baseline justify-between gap-3 font-mono text-[0.66rem] tracking-[0.14em] text-brand-cyan uppercase"
       >
         <span>
           {label}
-          {required ? <span className="text-brand-cyan"> *</span> : null}
+          {required ? (
+            <>
+              <span aria-hidden> *</span>
+              <span className="sr-only"> (required)</span>
+            </>
+          ) : null}
         </span>
         {hint ? <span className="normal-case tracking-normal text-faint">{hint}</span> : null}
       </label>
       <div className="mt-2.5">{children}</div>
-      {error ? <p className="mt-2 text-[0.76rem] text-[#ff9b9b]">{error}</p> : null}
+      {error ? (
+        <p id={`${htmlFor}-error`} role="alert" className="mt-2 text-[0.78rem] text-[#ffb3b3]">
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -75,7 +84,13 @@ export function SelectField({
   return (
     <Wrapper label={label} htmlFor={id} hint={hint} error={error} required={rest.required}>
       <div className="relative">
-        <select id={id} className={`${control} appearance-none pr-10`} {...rest}>
+        <select
+          id={id}
+          className={`${control} appearance-none pr-10`}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? `${id}-error` : undefined}
+          {...rest}
+        >
           {options.map((option) => (
             <option key={option} value={option} className="bg-ink text-paper">
               {option}
@@ -84,7 +99,7 @@ export function SelectField({
         </select>
         <svg
           viewBox="0 0 12 12"
-          className="pointer-events-none absolute top-1/2 right-4 size-3 -translate-y-1/2 text-brand-ice"
+          className="pointer-events-none absolute top-1/2 right-4 size-3 -translate-y-1/2 text-brand-cyan"
           fill="none"
           aria-hidden
         >
@@ -104,7 +119,14 @@ export function TextArea({
 }: { label: string; hint?: string; error?: string; id: string } & ComponentProps<"textarea">) {
   return (
     <Wrapper label={label} htmlFor={id} hint={hint} error={error} required={rest.required}>
-      <textarea id={id} rows={4} className={`${control} resize-y`} {...rest} />
+      <textarea
+        id={id}
+        rows={4}
+        className={`${control} resize-y`}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? `${id}-error` : undefined}
+        {...rest}
+      />
     </Wrapper>
   );
 }

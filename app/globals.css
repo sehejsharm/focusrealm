@@ -2,32 +2,49 @@
 
 /* ------------------------------------------------------------------ *
  * Design tokens.
- * Brand blues are taken from the FR mark; everything sits on a near
- * black navy so the product screenshots read as light sources.
  * ------------------------------------------------------------------ */
 
+/*
+ * Palette sampled directly from the product screenshots in assets/platform/
+ * so the site and the app read as one system:
+ *
+ *   #102830 / #122e35  deep teal ground and sidebar
+ *   #1d4044            elevated card
+ *   #33927b            emerald accent ("remarkable.", "service needs it.")
+ *   #94d4c1            mint (status dots, light accents)
+ *   #dbbc5f            gold (logo tile, active nav)
+ *   #f6f7f1            paper
+ *
+ * Text tokens are set above 4.5:1 against every surface they appear on,
+ * including the lightest card (#1d3e42) — see the contrast note per token.
+ */
 @theme {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
 
-  --color-void: #02040a;
-  --color-ink: #04070f;
-  --color-ink-2: #070c18;
-  --color-ink-3: #0b1220;
+  --color-void: #061417;
+  --color-ink: #0b2126;
+  --color-ink-2: #122e35;
+  --color-ink-3: #1d3e42;
 
-  --color-brand: #1d7bff;
-  --color-brand-bright: #4f9cff;
-  --color-brand-deep: #0b4fcc;
-  --color-brand-navy: #082a63;
-  --color-brand-ice: #a8d6ff;
-  --color-brand-cyan: #56e0ff;
+  --color-brand: #33927b;
+  --color-brand-bright: #4fbf9f;
+  --color-brand-deep: #1f6d5b;
+  --color-brand-navy: #0f3b39;
+  --color-brand-ice: #b9e6d8;
+  --color-brand-cyan: #94d4c1;
 
-  --color-paper: #eaf1fd;
-  --color-muted: #8fa2c0;
-  --color-faint: #5d6f8c;
+  --color-gold: #dbbc5f;
+  --color-gold-deep: #c9a94a;
 
-  --color-line: color-mix(in oklab, #8fd3ff 14%, transparent);
-  --color-line-strong: color-mix(in oklab, #8fd3ff 26%, transparent);
+  --color-paper: #f2f6f3;
+  /* 9.5:1 on void, 6.2:1 on the lightest card */
+  --color-muted: #a8c4c0;
+  /* 8.1:1 on void, 5.3:1 on the lightest card — safe for 9px mono labels */
+  --color-faint: #9ab5b1;
+
+  --color-line: color-mix(in oklab, #94d4c1 16%, transparent);
+  --color-line-strong: color-mix(in oklab, #94d4c1 30%, transparent);
 
   --animate-marquee: marquee 44s linear infinite;
   --animate-marquee-slow: marquee 90s linear infinite;
@@ -243,12 +260,12 @@ p {
   line-height: 1;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-brand-ice);
+  color: var(--color-brand-cyan);
 }
 
 /*
- * Accent type. Every stop stays inside the blue family: headlines are split
- * across masked lines, so a gradient that started at white would land
+ * Accent type. Every stop stays inside the mint/emerald family: headlines are
+ * split across masked lines, so a gradient that started at white would land
  * mid-word and read like a rendering fault.
  */
 @utility text-gradient {
@@ -278,7 +295,13 @@ p {
   background:
     linear-gradient(180deg, color-mix(in oklab, #ffffff 6%, transparent) 0%, color-mix(in oklab, #ffffff 2%, transparent) 100%),
     color-mix(in oklab, var(--color-ink-2) 88%, transparent);
-  backdrop-filter: blur(14px);
+  /*
+   * Frosting is a per-frame GPU cost on every card. Phones pay it hardest
+   * and see it least, so it starts at the tablet breakpoint.
+   */
+  @media (min-width: 768px) {
+    backdrop-filter: blur(14px);
+  }
 }
 
 @utility hairline {
@@ -290,31 +313,32 @@ p {
  * Scroll reveals. Driven by IntersectionObserver setting data-show.
  * ------------------------------------------------------------------ */
 
+/*
+ * Short and shallow on purpose. Long reveals meant a headline could sit
+ * visibly mid-transition while the reader was already looking at it.
+ */
 [data-reveal] {
   opacity: 0;
-  transform: translate3d(0, 26px, 0);
+  transform: translate3d(0, 16px, 0);
   transition:
-    opacity 0.9s var(--ease-out-expo),
-    transform 1s var(--ease-out-expo),
-    filter 0.9s var(--ease-out-expo);
-  filter: blur(6px);
+    opacity 0.45s var(--ease-out-expo),
+    transform 0.55s var(--ease-out-expo);
   transition-delay: var(--reveal-delay, 0ms);
 }
 
 [data-reveal="left"] {
-  transform: translate3d(-28px, 0, 0);
+  transform: translate3d(-18px, 0, 0);
 }
 [data-reveal="right"] {
-  transform: translate3d(28px, 0, 0);
+  transform: translate3d(18px, 0, 0);
 }
 [data-reveal="scale"] {
-  transform: scale(0.955);
+  transform: scale(0.975);
 }
 
 [data-reveal][data-show="true"] {
   opacity: 1;
   transform: none;
-  filter: blur(0);
 }
 
 /* Line-by-line headline mask. */
@@ -326,7 +350,7 @@ p {
 .mask-line > span {
   display: block;
   transform: translate3d(0, 108%, 0);
-  transition: transform 1.15s var(--ease-out-expo);
+  transition: transform 0.6s var(--ease-out-expo);
   transition-delay: var(--reveal-delay, 0ms);
 }
 [data-show="true"] .mask-line > span,
@@ -337,8 +361,8 @@ p {
 @media (prefers-reduced-motion: reduce) {
   [data-reveal],
   [data-reveal][data-show="true"] {
-    opacity: 1;
-    transform: none;
+    opacity: 1 !important;
+    transform: none !important;
     filter: none;
     transition: none;
   }
@@ -409,8 +433,8 @@ p {
 /* Technical grid, faded at the edges. */
 .grid-backdrop {
   background-image:
-    linear-gradient(to right, color-mix(in oklab, #8fd3ff 8%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, #8fd3ff 8%, transparent) 1px, transparent 1px);
+    linear-gradient(to right, color-mix(in oklab, #94d4c1 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, #94d4c1 8%, transparent) 1px, transparent 1px);
   background-size: 72px 72px;
   -webkit-mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 20%, transparent 75%);
   mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 20%, transparent 75%);

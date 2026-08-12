@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { CSSProperties, ElementType, ReactNode } from "react";
 
 import { useInView } from "@/components/fx/useInView";
@@ -52,17 +53,32 @@ export function MaskedLines({
   lineClassName,
   stagger = 90,
   delay = 0,
+  /**
+   * Hero headlines are above the fold, so they animate from mount rather than
+   * waiting on an observer — they can never be caught clipped mid-reveal.
+   */
+  immediate = false,
 }: {
   lines: ReactNode[];
   className?: string;
   lineClassName?: string;
   stagger?: number;
   delay?: number;
+  immediate?: boolean;
 }) {
-  const { ref, inView } = useInView<HTMLSpanElement>({ threshold: 0.2 });
+  const { ref, inView } = useInView<HTMLSpanElement>({ threshold: 0 });
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    if (!immediate) return;
+    const frame = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(frame);
+  }, [immediate]);
+
+  const show = immediate ? mounted : inView;
 
   return (
-    <span ref={ref} data-show={inView ? "true" : "false"} className={className}>
+    <span ref={ref} data-show={show ? "true" : "false"} className={className}>
       {lines.map((line, index) => (
         <span
           key={index}

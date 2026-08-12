@@ -12,6 +12,8 @@ import { site } from "@/lib/site";
 
 const title = "Book a 15-minute demo";
 const description =
+  "See the Focus Realm platform on one real hotel shift in 15 minutes — staff, manager and author interfaces — then a pilot scoped to your own standards.";
+const ogDescription =
   "Book a 15-minute walkthrough of the Focus Realm service execution platform: the staff mobile interface, the manager service picture and the author workspace, run live against a real shift — then a pilot scoped to your own standards.";
 
 export const metadata: Metadata = {
@@ -24,14 +26,15 @@ export const metadata: Metadata = {
     "hotel SOP pilot",
   ],
   alternates: { canonical: "/demo" },
-  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/demo", type: "website" },
+  openGraph: { title: `${title} · ${site.shortName}`, description: ogDescription, url: "/demo", type: "website" },
+  twitter: { card: "summary_large_image", description: ogDescription },
 };
 
 const fields: FieldSpec[] = [
-  { kind: "text", name: "name", label: "Your name", placeholder: "Full name", required: true, half: true },
-  { kind: "text", name: "email", label: "Work email", type: "email", placeholder: "you@property.com", required: true, half: true },
-  { kind: "text", name: "role", label: "Your role", placeholder: "General Manager, HR Director, Head of L&D…", half: true },
-  { kind: "text", name: "company", label: "Property or group", placeholder: "Hotel or group name", required: true, half: true },
+  { kind: "text", name: "name", label: "Your name", placeholder: "Full name", required: true, half: true, autoComplete: "name" },
+  { kind: "text", name: "email", label: "Work email", type: "email", placeholder: "you@property.com", required: true, half: true, autoComplete: "email" },
+  { kind: "text", name: "role", label: "Your role", placeholder: "General Manager, HR Director, Head of L&D…", half: true, autoComplete: "organization-title" },
+  { kind: "text", name: "company", label: "Property or group", placeholder: "Hotel or group name", required: true, half: true, autoComplete: "organization" },
   { kind: "select", name: "size", label: "Property size", options: ["Under 100 rooms", "100–249 rooms", "250–499 rooms", "500+ rooms", "Multi-property group"], half: true },
   { kind: "select", name: "timeline", label: "Timeline", options: ["Exploring", "Next quarter", "This quarter", "Audit deadline coming"], half: true },
   {
@@ -90,14 +93,14 @@ export default function DemoPage() {
         dangerouslySetInnerHTML={{
           __html: jsonLdGraph(
             webPageSchema({ path: "/demo", name: title, description }),
-            breadcrumbSchema([{ name: "Book a demo", path: "/demo" }]),
+            breadcrumbSchema([{ name: "Demo", path: "/demo" }]),
           ),
         }}
       />
 
       <PageHero
         eyebrow="Walkthrough & pilot"
-        breadcrumb={[{ label: "Book a demo" }]}
+        breadcrumb={[{ label: "Demo" }]}
         titleLines={[
           <>Fifteen minutes.</>,
           <>
@@ -115,9 +118,10 @@ export default function DemoPage() {
               <LeadForm
                 fields={fields}
                 subject="Demo request — Focus Realm Hospitality"
+                formId="demo"
                 submitLabel="Request the walkthrough"
-                successTitle="Your demo request is ready."
-                successBody="Your mail client should have opened with the details filled in. Send it and we will come back with two or three times within one working day."
+                successTitle="Request received."
+                successBody="A founder reads every one of these. We will come back with two or three times for your 15-minute walkthrough, usually within one working day."
               />
             </Reveal>
 
@@ -127,10 +131,14 @@ export default function DemoPage() {
                 <Eyebrow>What the fifteen minutes covers</Eyebrow>
               </Reveal>
 
+              {/* Reveal wraps the <li>, never sits between <ol> and <li>. */}
               <ol className="mt-8 space-y-1">
                 {agenda.map((item, index) => (
-                  <Reveal key={item.step} delay={index * 80}>
-                    <li className="group border-l-2 border-line py-5 pl-6 transition-colors duration-500 hover:border-brand-bright/60">
+                  <li
+                    key={item.step}
+                    className="group border-l-2 border-line py-5 pl-6 transition-colors duration-500 hover:border-brand-bright/60"
+                  >
+                    <Reveal delay={index * 60}>
                       <div className="flex items-center gap-3">
                         <span className="font-mono text-[0.6rem] tracking-[0.16em] text-brand-ice">
                           {item.step}
@@ -141,8 +149,8 @@ export default function DemoPage() {
                       </div>
                       <h2 className="mt-3 text-[1.12rem] font-semibold text-white">{item.title}</h2>
                       <p className="mt-2 text-[0.9rem] leading-relaxed text-muted">{item.body}</p>
-                    </li>
-                  </Reveal>
+                    </Reveal>
+                  </li>
                 ))}
               </ol>
 

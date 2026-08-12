@@ -7,7 +7,8 @@ import { useInView } from "@/components/fx/useInView";
 /** Counts to `value` once the number scrolls into view. */
 export default function CountUp({
   value,
-  duration = 1400,
+  /** Short enough that the number is never mid-count while being read. */
+  duration = 700,
   suffix = "",
   prefix = "",
   className,
@@ -18,23 +19,27 @@ export default function CountUp({
   prefix?: string;
   className?: string;
 }) {
-  const { ref, inView } = useInView<HTMLSpanElement>({ threshold: 0.4 });
-  const [display, setDisplay] = useState(0);
+  const { ref, inView } = useInView<HTMLSpanElement>({ threshold: 0.2 });
+  // Start partway up rather than from zero: the eye reads a settling number,
+  // not a slot machine, and the distance left to travel is short.
+  const [display, setDisplay] = useState(() => Math.round(value * 0.82));
   const started = useRef(false);
 
   useEffect(() => {
     if (!inView || started.current) return;
     started.current = true;
 
+    // Reduced motion lands on the final value on the very first frame.
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const from = Math.round(value * 0.82);
     const start = performance.now();
     let frame = requestAnimationFrame(step);
 
     function step(now: number) {
       const t = reduced ? 1 : Math.min(1, (now - start) / duration);
-      // easeOutExpo — fast arrival, long settle.
-      const eased = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
-      setDisplay(Math.round(eased * value));
+      const eased = 1 - Math.pow(1 - t, 3);
+      // Land exactly on `value` — never a rounding artefact one below it.
+      setDisplay(t === 1 ? value : from + Math.round((value - from) * eased));
       if (t < 1) frame = requestAnimationFrame(step);
     }
 

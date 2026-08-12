@@ -6,7 +6,7 @@
  * canonical tag, sitemap entry, OG URL and JSON-LD @id is derived from it.
  */
 
-const fallbackUrl = "https://www.focusrealm.com";
+const fallbackUrl = "https://www.focusrealm.org";
 
 function resolveSiteUrl() {
   const fromEnv =
@@ -30,11 +30,17 @@ export const site = {
   categoryLine: "The operating system for hotel service standards.",
   description:
     "Focus Realm Hospitality is a mobile-first service execution platform for hotel operations. The standard lives inside the timed task, completing the task captures photo and supervisor evidence, and that evidence compounds into an audit-ready service record.",
+  /** Kept under 155 characters — this is the default meta description. */
   shortDescription:
-    "The service execution platform for hotel operations. Standards inside timed tasks, evidence captured automatically, an audit-ready service record.",
+    "The service execution platform for hotel operations. The SOP lives inside the timed task, and the evidence it captures becomes an audit-ready record.",
+  /**
+   * One public address, one domain. Everything on the site — footer, contact
+   * routes, demo form, JSON-LD contactPoint, the policy pages — reads from
+   * these, and they all resolve to the same inbox on purpose.
+   */
   email: "hello@focusrealm.org",
-  demoEmail: "demo@focusrealm.org",
-  privacyEmail: "privacy@focusrealm.org",
+  demoEmail: "hello@focusrealm.org",
+  privacyEmail: "hello@focusrealm.org",
   prototypeUrl: "https://fr2-b6s.pages.dev/",
   founded: "2024",
   /** Public profiles for the company. Emitted as schema.org sameAs. */

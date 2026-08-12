@@ -15,8 +15,10 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${site.name} — Service Execution Platform for Hotels`,
-    template: `%s · ${site.name}`,
+    default: `${site.name} — Hotel SOP Execution Platform`,
+    // Short suffix on purpose: page titles have ~60 chars before Google
+    // truncates, and the full company name ate 26 of them.
+    template: `%s · ${site.shortName}`,
   },
   description: site.shortDescription,
   applicationName: site.name,
@@ -67,12 +69,12 @@ export const metadata: Metadata = {
   },
   formatDetection: { telephone: false, address: false, email: false },
   other: {
-    "theme-color": "#04070f",
+    "theme-color": "#061417",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#04070f",
+  themeColor: "#061417",
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,

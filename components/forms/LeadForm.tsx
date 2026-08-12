@@ -1,31 +1,75 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { SelectField, TextArea, TextField } from "@/components/forms/Field";
 import { ArrowRight, Button } from "@/components/ui/Button";
 import { site } from "@/lib/site";
 
 export type FieldSpec =
-  | { kind: "text"; name: string; label: string; placeholder?: string; required?: boolean; type?: string; half?: boolean; hint?: string }
-  | { kind: "select"; name: string; label: string; options: string[]; required?: boolean; half?: boolean; hint?: string }
-  | { kind: "textarea"; name: string; label: string; placeholder?: string; required?: boolean; hint?: string };
+  | {
+      kind: "text";
+      name: string;
+      label: string;
+      placeholder?: string;
+      required?: boolean;
+      type?: string;
+      half?: boolean;
+      hint?: string;
+      autoComplete?: string;
+    }
+  | {
+      kind: "select";
+      name: string;
+      label: string;
+      options: string[];
+      required?: boolean;
+      half?: boolean;
+      hint?: string;
+      autoComplete?: string;
+    }
+  | {
+      kind: "textarea";
+      name: string;
+      label: string;
+      placeholder?: string;
+      required?: boolean;
+      hint?: string;
+      autoComplete?: string;
+    };
 
-/**
- * There is no backend on this site yet, so the form validates in the browser
- * and hands off to the user's mail client with a structured body. Swap
- * `handoff` for a POST to a route handler when an inbox integration lands.
- */
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+type Status = "idle" | "submitting" | "sent" | "fallback";
+
+/** Fires a conversion event into whichever analytics layer is present. */
+function trackConversion(formId: string, reference?: string) {
+  if (typeof window === "undefined") return;
+  const w = window as typeof window & {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+    plausible?: (event: string, options?: unknown) => void;
+  };
+
+  w.dataLayer?.push({ event: "generate_lead", form_id: formId, reference });
+  w.gtag?.("event", "generate_lead", { form_id: formId, reference });
+  w.plausible?.("Lead", { props: { form: formId } });
+  // Always dispatch a DOM event so any later analytics tool can subscribe.
+  window.dispatchEvent(new CustomEvent("focusrealm:lead", { detail: { formId, reference } }));
+}
+
 export default function LeadForm({
   fields,
   subject,
-  to = site.demoEmail,
+  formId = "lead",
+  to = site.email,
   submitLabel = "Send request",
-  successTitle = "Request ready to send.",
-  successBody = "Your mail client should have opened with everything filled in. If it did not, use the address below and we will pick it up the same way.",
+  successTitle = "Request received.",
+  successBody = "A founder reads every one of these, usually within one working day. We will come back with two or three times for a 15-minute walkthrough.",
 }: {
   fields: FieldSpec[];
   subject: string;
+  formId?: string;
   to?: string;
   submitLabel?: string;
   successTitle?: string;
@@ -33,46 +77,126 @@ export default function LeadForm({
 }) {
   const [values, setValues] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
+  const [formError, setFormError] = useState("");
+  const [reference, setReference] = useState<string>();
+  // Set on mount, not during render — Date.now() is impure.
+  const mountedAt = useRef(0);
+  const honeypot = useRef<HTMLInputElement>(null);
+  const successRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    mountedAt.current = Date.now();
+  }, []);
+
+  // Move focus to the confirmation so screen-reader users are told it worked.
+  useEffect(() => {
+    if (status === "sent" || status === "fallback") successRef.current?.focus();
+  }, [status]);
 
   function set(name: string, value: string) {
     setValues((current) => ({ ...current, [name]: value }));
     setErrors((current) => (current[name] ? { ...current, [name]: "" } : current));
+    setFormError("");
   }
 
-  function validate() {
+  function validateField(field: FieldSpec, raw?: string): string {
+    const value = (raw ?? values[field.name] ?? "").trim();
+    if (field.required && !value) return `${field.label} is required.`;
+    if (field.kind === "text" && field.type === "email" && value && !EMAIL.test(value)) {
+      return "Enter a valid email, like you@property.com.";
+    }
+    return "";
+  }
+
+  function onBlur(field: FieldSpec) {
+    const message = validateField(field);
+    setErrors((current) => ({ ...current, [field.name]: message }));
+  }
+
+  function validateAll() {
     const next: Record<string, string> = {};
     for (const field of fields) {
-      const value = (values[field.name] ?? "").trim();
-      if (field.required && !value) {
-        next[field.name] = "This one we do need.";
-        continue;
-      }
-      if (field.kind === "text" && field.type === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) {
-        next[field.name] = "That email does not look right.";
-      }
+      const message = validateField(field);
+      if (message) next[field.name] = message;
     }
     setErrors(next);
-    return Object.keys(next).length === 0;
+    return next;
   }
 
-  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!validate()) return;
-
+  function mailtoHref() {
     const body = fields
       .map((field) => `${field.label}: ${values[field.name] ?? ""}`)
-      .join("\n")
-      .concat(`\n\nSent from ${site.name.toLowerCase().replace(/\s/g, "")}.com`);
-
-    const href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = href;
-    setSent(true);
+      .join("\n");
+    return `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
-  if (sent) {
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const invalid = validateAll();
+    if (Object.keys(invalid).length > 0) {
+      const first = fields.find((field) => invalid[field.name]);
+      if (first) document.getElementById(`field-${first.name}`)?.focus();
+      return;
+    }
+
+    setStatus("submitting");
+    setFormError("");
+
+    const payload = {
+      formId,
+      subject,
+      fields: Object.fromEntries(fields.map((f) => [f.name, (values[f.name] ?? "").trim()])),
+      website: honeypot.current?.value ?? "",
+      elapsedMs: mountedAt.current ? Date.now() - mountedAt.current : 9999,
+    };
+
+    try {
+      const response = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = (await response.json().catch(() => ({}))) as {
+        ok?: boolean;
+        errors?: Record<string, string>;
+        error?: string;
+        reference?: string;
+      };
+
+      if (response.ok && data.ok) {
+        setReference(data.reference);
+        setStatus("sent");
+        trackConversion(formId, data.reference);
+        return;
+      }
+
+      if (response.status === 422 && data.errors) {
+        setErrors(data.errors);
+        setStatus("idle");
+        return;
+      }
+
+      throw new Error(data.error ?? `Request failed (${response.status})`);
+    } catch {
+      // Network or server failure — hand the visitor their mail client rather
+      // than dropping the lead, and tell them plainly that is what happened.
+      setStatus("fallback");
+      setFormError("");
+      window.location.href = mailtoHref();
+    }
+  }
+
+  if (status === "sent" || status === "fallback") {
+    const fell = status === "fallback";
     return (
-      <div className="panel p-8 sm:p-10" role="status">
+      <div
+        ref={successRef}
+        tabIndex={-1}
+        role="status"
+        aria-live="polite"
+        className="panel p-8 sm:p-10"
+      >
         <span className="flex size-12 items-center justify-center rounded-2xl border border-brand-bright/40 bg-brand/18 text-brand-cyan">
           <svg viewBox="0 0 18 18" className="size-5" fill="none" aria-hidden>
             <path
@@ -84,74 +208,99 @@ export default function LeadForm({
             />
           </svg>
         </span>
-        <h3 className="mt-6 text-[1.4rem] font-semibold text-white">{successTitle}</h3>
-        <p className="mt-3 max-w-md text-[0.95rem] leading-relaxed text-muted">{successBody}</p>
+        <h3 className="mt-6 text-[1.4rem] font-semibold text-white">
+          {fell ? "Our form is having a moment." : successTitle}
+        </h3>
+        <p className="mt-3 max-w-md text-[0.95rem] leading-relaxed text-muted">
+          {fell
+            ? "We could not reach our server, so we have opened your mail client with everything filled in. Send that and it reaches the same inbox."
+            : successBody}
+        </p>
+        {reference ? (
+          <p className="mt-4 font-mono text-[0.72rem] tracking-[0.1em] text-faint uppercase">
+            Reference {reference}
+          </p>
+        ) : null}
         <a
           href={`mailto:${to}`}
-          className="mt-6 inline-block font-mono text-[0.8rem] tracking-[0.06em] text-brand-cyan underline decoration-brand/40 underline-offset-4"
+          className="mt-6 inline-block font-mono text-[0.8rem] tracking-[0.06em] text-brand-cyan underline decoration-brand/50 underline-offset-4"
         >
           {to}
         </a>
         <div className="mt-8">
-          <Button type="button" variant="outline" onClick={() => setSent(false)}>
-            Edit the details
+          <Button type="button" variant="outline" onClick={() => setStatus("idle")}>
+            Send another
           </Button>
         </div>
       </div>
     );
   }
 
+  const busy = status === "submitting";
+
   return (
     <form onSubmit={onSubmit} noValidate className="panel p-7 sm:p-9">
+      {/* Honeypot. Hidden from sight and from assistive tech, but a bot that
+          fills every input will trip it. */}
+      <div aria-hidden className="absolute -left-[9999px] h-px w-px overflow-hidden">
+        <label htmlFor={`${formId}-website`}>Leave this field empty</label>
+        <input
+          ref={honeypot}
+          id={`${formId}-website`}
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          defaultValue=""
+          style={{ width: 1, height: 1 }}
+        />
+      </div>
+
       <div className="grid gap-5 sm:grid-cols-2">
         {fields.map((field) => {
           const half = "half" in field ? field.half : false;
           const className = field.kind === "textarea" || !half ? "sm:col-span-2" : "";
           const id = `field-${field.name}`;
+          const shared = {
+            id,
+            label: field.label,
+            hint: field.hint,
+            name: field.name,
+            required: field.required,
+            error: errors[field.name],
+            disabled: busy,
+            onBlur: () => onBlur(field),
+          };
 
           return (
             <div key={field.name} className={className}>
               {field.kind === "text" ? (
                 <TextField
-                  id={id}
-                  label={field.label}
-                  hint={field.hint}
+                  {...shared}
                   type={field.type ?? "text"}
-                  name={field.name}
                   placeholder={field.placeholder}
-                  required={field.required}
                   value={values[field.name] ?? ""}
                   onChange={(event) => set(field.name, event.target.value)}
-                  error={errors[field.name]}
-                  autoComplete={field.type === "email" ? "email" : "off"}
+                  autoComplete={field.autoComplete ?? "on"}
                 />
               ) : null}
 
               {field.kind === "select" ? (
                 <SelectField
-                  id={id}
-                  label={field.label}
-                  hint={field.hint}
-                  name={field.name}
+                  {...shared}
                   options={field.options}
-                  required={field.required}
                   value={values[field.name] ?? field.options[0]}
                   onChange={(event) => set(field.name, event.target.value)}
-                  error={errors[field.name]}
+                  autoComplete={field.autoComplete}
                 />
               ) : null}
 
               {field.kind === "textarea" ? (
                 <TextArea
-                  id={id}
-                  label={field.label}
-                  hint={field.hint}
-                  name={field.name}
+                  {...shared}
                   placeholder={field.placeholder}
-                  required={field.required}
                   value={values[field.name] ?? ""}
                   onChange={(event) => set(field.name, event.target.value)}
-                  error={errors[field.name]}
                 />
               ) : null}
             </div>
@@ -159,10 +308,16 @@ export default function LeadForm({
         })}
       </div>
 
+      {formError ? (
+        <p role="alert" className="mt-6 rounded-xl border border-[#ff9b9b]/40 bg-[#ff9b9b]/10 px-4 py-3 text-[0.85rem] text-[#ffc4c4]">
+          {formError}
+        </p>
+      ) : null}
+
       <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <Button type="submit" size="lg">
-          {submitLabel}
-          <ArrowRight />
+        <Button type="submit" size="lg" disabled={busy} aria-busy={busy}>
+          {busy ? "Sending…" : submitLabel}
+          {busy ? null : <ArrowRight />}
         </Button>
         <p className="text-[0.76rem] leading-relaxed text-faint sm:max-w-xs sm:text-right">
           We reply from a real address, usually within one working day. No sequences, no drip.

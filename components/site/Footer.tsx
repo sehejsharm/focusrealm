@@ -50,8 +50,8 @@ export default function Footer() {
         {/* Link matrix */}
         <div className="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_repeat(4,minmax(0,1fr))]">
           <div>
-            <Link href="/" className="inline-flex items-center gap-3" aria-label="Focus Realm Hospitality — home">
-              <LogoMark className="size-10" />
+            <Link href="/" className="inline-flex min-h-11 items-center gap-3">
+              <LogoMark className="size-10" decorative />
               <span className="flex flex-col leading-none">
                 <span className="text-[0.95rem] font-semibold text-white">Focus Realm</span>
                 <span className="mt-1 font-mono text-[0.6rem] tracking-[0.16em] text-faint uppercase">
@@ -73,7 +73,7 @@ export default function Footer() {
               <h3 className="font-mono text-[0.62rem] tracking-[0.18em] text-faint uppercase">
                 {group.heading}
               </h3>
-              <ul className="mt-4 space-y-2.5">
+              <ul className="mt-2 space-y-0">
                 {group.links.map((link) => (
                   <li key={link.href + link.label}>
                     {"external" in link && link.external ? (
@@ -81,14 +81,14 @@ export default function Footer() {
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[0.88rem] text-muted transition-colors duration-300 hover:text-white"
+                        className="-my-1 inline-flex min-h-11 items-center py-1 text-[0.88rem] text-muted transition-colors duration-300 hover:text-white"
                       >
                         {link.label}
                       </a>
                     ) : (
                       <Link
                         href={link.href}
-                        className="text-[0.88rem] text-muted transition-colors duration-300 hover:text-white"
+                        className="-my-1 inline-flex min-h-11 items-center py-1 text-[0.88rem] text-muted transition-colors duration-300 hover:text-white"
                       >
                         {link.label}
                       </Link>
@@ -121,14 +121,14 @@ export default function Footer() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-[0.78rem] text-muted transition-colors hover:text-white"
+                className="inline-flex min-h-11 items-center text-[0.78rem] text-muted transition-colors hover:text-white"
               >
                 {item.label}
               </Link>
             ))}
             <a
               href={`mailto:${site.email}`}
-              className="text-[0.78rem] text-muted transition-colors hover:text-white"
+              className="inline-flex min-h-11 items-center text-[0.78rem] text-muted transition-colors hover:text-white"
             >
               {site.email}
             </a>

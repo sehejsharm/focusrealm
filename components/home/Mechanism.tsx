@@ -85,8 +85,8 @@ function TaskCard({ progress }: { progress: number }) {
             />
             <defs>
               <linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#56e0ff" />
-                <stop offset="100%" stopColor="#1d7bff" />
+                <stop offset="0%" stopColor="#94d4c1" />
+                <stop offset="100%" stopColor="#33927b" />
               </linearGradient>
             </defs>
           </svg>
@@ -245,8 +245,8 @@ export default function Mechanism() {
       </Container>
 
       {/* Pinned three-stage sequence */}
-      <div ref={ref} className="relative mt-16 h-[280vh] lg:h-[300vh]">
-        <div className="sticky top-0 flex h-dvh items-center overflow-hidden">
+      <div ref={ref} className="relative mt-16 h-[190vh] lg:h-[200vh]">
+        <div className="sticky top-0 flex min-h-dvh items-center overflow-hidden py-20">
           <Container>
             <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
               {/* Stage copy */}
@@ -261,9 +261,11 @@ export default function Mechanism() {
                         style={{
                           borderColor: isActive
                             ? "var(--color-brand-bright)"
-                            : "color-mix(in oklab, #8fd3ff 12%, transparent)",
-                          opacity: isActive ? 1 : 0.34,
-                          filter: isActive ? "none" : "blur(0.6px)",
+                            : "color-mix(in oklab, #94d4c1 12%, transparent)",
+                          // 0.34 dropped the label text to 2.6:1. The active
+                          // stage is signalled by the lit rail and the open
+                          // body copy instead of by fading the rest out.
+                          opacity: isActive ? 1 : 0.72,
                         }}
                       >
                         {isActive ? (

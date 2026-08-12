@@ -12,6 +12,8 @@ import { site } from "@/lib/site";
 
 const title = "Contact Focus Realm Hospitality";
 const description =
+  "Talk to the founders of Focus Realm Hospitality about hotel SOP execution, pilots, partnerships or press. One inbox, answered within a working day.";
+const ogDescription =
   "Talk to the founding team at Focus Realm Hospitality about hotel SOP execution, pilots, partnerships or press. Early conversations go directly to Sehej Sharma, Ali Electricwala and Aditya Mishra.";
 
 export const metadata: Metadata = {
@@ -19,13 +21,14 @@ export const metadata: Metadata = {
   description,
   keywords: ["contact Focus Realm", "Focus Realm Hospitality contact", "hotel SOP software enquiry"],
   alternates: { canonical: "/contact" },
-  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/contact", type: "website" },
+  openGraph: { title: `${title} · ${site.shortName}`, description: ogDescription, url: "/contact", type: "website" },
+  twitter: { card: "summary_large_image", description: ogDescription },
 };
 
 const fields: FieldSpec[] = [
-  { kind: "text", name: "name", label: "Your name", placeholder: "Full name", required: true, half: true },
-  { kind: "text", name: "email", label: "Email", type: "email", placeholder: "you@company.com", required: true, half: true },
-  { kind: "text", name: "company", label: "Company", placeholder: "Property, group or organisation", half: true },
+  { kind: "text", name: "name", label: "Your name", placeholder: "Full name", required: true, half: true, autoComplete: "name" },
+  { kind: "text", name: "email", label: "Email", type: "email", placeholder: "you@company.com", required: true, half: true, autoComplete: "email" },
+  { kind: "text", name: "company", label: "Company", placeholder: "Property, group or organisation", half: true, autoComplete: "organization" },
   {
     kind: "select",
     name: "topic",
@@ -36,9 +39,13 @@ const fields: FieldSpec[] = [
   { kind: "textarea", name: "message", label: "Message", placeholder: "Tell us what you are trying to fix.", required: true },
 ];
 
+// One address on purpose — a prospect should never have to pick an inbox.
 const routes = [
-  { label: "Pilots and properties", value: site.demoEmail, note: "Demos, pilot scoping, commercials." },
-  { label: "Everything else", value: site.email, note: "Partnerships, press, careers, research." },
+  {
+    label: "One inbox, read by the founders",
+    value: site.email,
+    note: "Demos, pilot scoping, commercials, partnerships, press and careers all land here.",
+  },
 ];
 
 export default function ContactPage() {
@@ -59,13 +66,6 @@ export default function ContactPage() {
                 {
                   "@type": "ContactPoint",
                   contactType: "sales",
-                  email: site.demoEmail,
-                  availableLanguage: ["English"],
-                  areaServed: "Worldwide",
-                },
-                {
-                  "@type": "ContactPoint",
-                  contactType: "customer support",
                   email: site.email,
                   availableLanguage: ["English"],
                   areaServed: "Worldwide",
@@ -95,10 +95,11 @@ export default function ContactPage() {
               <LeadForm
                 fields={fields}
                 subject="Enquiry — Focus Realm Hospitality"
+                formId="contact"
                 to={site.email}
                 submitLabel="Send message"
-                successTitle="Message ready to send."
-                successBody="Your mail client should have opened with your message. Send it and one of the founders will reply, usually within a working day."
+                successTitle="Message received."
+                successBody="One of the founders will reply, usually within a working day. If it is urgent, the same inbox is listed below."
               />
             </Reveal>
 

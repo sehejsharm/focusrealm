@@ -9,9 +9,12 @@ import { buyers, pains } from "@/lib/content";
 import { breadcrumbSchema, jsonLdGraph, webPageSchema } from "@/lib/seo";
 import { site } from "@/lib/site";
 
-const title = "The six pains that compound on a hotel floor";
+const title = "The six pains on a hotel floor";
 const description =
+  "Supervisor bottleneck, ghost SOP, invisible performance, attrition, rating ceiling, audit ambush — six hotel operations pains, and one mechanism for all.";
+const ogDescription =
   "Supervisor bottleneck, ghost SOP, invisible performance gap, attrition bleed, star rating ceiling, audit ambush. The six operational pains hotels actually carry, how each one sets off the next, and the single mechanism that answers all six.";
+const pageName = "The six pains that compound on a hotel floor";
 
 export const metadata: Metadata = {
   title,
@@ -25,7 +28,8 @@ export const metadata: Metadata = {
     "hotel supervisor workload",
   ],
   alternates: { canonical: "/problems" },
-  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/problems", type: "website" },
+  openGraph: { title: `${pageName} · ${site.shortName}`, description: ogDescription, url: "/problems", type: "website" },
+  twitter: { card: "summary_large_image", description: ogDescription },
 };
 
 export default function ProblemsPage() {
@@ -35,7 +39,7 @@ export default function ProblemsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: jsonLdGraph(
-            webPageSchema({ path: "/problems", name: title, description }),
+            webPageSchema({ path: "/problems", name: pageName, description }),
             breadcrumbSchema([{ name: "Problems", path: "/problems" }]),
             {
               "@type": "ItemList",
@@ -102,7 +106,9 @@ export default function ProblemsPage() {
               <div className="grid gap-10 lg:grid-cols-[0.42fr_0.58fr] lg:gap-16">
                 <div className="lg:sticky lg:top-28 lg:self-start">
                   <Reveal>
-                    <span className="font-mono text-[clamp(3.5rem,9vw,7rem)] leading-none font-semibold text-white/8">
+                    {/* Chapter numeral. Kept at /40 so it clears 3:1 as large text — the
+                        ghost weight it used to have failed contrast. */}
+                    <span aria-hidden className="font-mono text-[clamp(3.5rem,9vw,7rem)] leading-none font-semibold text-white/40">
                       {pain.index}
                     </span>
                   </Reveal>
