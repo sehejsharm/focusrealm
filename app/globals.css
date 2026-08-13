@@ -160,6 +160,26 @@
   }
 }
 
+@keyframes route-sweep {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(430vw, 0, 0);
+  }
+}
+
+@keyframes route-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 @keyframes draw-line {
   from {
     transform: scaleX(0);

@@ -1,4 +1,5 @@
 import Aurora from "@/components/fx/Aurora";
+import { KineticHeading, Parallax } from "@/components/fx/Kinetics";
 import Reveal from "@/components/fx/Reveal";
 import EvidenceChart from "@/components/viz/EvidenceChart";
 import FloorGrid from "@/components/viz/FloorGrid";
@@ -22,11 +23,11 @@ export default function Mechanism() {
           <Reveal>
             <Eyebrow>How it works</Eyebrow>
           </Reveal>
-          <Reveal delay={60}>
-            <h2 className="mt-5 text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] font-semibold text-white">
-              One loop, four moves.
-            </h2>
-          </Reveal>
+          <KineticHeading
+            text="One loop, four moves."
+            accentFrom={2}
+            className="mt-5 text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] font-semibold text-white"
+          />
         </div>
 
         <Reveal delay={120} className="mt-12">
@@ -45,7 +46,7 @@ export default function Mechanism() {
             </Reveal>
           </div>
 
-          <div className="grid gap-5">
+          <Parallax distance={-28} className="grid gap-5">
             <Reveal delay={90} className="panel p-6 sm:p-7">
               <ReadinessBars />
             </Reveal>
@@ -70,7 +71,7 @@ export default function Mechanism() {
                 ))}
               </dl>
             </Reveal>
-          </div>
+          </Parallax>
         </div>
       </Container>
     </section>

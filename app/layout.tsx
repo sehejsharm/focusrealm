@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import CursorField from "@/components/fx/CursorField";
+import RouteTransition from "@/components/fx/RouteTransition";
 import Footer from "@/components/site/Footer";
 import Header from "@/components/site/Header";
 import StickyCta from "@/components/site/StickyCta";
@@ -50,6 +52,14 @@ export const metadata: Metadata = {
     title: `${site.name} — the operating system for hotel service standards`,
     description: site.shortDescription,
     locale: "en_US",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: `${site.name} — the operating system for hotel service standards`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -98,8 +108,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: jsonLdGraph(organizationSchema, websiteSchema, softwareSchema),
           }}
         />
+        <CursorField />
         <Header />
-        <main id="main">{children}</main>
+        <main id="main">
+          <RouteTransition>{children}</RouteTransition>
+        </main>
         <Footer />
         <StickyCta />
       </body>

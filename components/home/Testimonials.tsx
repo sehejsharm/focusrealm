@@ -1,3 +1,4 @@
+import { Magnetic, Scramble } from "@/components/fx/Kinetics";
 import Reveal from "@/components/fx/Reveal";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import { Container, Eyebrow } from "@/components/ui/Section";
@@ -12,8 +13,8 @@ export default function Testimonials() {
           {outcomes.map((outcome, index) => (
             <div key={outcome.label} className="bg-ink/75">
               <Reveal delay={index * 60} className="flex h-full flex-col px-6 py-7">
-                <p className="text-[clamp(1.8rem,3vw,2.4rem)] leading-none font-semibold tabular-nums text-gradient">
-                  {outcome.stat}
+                <p className="text-[clamp(1.8rem,3vw,2.4rem)] leading-none font-semibold text-gradient">
+                  <Scramble text={outcome.stat} />
                 </p>
                 <p className="mt-3 text-[0.88rem] font-medium text-white">{outcome.label}</p>
                 <p className="mt-2 text-[0.8rem] leading-relaxed text-faint">{outcome.body}</p>
@@ -47,10 +48,12 @@ export default function Testimonials() {
         </div>
 
         <Reveal delay={100} className="mt-14">
-          <ButtonLink href="/demo" size="lg">
-            Book a 15-min demo
-            <ArrowRight />
-          </ButtonLink>
+          <Magnetic>
+            <ButtonLink href="/demo" size="lg">
+              Book a 15-min demo
+              <ArrowRight />
+            </ButtonLink>
+          </Magnetic>
         </Reveal>
       </Container>
     </section>

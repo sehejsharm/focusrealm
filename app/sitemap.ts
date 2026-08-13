@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { team } from "@/lib/content";
+import { teamPhoto } from "@/lib/team-photos";
 import { absoluteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -26,12 +27,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: entry.priority,
   }));
 
-  const people: MetadataRoute.Sitemap = team.map((person) => ({
-    url: absoluteUrl(`/team/${person.slug}`),
-    lastModified,
-    changeFrequency: "monthly",
-    priority: 0.7,
-  }));
+  const people: MetadataRoute.Sitemap = team.map((person) => {
+    const photo = teamPhoto(person.slug);
+    return {
+      url: absoluteUrl(`/team/${person.slug}`),
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+      // Declared so the founders' portraits are eligible for image search,
+      // which is a real entry point for a name query.
+      ...(photo ? { images: [absoluteUrl(photo)] } : {}),
+    };
+  });
 
   return [...core, ...people];
 }

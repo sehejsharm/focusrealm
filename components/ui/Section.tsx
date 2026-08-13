@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { SignalDivider } from "@/components/fx/Kinetics";
 import Reveal from "@/components/fx/Reveal";
 
 /** Shared page rhythm: one max width, one gutter, everywhere. */
@@ -78,6 +79,7 @@ export function SectionHeading({
   );
 }
 
+/** A divider that fires a pulse across as the reader reaches it. */
 export function Rule({ className = "" }: { className?: string }) {
-  return <div aria-hidden className={`hairline w-full ${className}`} />;
+  return <SignalDivider className={className} />;
 }

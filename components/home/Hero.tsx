@@ -1,7 +1,9 @@
 "use client";
 
 import Aurora from "@/components/fx/Aurora";
+import { Magnetic, Parallax, Tilt } from "@/components/fx/Kinetics";
 import Reveal, { MaskedLines } from "@/components/fx/Reveal";
+import EventStream from "@/components/viz/EventStream";
 import ShiftConsole from "@/components/viz/ShiftConsole";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import { Container, Eyebrow } from "@/components/ui/Section";
@@ -12,7 +14,7 @@ export default function Hero() {
       <Aurora variant="hero" />
 
       <Container>
-        <div className="grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14">
+        <div className="grid items-center gap-12 lg:grid-cols-[0.88fr_1.12fr] lg:gap-14">
           <div>
             <Reveal>
               <Eyebrow>Service execution platform</Eyebrow>
@@ -39,20 +41,36 @@ export default function Hero() {
 
             <Reveal delay={400}>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <ButtonLink href="/demo" size="lg">
-                  Book a 15-min demo
-                  <ArrowRight />
-                </ButtonLink>
-                <ButtonLink href="/platform" variant="outline" size="lg">
-                  See the platform
-                </ButtonLink>
+                <Magnetic>
+                  <ButtonLink href="/demo" size="lg">
+                    Book a 15-min demo
+                    <ArrowRight />
+                  </ButtonLink>
+                </Magnetic>
+                <Magnetic strength={8}>
+                  <ButtonLink href="/platform" variant="outline" size="lg">
+                    See the platform
+                  </ButtonLink>
+                </Magnetic>
               </div>
+            </Reveal>
+
+            {/* The ledger, writing itself */}
+            <Reveal delay={520} className="mt-10 border-t border-line pt-5">
+              <p className="mb-2 font-mono text-[0.55rem] tracking-[0.16em] text-faint uppercase">
+                Service record · writing now
+              </p>
+              <EventStream />
             </Reveal>
           </div>
 
-          <Reveal variant="scale" delay={180}>
-            <ShiftConsole />
-          </Reveal>
+          <Parallax distance={-38}>
+            <Reveal variant="scale" delay={180}>
+              <Tilt max={5}>
+                <ShiftConsole />
+              </Tilt>
+            </Reveal>
+          </Parallax>
         </div>
       </Container>
     </section>

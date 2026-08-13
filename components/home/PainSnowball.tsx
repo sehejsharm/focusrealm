@@ -1,3 +1,4 @@
+import { KineticHeading } from "@/components/fx/Kinetics";
 import Reveal from "@/components/fx/Reveal";
 import PainChain from "@/components/viz/PainChain";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
@@ -16,11 +17,11 @@ export default function PainSnowball() {
             <Reveal>
               <Eyebrow>What it is for</Eyebrow>
             </Reveal>
-            <Reveal delay={60}>
-              <h2 className="mt-5 text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] font-semibold text-white">
-                Six problems, one chain.
-              </h2>
-            </Reveal>
+            <KineticHeading
+              text="Six problems, one chain."
+              accentFrom={2}
+              className="mt-5 text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] font-semibold text-white"
+            />
           </div>
           <Reveal delay={120}>
             <ButtonLink href="/problems" variant="outline">

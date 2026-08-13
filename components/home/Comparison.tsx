@@ -1,3 +1,4 @@
+import { KineticHeading } from "@/components/fx/Kinetics";
 import Reveal from "@/components/fx/Reveal";
 import { Container, Eyebrow } from "@/components/ui/Section";
 import { comparison } from "@/lib/content";
@@ -11,11 +12,11 @@ export default function Comparison() {
           <Reveal>
             <Eyebrow>Where it sits</Eyebrow>
           </Reveal>
-          <Reveal delay={60}>
-            <h2 className="mt-5 text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] font-semibold text-white">
-              Only one of the three leaves a record.
-            </h2>
-          </Reveal>
+          <KineticHeading
+            text="Only one of the three leaves a record."
+            accentFrom={4}
+            className="mt-5 text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] font-semibold text-white"
+          />
         </div>
 
         {/* Desktop */}
