@@ -16,7 +16,7 @@ export default function Hero() {
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-[0.88fr_1.12fr] lg:gap-14">
           <div>
-            <Reveal>
+            <Reveal immediate>
               <Eyebrow>Service execution platform</Eyebrow>
             </Reveal>
 
@@ -33,13 +33,13 @@ export default function Hero() {
               />
             </h1>
 
-            <Reveal delay={300}>
+            <Reveal delay={300} immediate>
               <p className="mt-6 max-w-md text-[1.05rem] leading-relaxed text-muted">
                 Hotel SOPs run as timed tasks on staff phones. The work produces the evidence.
               </p>
             </Reveal>
 
-            <Reveal delay={400}>
+            <Reveal delay={400} immediate>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Magnetic>
                   <ButtonLink href="/demo" size="lg">
@@ -56,7 +56,7 @@ export default function Hero() {
             </Reveal>
 
             {/* The ledger, writing itself */}
-            <Reveal delay={520} className="mt-10 border-t border-line pt-5">
+            <Reveal delay={520} immediate className="mt-10 border-t border-line pt-5">
               <p className="mb-2 font-mono text-[0.55rem] tracking-[0.16em] text-faint uppercase">
                 Service record · writing now
               </p>
@@ -65,7 +65,7 @@ export default function Hero() {
           </div>
 
           <Parallax distance={-38}>
-            <Reveal variant="scale" delay={180}>
+            <Reveal variant="scale" delay={180} immediate>
               <Tilt max={5}>
                 <ShiftConsole />
               </Tilt>

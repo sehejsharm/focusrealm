@@ -19,6 +19,7 @@ export default function PainSnowball() {
             </Reveal>
             <KineticHeading
               text="Six problems, one chain."
+              variant="unmask"
               accentFrom={2}
               className="mt-5 text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] font-semibold text-white"
             />

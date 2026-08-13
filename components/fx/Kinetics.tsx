@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import type { CSSProperties, ElementType, ReactNode } from "react";
 
 import { useReducedMotion, useScene, usePointer } from "@/components/fx/motion";
@@ -219,42 +219,91 @@ export function SignalDivider({ className = "" }: { className?: string }) {
 }
 
 /* ------------------------------------------------------------------ *
- * Kinetic heading — words rise on a stagger, and lean with scroll speed.
+ * Kinetic heading — per-word entrance, with a choice of motion.
  * ------------------------------------------------------------------ */
+
+/**
+ * `variant` exists because one motion applied to every heading reads as a
+ * template rather than a considered page — by the third section a visitor has
+ * learned the animation and stops seeing it. Vary it between adjacent sections.
+ */
+export type HeadingMotion = "rise" | "settle" | "drift" | "unmask";
+
+const motions: Record<HeadingMotion, { transform: string; opacity: string; stagger: number }> = {
+  // Words lift from below their own baseline, leaning with scroll speed.
+  rise: {
+    transform:
+      "translate3d(0, calc((1 - var(--enter, 1)) * 0.9em), 0) skewY(calc(var(--vel, 0) * -1.2deg))",
+    opacity: "calc(var(--enter, 1) * 1.6)",
+    stagger: 24,
+  },
+  // Descends and scales down into place — heavier, for a heading that should
+  // feel like it lands rather than floats.
+  settle: {
+    transform:
+      "translate3d(0, calc((var(--enter, 1) - 1) * 0.45em), 0) scale(calc(1 + (1 - var(--enter, 1)) * 0.06))",
+    opacity: "calc(var(--enter, 1) * 1.8)",
+    stagger: 32,
+  },
+  // Alternating lateral drift, word by word.
+  drift: {
+    transform: "translate3d(calc((1 - var(--enter, 1)) * var(--dir, 1) * 0.5em), 0, 0)",
+    opacity: "calc(var(--enter, 1) * 1.7)",
+    stagger: 28,
+  },
+  // Pure wipe: no fade, just the overflow-hidden mask uncovering each word.
+  unmask: {
+    transform: "translate3d(0, calc((1 - var(--enter, 1)) * 1.05em), 0)",
+    opacity: "1",
+    stagger: 38,
+  },
+};
 
 export function KineticHeading({
   text,
   className = "",
   as: Tag = "h2",
   accentFrom,
+  variant = "rise",
 }: {
   text: string;
   className?: string;
   as?: ElementType;
   /** Word index from which the accent gradient starts. */
   accentFrom?: number;
+  variant?: HeadingMotion;
 }) {
   const ref = useScene<HTMLHeadingElement>(0.6);
   const words = text.split(" ");
+  const motion = motions[variant];
 
   return (
     <Tag ref={ref} className={className}>
       {words.map((word, index) => (
-        <span key={`${word}-${index}`} className="inline-block overflow-hidden pb-[0.08em] align-bottom">
+        <Fragment key={`${word}-${index}`}>
+        <span className="inline-block overflow-hidden pb-[0.08em] align-bottom">
           <span
             className={`inline-block ${accentFrom !== undefined && index >= accentFrom ? "text-gradient" : ""}`}
-            style={{
-              transform:
-                "translate3d(0, calc((1 - var(--enter, 1)) * 0.9em), 0) skewY(calc(var(--vel, 0) * -1.2deg))",
-              opacity: "calc(var(--enter, 1) * 1.6)",
-              transition: "transform 120ms linear, opacity 120ms linear",
-              transitionDelay: `${index * 24}ms`,
-            }}
+            style={
+              {
+                transform: motion.transform,
+                opacity: motion.opacity,
+                transition: "transform 120ms linear, opacity 120ms linear",
+                transitionDelay: `${index * motion.stagger}ms`,
+                "--dir": index % 2 === 0 ? 1 : -1,
+              } as CSSProperties
+            }
           >
             {word}
-            {index < words.length - 1 ? " " : ""}
           </span>
         </span>
+          {/* A real space, and deliberately outside the mask. Inside the
+              overflow-hidden inline-block a trailing space collapses and the
+              words run together; as its own node between two inline-blocks it
+              renders, and it keeps the heading's text content readable to
+              screen readers and crawlers. */}
+          {index < words.length - 1 ? " " : ""}
+        </Fragment>
       ))}
     </Tag>
   );

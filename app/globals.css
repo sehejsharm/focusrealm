@@ -361,6 +361,32 @@ p {
   transform: none;
 }
 
+/*
+ * Above-the-fold content. It paints fully opaque on the very first frame and
+ * moves with transform only.
+ *
+ * The ordinary reveal starts at opacity 0 and waits for the observer, which
+ * cannot fire until hydration — so the hero paragraph, the largest element on
+ * the page, was invisible for the first second and Largest Contentful Paint
+ * was measuring hydration rather than paint. Transform does not affect LCP
+ * eligibility, so the motion survives and the metric reflects reality.
+ */
+[data-reveal][data-immediate="true"] {
+  opacity: 1;
+  animation: reveal-settle 0.6s var(--ease-out-expo) both;
+  animation-delay: var(--reveal-delay, 0ms);
+  transition: none;
+}
+
+@keyframes reveal-settle {
+  from {
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
 /* Line-by-line headline mask. */
 .mask-line {
   display: block;
@@ -378,14 +404,39 @@ p {
   transform: none;
 }
 
+/*
+ * Hero headline. Driven by a CSS animation that starts at first paint rather
+ * than by an observer that cannot fire until hydration, so the largest text on
+ * the page is not waiting on JavaScript to become visible — and still shows if
+ * the JS never arrives at all.
+ */
+[data-immediate="true"] .mask-line > span {
+  transform: translate3d(0, 108%, 0);
+  transition: none;
+  animation: mask-rise 0.62s var(--ease-out-expo) both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+@keyframes mask-rise {
+  from {
+    transform: translate3d(0, 108%, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-reveal],
+  [data-reveal][data-immediate="true"],
   [data-reveal][data-show="true"] {
     opacity: 1 !important;
     transform: none !important;
     filter: none;
     transition: none;
+    animation: none !important;
   }
+  [data-immediate="true"] .mask-line > span,
   .mask-line > span {
     transform: none;
     transition: none;

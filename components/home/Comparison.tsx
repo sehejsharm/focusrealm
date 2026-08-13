@@ -14,6 +14,7 @@ export default function Comparison() {
           </Reveal>
           <KineticHeading
             text="Only one of the three leaves a record."
+            variant="drift"
             accentFrom={4}
             className="mt-5 text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] font-semibold text-white"
           />

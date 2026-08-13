@@ -11,25 +11,33 @@ import { useEffect, useRef, useState } from "react";
  * custom properties; the compositor does the rest.
  */
 
-type Frame = (time: number) => void;
+/**
+ * Subscribers split their work into two phases. Every `read` in the frame runs
+ * before any `write`, because interleaving them is what makes a page like this
+ * crawl: a getBoundingClientRect after a style change forces the browser to
+ * flush layout synchronously, so N animated elements cost N layouts per frame
+ * instead of one.
+ */
+type Phase = { read: () => void; write: () => void };
 
-const subscribers = new Set<Frame>();
+const subscribers = new Set<Phase>();
 let running = false;
 
-function loop(time: number) {
-  for (const fn of subscribers) fn(time);
+function loop() {
+  for (const s of subscribers) s.read();
+  for (const s of subscribers) s.write();
   running = subscribers.size > 0;
   if (running) requestAnimationFrame(loop);
 }
 
-function subscribe(fn: Frame) {
-  subscribers.add(fn);
+function subscribe(phase: Phase) {
+  subscribers.add(phase);
   if (!running) {
     running = true;
     requestAnimationFrame(loop);
   }
   return () => {
-    subscribers.delete(fn);
+    subscribers.delete(phase);
   };
 }
 
@@ -70,11 +78,15 @@ export function usePointer(enabled = true) {
       targetY = 0;
     }
 
-    const stop = subscribe(() => {
-      x += (targetX - x) * 0.08;
-      y += (targetY - y) * 0.08;
-      node!.style.setProperty("--px", x.toFixed(4));
-      node!.style.setProperty("--py", y.toFixed(4));
+    const stop = subscribe({
+      read: () => {
+        x += (targetX - x) * 0.08;
+        y += (targetY - y) * 0.08;
+      },
+      write: () => {
+        node!.style.setProperty("--px", x.toFixed(4));
+        node!.style.setProperty("--py", y.toFixed(4));
+      },
     });
 
     window.addEventListener("pointermove", onMove, { passive: true });
@@ -112,29 +124,93 @@ export function useScene<T extends HTMLElement = HTMLDivElement>(strength = 1) {
 
     let lastY = window.scrollY;
     let velocity = 0;
+    let thru = 0;
 
-    return subscribe(() => {
-      const rect = node.getBoundingClientRect();
+    /**
+     * `enter` latches: it only ever increases. Content that has been revealed
+     * stays revealed.
+     *
+     * Reveal used to be a pure function of scroll position, which meant any
+     * element whose rect did not move the way the maths assumed — anything in
+     * a sticky or pinned container, anything re-measured mid-transition — could
+     * sit at a fraction of its reveal indefinitely, showing text dimmed and
+     * clipped in half by the overflow-hidden mask. Latching removes that whole
+     * class of failure: the worst case is now that something reveals early,
+     * never that it stays invisible.
+     */
+    let enter = 0;
+
+    // Bound to a const so the null-check above narrows inside the closure.
+    const el = node;
+
+    function measure() {
+      const rect = el.getBoundingClientRect();
       const vh = window.innerHeight;
+      const target = Math.min(1, Math.max(0, (vh - rect.top) / (vh * 0.42)));
+      enter = Math.max(enter, target);
+      return rect;
+    }
 
-      // Skip work entirely when the element is nowhere near the viewport.
-      if (rect.bottom < -vh || rect.top > vh * 2) return;
+    // Seed synchronously so anything already on screen at load is correct on
+    // the first paint, and anything below it starts hidden rather than
+    // flashing in and then popping out when the loop catches up.
+    measure();
+    node.style.setProperty("--enter", enter.toFixed(4));
+    node.style.setProperty("--thru", "0");
+    node.style.setProperty("--vel", "0");
 
-      const centre = rect.top + rect.height / 2;
-      // Clamped: short elements would otherwise report values well past 1
-      // and travel further than the layout allows for.
-      const raw = ((vh / 2 - centre) / (vh / 2 + rect.height / 2)) * strength;
-      const thru = Math.max(-1, Math.min(1, raw));
-      const enter = Math.min(1, Math.max(0, 1 - rect.top / vh));
+    const phase: Phase = {
+      read: () => {
+        const rect = measure();
+        const vh = window.innerHeight;
 
-      const dy = window.scrollY - lastY;
-      lastY = window.scrollY;
-      velocity += (Math.max(-60, Math.min(60, dy)) - velocity) * 0.15;
+        const centre = rect.top + rect.height / 2;
+        // Clamped: short elements would otherwise report values well past 1
+        // and travel further than the layout allows for.
+        const raw = ((vh / 2 - centre) / (vh / 2 + rect.height / 2)) * strength;
+        thru = Math.max(-1, Math.min(1, raw));
 
-      node.style.setProperty("--thru", thru.toFixed(4));
-      node.style.setProperty("--enter", enter.toFixed(4));
-      node.style.setProperty("--vel", (velocity / 60).toFixed(4));
-    });
+        const dy = window.scrollY - lastY;
+        lastY = window.scrollY;
+        velocity += (Math.max(-60, Math.min(60, dy)) - velocity) * 0.15;
+      },
+      write: () => {
+        el.style.setProperty("--thru", thru.toFixed(4));
+        el.style.setProperty("--enter", enter.toFixed(4));
+        el.style.setProperty("--vel", (velocity / 60).toFixed(4));
+      },
+    };
+
+    /**
+     * Only elements near the viewport are subscribed.
+     *
+     * Measuring every scene on the page each frame meant a long page paid for
+     * one getBoundingClientRect per element per frame — around a second of
+     * style-and-layout on a mid-range phone, most of it for content nobody
+     * could see. The observer keeps the frame proportional to what is actually
+     * on screen instead of to the length of the document.
+     */
+    let stop: (() => void) | undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !stop) {
+          stop = subscribe(phase);
+        } else if (!entry.isIntersecting && stop) {
+          stop();
+          stop = undefined;
+          // Park it at its latched value so it keeps whatever it revealed to.
+          el.style.setProperty("--vel", "0");
+          el.style.setProperty("--enter", enter.toFixed(4));
+        }
+      },
+      { rootMargin: "100% 0px 100% 0px" },
+    );
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+      stop?.();
+    };
   }, [strength, reduced]);
 
   return ref;

@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import type { CSSProperties, ElementType, ReactNode } from "react";
 
 import { useInView } from "@/components/fx/useInView";
@@ -15,6 +14,12 @@ type RevealProps = {
   threshold?: number;
   style?: CSSProperties;
   id?: string;
+  /**
+   * For content in the initial viewport. Renders opaque from the first paint
+   * and animates transform only, instead of waiting for the observer — which
+   * cannot fire until hydration and so delays Largest Contentful Paint.
+   */
+  immediate?: boolean;
 };
 
 export default function Reveal({
@@ -26,6 +31,7 @@ export default function Reveal({
   threshold = 0.15,
   style,
   id,
+  immediate = false,
 }: RevealProps) {
   const { ref, inView } = useInView<HTMLDivElement>({ threshold });
 
@@ -34,7 +40,8 @@ export default function Reveal({
       id={id}
       ref={ref}
       data-reveal={variant}
-      data-show={inView ? "true" : "false"}
+      data-immediate={immediate ? "true" : undefined}
+      data-show={immediate || inView ? "true" : "false"}
       className={className}
       style={{ ...style, "--reveal-delay": `${delay}ms` } as CSSProperties}
     >
@@ -67,18 +74,14 @@ export function MaskedLines({
   immediate?: boolean;
 }) {
   const { ref, inView } = useInView<HTMLSpanElement>({ threshold: 0 });
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    if (!immediate) return;
-    const frame = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(frame);
-  }, [immediate]);
-
-  const show = immediate ? mounted : inView;
 
   return (
-    <span ref={ref} data-show={show ? "true" : "false"} className={className}>
+    <span
+      ref={ref}
+      data-show={immediate || inView ? "true" : "false"}
+      data-immediate={immediate ? "true" : undefined}
+      className={className}
+    >
       {lines.map((line, index) => (
         <span
           key={index}

@@ -49,7 +49,7 @@ export default function PageHero({
           </nav>
         ) : null}
 
-        <Reveal>
+        <Reveal immediate>
           <Eyebrow>{eyebrow}</Eyebrow>
         </Reveal>
 
@@ -58,12 +58,12 @@ export default function PageHero({
         </h1>
 
         {lede ? (
-          <Reveal delay={380}>
+          <Reveal delay={380} immediate>
             <p className="mt-7 max-w-2xl text-[1.05rem] leading-relaxed text-muted sm:text-[1.12rem]">{lede}</p>
           </Reveal>
         ) : null}
 
-        {children ? <Reveal delay={480}>{children}</Reveal> : null}
+        {children ? <Reveal delay={480} immediate>{children}</Reveal> : null}
       </Container>
     </section>
   );
