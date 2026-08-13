@@ -30,7 +30,7 @@ function Wrapper({
     <div>
       <label
         htmlFor={htmlFor}
-        className="flex items-baseline justify-between gap-3 font-mono text-[0.66rem] tracking-[0.14em] text-brand-cyan uppercase"
+        className="flex items-baseline justify-between gap-3 font-mono text-[0.78rem] tracking-[0.14em] text-brand-cyan uppercase"
       >
         <span>
           {label}

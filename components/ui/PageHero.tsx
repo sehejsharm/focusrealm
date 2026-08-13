@@ -25,7 +25,7 @@ export default function PageHero({
       <Container>
         {breadcrumb ? (
           <nav aria-label="Breadcrumb" className="mb-8">
-            <ol className="flex flex-wrap items-center gap-2 font-mono text-[0.62rem] tracking-[0.14em] uppercase">
+            <ol className="flex flex-wrap items-center gap-2 font-mono text-[0.76rem] tracking-[0.14em] uppercase">
               <li>
                 <Link href="/" className="inline-flex min-h-11 items-center text-faint transition-colors hover:text-brand-ice">
                   Home

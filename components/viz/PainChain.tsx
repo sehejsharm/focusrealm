@@ -42,7 +42,7 @@ export default function PainChain() {
                 </span>
                 <span className="flex items-baseline gap-2">
                   <span
-                    className="font-mono text-[0.55rem] tabular-nums transition-colors duration-300"
+                    className="font-mono text-[0.72rem] tabular-nums transition-colors duration-300"
                     style={{ color: isActive ? "#a8ecd4" : "var(--color-faint)" }}
                   >
                     {entry.index}
@@ -67,13 +67,13 @@ export default function PainChain() {
         style={{ animation: "rise-in 0.5s var(--ease-out-expo) both" }}
       >
         <div>
-          <p className="font-mono text-[0.55rem] tracking-[0.16em] uppercase text-[#ff9b9b]">Costs you</p>
+          <p className="font-mono text-[0.72rem] tracking-[0.16em] uppercase text-[#ff9b9b]">Costs you</p>
           <p className="mt-3 text-[clamp(1.2rem,2.4vw,1.7rem)] leading-snug font-medium text-white">
             {pain.wound}
           </p>
         </div>
         <div>
-          <p className="font-mono text-[0.55rem] tracking-[0.16em] text-brand-cyan uppercase">Closed by</p>
+          <p className="font-mono text-[0.72rem] tracking-[0.16em] text-brand-cyan uppercase">Closed by</p>
           <p className="mt-3 text-[1rem] leading-relaxed text-muted">{pain.answer}</p>
         </div>
       </div>

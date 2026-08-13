@@ -140,10 +140,10 @@ export default function DemoPage() {
                   >
                     <Reveal delay={index * 60}>
                       <div className="flex items-center gap-3">
-                        <span className="font-mono text-[0.6rem] tracking-[0.16em] text-brand-ice">
+                        <span className="font-mono text-[0.76rem] tracking-[0.16em] text-brand-ice">
                           {item.step}
                         </span>
-                        <span className="font-mono text-[0.6rem] tracking-[0.1em] text-faint uppercase">
+                        <span className="font-mono text-[0.76rem] tracking-[0.1em] text-faint uppercase">
                           {item.minutes}
                         </span>
                       </div>
@@ -177,7 +177,7 @@ export default function DemoPage() {
                     />
                   </div>
                   <div>
-                    <p className="font-mono text-[0.58rem] tracking-[0.14em] text-brand-ice uppercase">
+                    <p className="font-mono text-[0.74rem] tracking-[0.14em] text-brand-ice uppercase">
                       Demo environment
                     </p>
                     <p className="mt-2.5 text-[0.98rem] font-medium text-white">{property.name}</p>

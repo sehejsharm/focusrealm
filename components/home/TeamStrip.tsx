@@ -57,7 +57,7 @@ export default function TeamStrip({
                   </div>
 
                   <h3 className="mt-6 text-[1.3rem] leading-tight font-semibold text-white">{person.name}</h3>
-                  <p className="mt-2 font-mono text-[0.6rem] tracking-[0.14em] text-brand-ice uppercase">
+                  <p className="mt-2 font-mono text-[0.76rem] tracking-[0.14em] text-brand-ice uppercase">
                     {person.shortRole} · {site.shortName}
                   </p>
                   <p className="mt-5 text-[0.88rem] leading-relaxed text-muted">
@@ -67,7 +67,7 @@ export default function TeamStrip({
                     {person.focus.slice(0, 3).map((focus) => (
                       <li
                         key={focus}
-                        className="rounded-full border border-line px-2.5 py-1 text-[0.68rem] text-faint"
+                        className="rounded-full border border-line px-2.5 py-1 text-[0.78rem] text-faint"
                       >
                         {focus}
                       </li>

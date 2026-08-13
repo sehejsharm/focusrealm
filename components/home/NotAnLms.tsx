@@ -68,10 +68,10 @@ export default function NotAnLms() {
         <Reveal delay={120} className="mx-auto mt-16 max-w-4xl">
           <div className="panel overflow-hidden">
             <div className="grid grid-cols-2 border-b border-line">
-              <p className="px-5 py-3.5 font-mono text-[0.58rem] tracking-[0.18em] uppercase text-[#ff9b9b]/80 sm:px-7">
+              <p className="px-5 py-3.5 font-mono text-[0.74rem] tracking-[0.18em] uppercase text-[#ff9b9b]/80 sm:px-7">
                 Retired
               </p>
-              <p className="border-l border-line px-5 py-3.5 font-mono text-[0.58rem] tracking-[0.18em] text-brand-cyan uppercase sm:px-7">
+              <p className="border-l border-line px-5 py-3.5 font-mono text-[0.74rem] tracking-[0.18em] text-brand-cyan uppercase sm:px-7">
                 In use
               </p>
             </div>
@@ -103,7 +103,7 @@ export default function NotAnLms() {
               aria-hidden
               className="animate-sheen pointer-events-none absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent"
             />
-            <p className="font-mono text-[0.6rem] tracking-[0.18em] text-brand-cyan uppercase">Category</p>
+            <p className="font-mono text-[0.76rem] tracking-[0.18em] text-brand-cyan uppercase">Category</p>
             <p className="mt-4 text-[clamp(1.3rem,3vw,2rem)] leading-tight font-semibold text-white">
               Service Execution Platform
             </p>

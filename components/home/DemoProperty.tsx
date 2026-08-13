@@ -55,7 +55,7 @@ export default function DemoProperty() {
                 />
                 <div className="relative flex items-start justify-between gap-4">
                   <div>
-                    <p className="font-mono text-[0.58rem] tracking-[0.16em] text-brand-ice uppercase">
+                    <p className="font-mono text-[0.74rem] tracking-[0.16em] text-brand-ice uppercase">
                       {property.location}
                     </p>
                     <h3 className="mt-2.5 text-[1.6rem] leading-tight font-semibold text-white">
@@ -67,7 +67,7 @@ export default function DemoProperty() {
                       <span className="animate-pulse-ring absolute inset-0 rounded-full bg-brand-cyan" />
                       <span className="relative size-1.5 rounded-full bg-brand-cyan" />
                     </span>
-                    <span className="font-mono text-[0.55rem] tracking-[0.12em] text-white uppercase">Live</span>
+                    <span className="font-mono text-[0.72rem] tracking-[0.12em] text-white uppercase">Live</span>
                   </span>
                 </div>
               </div>
@@ -86,7 +86,7 @@ export default function DemoProperty() {
 
               {/* Personas */}
               <div className="px-7 py-7">
-                <p className="font-mono text-[0.58rem] tracking-[0.16em] text-faint uppercase">
+                <p className="font-mono text-[0.74rem] tracking-[0.16em] text-faint uppercase">
                   The five people in every demo
                 </p>
                 <ul className="mt-4 space-y-2.5">
@@ -95,12 +95,12 @@ export default function DemoProperty() {
                       key={persona.name}
                       className="flex items-center gap-3 rounded-xl border border-line bg-white/[0.02] px-3.5 py-2.5"
                     >
-                      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand/18 font-mono text-[0.6rem] text-brand-ice">
+                      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand/18 font-mono text-[0.76rem] text-brand-ice">
                         {persona.initials}
                       </span>
                       <span className="text-[0.85rem] font-medium text-white">{persona.name}</span>
                       <span className="text-[0.78rem] text-faint">{persona.role}</span>
-                      <span className="ml-auto rounded-full border border-line px-2 py-0.5 font-mono text-[0.52rem] tracking-[0.1em] text-muted uppercase">
+                      <span className="ml-auto rounded-full border border-line px-2 py-0.5 font-mono text-[0.72rem] tracking-[0.1em] text-muted uppercase">
                         {persona.role_interface}
                       </span>
                     </li>

@@ -16,7 +16,7 @@ export default function TrustedBy() {
         <Reveal>
           <p
             id="trusted-by-heading"
-            className="text-center font-mono text-[0.62rem] tracking-[0.2em] text-faint uppercase"
+            className="text-center font-mono text-[0.76rem] tracking-[0.2em] text-faint uppercase"
           >
             Trusted across hospitality, training and fast-moving teams
           </p>
@@ -40,7 +40,7 @@ export default function TrustedBy() {
                     {client.name}
                   </span>
                 )}
-                <span className="text-center font-mono text-[0.55rem] tracking-[0.12em] text-faint uppercase">
+                <span className="text-center font-mono text-[0.72rem] tracking-[0.12em] text-faint uppercase">
                   {client.segment}
                 </span>
               </Reveal>

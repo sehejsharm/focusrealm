@@ -80,7 +80,7 @@ export default function PlatformPage() {
             <ArchitectureDiagram />
           </Reveal>
           <Reveal delay={80} className="lg:max-w-[220px]">
-            <p className="font-mono text-[0.58rem] tracking-[0.16em] text-brand-cyan uppercase">
+            <p className="font-mono text-[0.74rem] tracking-[0.16em] text-brand-cyan uppercase">
               Shared substrate
             </p>
             <p className="mt-3 text-[0.92rem] leading-relaxed text-muted">
@@ -125,7 +125,7 @@ export default function PlatformPage() {
                   </dl>
                 </Reveal>
                 <Reveal delay={260}>
-                  <p className="mt-8 font-mono text-[0.6rem] tracking-[0.14em] text-brand-ice uppercase">
+                  <p className="mt-8 font-mono text-[0.76rem] tracking-[0.14em] text-brand-ice uppercase">
                     {role.deviceLabel}
                   </p>
                 </Reveal>
@@ -157,7 +157,7 @@ export default function PlatformPage() {
                           sizes="(max-width: 1024px) 90vw, 680px"
                         />
                       )}
-                      <figcaption className="mt-3 font-mono text-[0.58rem] tracking-[0.12em] text-faint uppercase">
+                      <figcaption className="mt-3 font-mono text-[0.74rem] tracking-[0.12em] text-faint uppercase">
                         {screen.title}
                       </figcaption>
                     </figure>

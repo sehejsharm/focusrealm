@@ -62,14 +62,14 @@ export default function ShiftConsole() {
       <div className="overflow-hidden rounded-2xl border border-line bg-ink/85 shadow-[0_50px_120px_-52px_rgba(0,0,0,0.95)]">
         {/* Console bar */}
         <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-2.5">
-          <span className="flex items-center gap-2 font-mono text-[0.55rem] tracking-[0.14em] text-faint uppercase">
+          <span className="flex items-center gap-2 font-mono text-[0.72rem] tracking-[0.14em] text-faint uppercase">
             <span className="relative flex size-1.5">
               <span className="animate-pulse-ring absolute inset-0 rounded-full bg-brand-cyan" />
               <span className="relative size-1.5 rounded-full bg-brand-cyan" />
             </span>
             Morning shift · rooms division
           </span>
-          <span className="font-mono text-[0.6rem] tabular-nums text-brand-cyan">
+          <span className="font-mono text-[0.76rem] tabular-nums text-brand-cyan">
             {mm}:{ss}
           </span>
         </div>
@@ -79,7 +79,7 @@ export default function ShiftConsole() {
           <div className="border-b border-line p-5 sm:border-r sm:border-b-0 sm:p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="font-mono text-[0.55rem] tracking-[0.14em] text-faint uppercase">
+                <p className="font-mono text-[0.72rem] tracking-[0.14em] text-faint uppercase">
                   Room 208 · HSK-101
                 </p>
                 <p className="mt-2 text-[1.05rem] leading-tight font-semibold text-white">
@@ -88,7 +88,7 @@ export default function ShiftConsole() {
               </div>
               <div className="relative shrink-0">
                 <Ring value={progress} />
-                <span className="absolute inset-0 flex items-center justify-center font-mono text-[0.6rem] tabular-nums text-white">
+                <span className="absolute inset-0 flex items-center justify-center font-mono text-[0.76rem] tabular-nums text-white">
                   {Math.round(progress * 100)}%
                 </span>
               </div>
@@ -113,7 +113,7 @@ export default function ShiftConsole() {
                 {phases.map((phase, i) => (
                   <li
                     key={phase.key}
-                    className="font-mono text-[0.5rem] tracking-[0.1em] uppercase transition-colors duration-500"
+                    className="font-mono text-[0.72rem] tracking-[0.1em] uppercase transition-colors duration-500"
                     style={{ color: progress * 4 > i ? "#a8ecd4" : "var(--color-faint)" }}
                   >
                     {phase.label}
@@ -141,7 +141,7 @@ export default function ShiftConsole() {
                 { k: "Guest signal", v: "85%" },
               ].map((cell) => (
                 <div key={cell.k} className="bg-ink px-3 py-2.5">
-                  <p className="font-mono text-[0.48rem] tracking-[0.1em] text-faint uppercase">{cell.k}</p>
+                  <p className="font-mono text-[0.72rem] tracking-[0.1em] text-faint uppercase">{cell.k}</p>
                   <p className="mt-1 font-mono text-[0.95rem] tabular-nums text-white">{cell.v}</p>
                 </div>
               ))}

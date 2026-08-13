@@ -89,7 +89,7 @@ export default function Comparison() {
                     const ours = index === row.values.length - 1;
                     return (
                       <div key={index} className={`flex gap-3 px-4 py-2.5 ${ours ? "bg-brand/10" : ""}`}>
-                        <dt className="w-[38%] shrink-0 font-mono text-[0.55rem] tracking-[0.1em] uppercase">
+                        <dt className="w-[38%] shrink-0 font-mono text-[0.72rem] tracking-[0.1em] uppercase">
                           <span className={ours ? "text-brand-cyan" : "text-faint"}>
                             {comparison.columns[index]}
                           </span>

@@ -121,7 +121,7 @@ export default function MechanismFlow() {
 
                 <span className="flex flex-col gap-1.5 lg:items-center">
                   <span className="flex items-baseline gap-2">
-                    <span className="font-mono text-[0.55rem] tracking-[0.16em] text-faint">
+                    <span className="font-mono text-[0.72rem] tracking-[0.16em] text-faint">
                       0{index + 1}
                     </span>
                     <span

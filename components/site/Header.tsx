@@ -154,7 +154,7 @@ export default function Header() {
                   <span className="text-[1.7rem] leading-none font-semibold tracking-[-0.03em] text-white">
                     {item.label}
                   </span>
-                  <span className="font-mono text-[0.62rem] tracking-[0.14em] text-faint uppercase">
+                  <span className="font-mono text-[0.76rem] tracking-[0.14em] text-faint uppercase">
                     0{index + 1}
                   </span>
                 </Link>

@@ -93,7 +93,7 @@ export default async function PersonPage({ params }: Props) {
         <Aurora variant="hero" />
         <Container>
           <nav aria-label="Breadcrumb" className="mb-8">
-            <ol className="flex flex-wrap items-center gap-2 font-mono text-[0.62rem] tracking-[0.14em] uppercase">
+            <ol className="flex flex-wrap items-center gap-2 font-mono text-[0.76rem] tracking-[0.14em] uppercase">
               <li>
                 <Link href="/" className="inline-flex min-h-11 items-center text-faint transition-colors hover:text-brand-ice">
                   Home
@@ -141,7 +141,7 @@ export default async function PersonPage({ params }: Props) {
 
               <Reveal delay={260}>
                 <dl className="mt-8 space-y-3 border-t border-line pt-7">
-                  <dt className="font-mono text-[0.58rem] tracking-[0.16em] text-faint uppercase">Focus</dt>
+                  <dt className="font-mono text-[0.74rem] tracking-[0.16em] text-faint uppercase">Focus</dt>
                   <dd className="flex flex-wrap gap-2">
                     {person.focus.map((focus) => (
                       <span
@@ -192,7 +192,7 @@ export default async function PersonPage({ params }: Props) {
 
               {/* How they operate */}
               <Reveal delay={300}>
-                <h2 className="mt-12 font-mono text-[0.6rem] tracking-[0.16em] text-faint uppercase">
+                <h2 className="mt-12 font-mono text-[0.76rem] tracking-[0.16em] text-faint uppercase">
                   How {person.name.split(" ")[0]} operates
                 </h2>
               </Reveal>
@@ -212,7 +212,7 @@ export default async function PersonPage({ params }: Props) {
                   <p className="text-[clamp(1.1rem,2.2vw,1.45rem)] leading-snug font-medium text-white">
                     &ldquo;{person.quote}&rdquo;
                   </p>
-                  <footer className="mt-4 font-mono text-[0.6rem] tracking-[0.14em] text-faint uppercase">
+                  <footer className="mt-4 font-mono text-[0.76rem] tracking-[0.14em] text-faint uppercase">
                     {person.name} · {person.shortRole}
                   </footer>
                 </blockquote>
@@ -220,7 +220,7 @@ export default async function PersonPage({ params }: Props) {
 
               <Reveal delay={400}>
                 <div className="panel mt-10 p-7">
-                  <p className="font-mono text-[0.58rem] tracking-[0.16em] text-brand-ice uppercase">
+                  <p className="font-mono text-[0.74rem] tracking-[0.16em] text-brand-ice uppercase">
                     On the company
                   </p>
                   <p className="mt-4 text-[0.95rem] leading-relaxed text-muted">
@@ -270,7 +270,7 @@ export default async function PersonPage({ params }: Props) {
                       <Avatar person={other} className="size-12" rounded="rounded-xl" sizes="96px" />
                       <div>
                         <p className="text-[1.05rem] font-semibold text-white">{other.name}</p>
-                        <p className="mt-1 font-mono text-[0.58rem] tracking-[0.14em] text-brand-ice uppercase">
+                        <p className="mt-1 font-mono text-[0.74rem] tracking-[0.14em] text-brand-ice uppercase">
                           {other.shortRole}
                         </p>
                       </div>

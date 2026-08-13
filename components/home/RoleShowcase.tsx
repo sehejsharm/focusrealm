@@ -102,7 +102,7 @@ export default function RoleShowcase({
                   ) : null}
                   <span className="relative flex flex-col gap-1">
                     <span className="flex items-center gap-2">
-                      <span className="font-mono text-[0.58rem] tracking-[0.16em] uppercase opacity-70">
+                      <span className="font-mono text-[0.74rem] tracking-[0.16em] uppercase opacity-70">
                         0{index + 1}
                       </span>
                       <span className="text-[0.95rem] font-medium tracking-[-0.01em]">{entry.name}</span>
@@ -129,7 +129,7 @@ export default function RoleShowcase({
         >
           {/* Copy */}
           <div key={role.id} style={{ animation: "rise-in 0.75s var(--ease-out-expo) both" }}>
-            <p className="font-mono text-[0.62rem] tracking-[0.16em] text-brand-ice uppercase">
+            <p className="font-mono text-[0.76rem] tracking-[0.16em] text-brand-ice uppercase">
               {role.deviceLabel}
             </p>
             <RoleHeading className="mt-4 text-[clamp(1.6rem,3.2vw,2.4rem)] leading-[1.06] font-semibold text-white">
@@ -139,7 +139,7 @@ export default function RoleShowcase({
             <p className="mt-5 text-[0.98rem] leading-relaxed text-muted">{role.summary}</p>
 
             <div className="mt-6 flex items-center gap-3 rounded-xl border border-line bg-white/[0.03] px-4 py-3">
-              <span className="flex size-9 items-center justify-center rounded-full bg-brand/20 font-mono text-[0.68rem] text-brand-ice">
+              <span className="flex size-9 items-center justify-center rounded-full bg-brand/20 font-mono text-[0.78rem] text-brand-ice">
                 {role.persona
                   .split(" ")
                   .map((n) => n[0])
@@ -176,12 +176,12 @@ export default function RoleShowcase({
                 aria-hidden
                 className="pointer-events-none absolute inset-0 opacity-40 [background-image:linear-gradient(to_right,color-mix(in_oklab,#94d4c1_7%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklab,#94d4c1_7%,transparent)_1px,transparent_1px)] [background-size:44px_44px]"
               />
-              <span className="absolute top-4 left-5 z-10 font-mono text-[0.55rem] tracking-[0.16em] text-faint uppercase">
+              <span className="absolute top-4 left-5 z-10 font-mono text-[0.72rem] tracking-[0.16em] text-faint uppercase">
                 {role.name} · {role.device === "phone" ? "mobile" : "desktop"}
               </span>
               <span
                 aria-hidden
-                className="absolute top-4 right-5 z-10 flex items-center gap-1.5 font-mono text-[0.55rem] tracking-[0.14em] text-brand-cyan/70 uppercase"
+                className="absolute top-4 right-5 z-10 flex items-center gap-1.5 font-mono text-[0.72rem] tracking-[0.14em] text-brand-cyan/70 uppercase"
               >
                 <span className="size-1 rounded-full bg-brand-cyan animate-tick" />
                 live
@@ -225,7 +225,7 @@ export default function RoleShowcase({
             <div className="mt-8">
               <div className="flex items-baseline justify-between gap-4">
                 <p className="text-[0.9rem] font-medium text-white">{role.screens[screenIndex].title}</p>
-                <p className="font-mono text-[0.62rem] tracking-[0.12em] text-faint uppercase">
+                <p className="font-mono text-[0.76rem] tracking-[0.12em] text-faint uppercase">
                   {String(screenIndex + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
                 </p>
               </div>

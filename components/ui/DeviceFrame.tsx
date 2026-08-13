@@ -44,7 +44,7 @@ export function PhoneFrame({
         <div className="relative overflow-hidden rounded-[2.45rem] bg-ink ring-1 ring-black/60">
           {/* Status bar stands in for the clipped app header */}
           <div className="relative z-20 flex items-center justify-between px-5 pt-2.5 pb-1.5">
-            <span className="font-mono text-[0.5rem] tracking-[0.08em] text-white/55">09:41</span>
+            <span className="font-mono text-[0.72rem] tracking-[0.08em] text-white/55">09:41</span>
             <span className="h-4 w-16 rounded-full bg-black/80" />
             <span className="flex items-center gap-1">
               <span className="h-1.5 w-1.5 rounded-full bg-white/45" />
@@ -116,7 +116,7 @@ export function BrowserFrame({
                 <rect x="2.5" y="5" width="7" height="5" rx="1" stroke="currentColor" strokeWidth="1.1" />
                 <path d="M4.2 5V3.6a1.8 1.8 0 0 1 3.6 0V5" stroke="currentColor" strokeWidth="1.1" />
               </svg>
-              <span className="truncate font-mono text-[0.62rem] tracking-[0.04em] text-faint">{route}</span>
+              <span className="truncate font-mono text-[0.76rem] tracking-[0.04em] text-faint">{route}</span>
             </div>
           </div>
           <Image

@@ -44,7 +44,7 @@ export default function NotFound() {
 
       <Reveal delay={160}>
         <nav aria-label="Site sections" className="mt-16 border-t border-line pt-8">
-          <p className="font-mono text-[0.66rem] tracking-[0.16em] text-brand-cyan uppercase">
+          <p className="font-mono text-[0.78rem] tracking-[0.16em] text-brand-cyan uppercase">
             Or pick up where you meant to go
           </p>
           <ul className="mt-5 grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">

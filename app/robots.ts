@@ -1,8 +1,14 @@
 import type { MetadataRoute } from "next";
 
-import { absoluteUrl, siteUrl } from "@/lib/site";
+import { absoluteUrl, isUnindexableHost, siteUrl } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
+  // A preview deployment disallows everything: canonicals already point at the
+  // production domain, so letting crawlers in here only creates a duplicate.
+  if (isUnindexableHost) {
+    return { rules: [{ userAgent: "*", disallow: "/" }] };
+  }
+
   return {
     rules: [
       { userAgent: "*", allow: "/" },

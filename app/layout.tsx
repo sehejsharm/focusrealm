@@ -7,7 +7,7 @@ import Footer from "@/components/site/Footer";
 import Header from "@/components/site/Header";
 import StickyCta from "@/components/site/StickyCta";
 import { jsonLdGraph, organizationSchema, softwareSchema, websiteSchema } from "@/lib/seo";
-import { site, siteUrl } from "@/lib/site";
+import { isUnindexableHost, site, siteUrl } from "@/lib/site";
 
 import "./globals.css";
 
@@ -66,11 +66,13 @@ export const metadata: Metadata = {
     title: `${site.name} — Service Execution Platform for Hotels`,
     description: site.shortDescription,
   },
+  // Previews and *.vercel.app hosts are excluded from the index so a
+  // presentation link never competes with the production domain.
   robots: {
-    index: true,
+    index: !isUnindexableHost,
     follow: true,
     googleBot: {
-      index: true,
+      index: !isUnindexableHost,
       follow: true,
       "max-image-preview": "large",
       "max-snippet": -1,

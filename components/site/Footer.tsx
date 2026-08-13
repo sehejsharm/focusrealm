@@ -54,7 +54,7 @@ export default function Footer() {
               <LogoMark className="size-10" decorative />
               <span className="flex flex-col leading-none">
                 <span className="text-[0.95rem] font-semibold text-white">Focus Realm</span>
-                <span className="mt-1 font-mono text-[0.6rem] tracking-[0.16em] text-faint uppercase">
+                <span className="mt-1 font-mono text-[0.76rem] tracking-[0.16em] text-faint uppercase">
                   Hospitality
                 </span>
               </span>
@@ -63,14 +63,14 @@ export default function Footer() {
               {site.categoryLine} Standards inside timed tasks, evidence captured by doing the work, an
               audit-ready service record.
             </p>
-            <p className="mt-5 font-mono text-[0.68rem] tracking-[0.1em] text-brand-ice/80">
+            <p className="mt-5 font-mono text-[0.78rem] tracking-[0.1em] text-brand-ice/80">
               {site.tagline.toUpperCase()}
             </p>
           </div>
 
           {footerNav.map((group) => (
             <nav key={group.heading} aria-label={group.heading}>
-              <h3 className="font-mono text-[0.62rem] tracking-[0.18em] text-faint uppercase">
+              <h3 className="font-mono text-[0.76rem] tracking-[0.18em] text-faint uppercase">
                 {group.heading}
               </h3>
               <ul className="mt-2 space-y-0">

@@ -57,7 +57,7 @@ export default function Hero() {
 
             {/* The ledger, writing itself */}
             <Reveal delay={520} immediate className="mt-10 border-t border-line pt-5">
-              <p className="mb-2 font-mono text-[0.55rem] tracking-[0.16em] text-faint uppercase">
+              <p className="mb-2 font-mono text-[0.72rem] tracking-[0.16em] text-faint uppercase">
                 Service record · writing now
               </p>
               <EventStream />

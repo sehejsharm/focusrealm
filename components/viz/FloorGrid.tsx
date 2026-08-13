@@ -50,10 +50,10 @@ export default function FloorGrid() {
   return (
     <figure className="relative">
       <figcaption className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
-        <span className="font-mono text-[0.58rem] tracking-[0.16em] text-brand-cyan uppercase">
+        <span className="font-mono text-[0.74rem] tracking-[0.16em] text-brand-cyan uppercase">
           Live floor state · 08:36
         </span>
-        <span className="font-mono text-[0.62rem] tabular-nums text-faint">
+        <span className="font-mono text-[0.76rem] tabular-nums text-faint">
           {shown ? `Floor ${shown.floor} · room ${String(shown.index + 1).padStart(2, "0")} · ${status[shown.state].label} · ${shown.minutes} min target` : `${total} rooms tracked`}
         </span>
       </figcaption>
@@ -68,7 +68,7 @@ export default function FloorGrid() {
               type="button"
               onClick={() => setFilter(active ? null : key)}
               aria-pressed={active}
-              className={`flex min-h-11 items-center gap-2 rounded-full border px-3 py-1.5 font-mono text-[0.58rem] tracking-[0.1em] uppercase transition-colors duration-300 ${
+              className={`flex min-h-11 items-center gap-2 rounded-full border px-3 py-1.5 font-mono text-[0.74rem] tracking-[0.1em] uppercase transition-colors duration-300 ${
                 active ? "border-brand-bright/60 bg-brand/15 text-white" : "border-line text-muted hover:text-white"
               }`}
             >
@@ -85,7 +85,7 @@ export default function FloorGrid() {
       <div className="space-y-[3px]" onMouseLeave={() => setHover(null)}>
         {floors.map((floor) => (
           <div key={floor[0].floor} className="flex items-center gap-2.5">
-            <span className="w-5 shrink-0 text-right font-mono text-[0.5rem] tabular-nums text-faint">
+            <span className="w-5 shrink-0 text-right font-mono text-[0.72rem] tabular-nums text-faint">
               {floor[0].floor}
             </span>
             <div className="grid flex-1 gap-[3px]" style={{ gridTemplateColumns: `repeat(${floor.length}, minmax(0, 1fr))` }}>
@@ -111,7 +111,7 @@ export default function FloorGrid() {
         ))}
       </div>
 
-      <p className="mt-4 font-mono text-[0.55rem] tracking-[0.12em] text-faint uppercase">
+      <p className="mt-4 font-mono text-[0.72rem] tracking-[0.12em] text-faint uppercase">
         Floor · 20 rooms each · top floor first
       </p>
     </figure>

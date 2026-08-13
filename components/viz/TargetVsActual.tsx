@@ -27,7 +27,7 @@ export default function TargetVsActual() {
   return (
     <figure ref={ref}>
       <figcaption className="mb-5 flex flex-wrap items-baseline justify-between gap-3">
-        <span className="font-mono text-[0.58rem] tracking-[0.16em] text-brand-cyan uppercase">
+        <span className="font-mono text-[0.74rem] tracking-[0.16em] text-brand-cyan uppercase">
           Target vs median actual
         </span>
         <ul className="flex gap-4">
@@ -58,7 +58,7 @@ export default function TargetVsActual() {
             >
               <div className="flex items-baseline justify-between gap-3">
                 <span className="truncate text-[0.8rem] text-muted">{row.name}</span>
-                <span className="shrink-0 font-mono text-[0.68rem] tabular-nums text-faint">
+                <span className="shrink-0 font-mono text-[0.78rem] tabular-nums text-faint">
                   {row.target}→{row.actual} min
                   <span className={over ? "ml-1.5 text-[#ff9b9b]" : "ml-1.5 text-brand-cyan"}>
                     {over ? "+" : "−"}

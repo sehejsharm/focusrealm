@@ -20,10 +20,10 @@ export default function ReadinessBars() {
   return (
     <figure ref={ref}>
       <figcaption className="mb-5 flex items-baseline justify-between gap-4">
-        <span className="font-mono text-[0.58rem] tracking-[0.16em] text-brand-cyan uppercase">
+        <span className="font-mono text-[0.74rem] tracking-[0.16em] text-brand-cyan uppercase">
           Cleared to standard, by department
         </span>
-        <span className="font-mono text-[0.62rem] tabular-nums text-faint">
+        <span className="font-mono text-[0.76rem] tabular-nums text-faint">
           {hover === null ? "42 staff" : `${readiness[hover].staff} staff`}
         </span>
       </figcaption>

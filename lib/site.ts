@@ -8,18 +8,32 @@
 
 const fallbackUrl = "https://www.focusrealm.org";
 
+/**
+ * Deliberately does NOT fall back to Vercel's deployment URL.
+ *
+ * It used to, which meant a deployment with no NEXT_PUBLIC_SITE_URL set
+ * published canonicals, OG image URLs, sitemap entries and JSON-LD @ids
+ * pointing at the *.vercel.app host — inviting Google to index the preview as
+ * the canonical site and stranding any authority it earned on a throwaway
+ * domain. The production domain is the answer unless someone says otherwise.
+ */
 function resolveSiteUrl() {
-  const fromEnv =
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : undefined);
-
+  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL;
   if (!fromEnv) return fallbackUrl;
   return fromEnv.startsWith("http") ? fromEnv.replace(/\/$/, "") : `https://${fromEnv.replace(/\/$/, "")}`;
 }
 
 export const siteUrl = resolveSiteUrl();
+
+/**
+ * True for anything that is not the real production site — Vercel previews and
+ * branch deploys, or a deployment still being served from a *.vercel.app host.
+ * These are kept out of the index entirely: a presentation link should not
+ * compete with the production domain in search results.
+ */
+export const isUnindexableHost =
+  (process.env.VERCEL_ENV !== undefined && process.env.VERCEL_ENV !== "production") ||
+  /\.vercel\.app$/.test(new URL(siteUrl).hostname);
 
 export const site = {
   name: "Focus Realm Hospitality",

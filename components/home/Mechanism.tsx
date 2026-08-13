@@ -55,7 +55,7 @@ export default function Mechanism() {
               <TargetVsActual />
             </Reveal>
             <Reveal delay={200} className="panel p-6 sm:p-7">
-              <p className="font-mono text-[0.58rem] tracking-[0.16em] text-brand-cyan uppercase">
+              <p className="font-mono text-[0.74rem] tracking-[0.16em] text-brand-cyan uppercase">
                 Runs on
               </p>
               <dl className="mt-4 space-y-2.5">

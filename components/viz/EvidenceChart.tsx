@@ -54,7 +54,7 @@ export default function EvidenceChart() {
     <figure ref={ref} className="relative">
       <figcaption className="mb-5 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <span className="font-mono text-[0.58rem] tracking-[0.16em] text-brand-cyan uppercase">
+          <span className="font-mono text-[0.74rem] tracking-[0.16em] text-brand-cyan uppercase">
             Evidence held, day {active.day}
           </span>
           <p className="mt-2 text-[clamp(1.8rem,3.6vw,2.6rem)] leading-none font-semibold tabular-nums text-white">

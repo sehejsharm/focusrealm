@@ -111,7 +111,7 @@ export default function ContactPage() {
               {routes.map((route, index) => (
                 <Reveal key={route.value} delay={index * 90}>
                   <SpotlightCard className="panel p-6">
-                    <p className="font-mono text-[0.58rem] tracking-[0.14em] text-faint uppercase">
+                    <p className="font-mono text-[0.74rem] tracking-[0.14em] text-faint uppercase">
                       {route.label}
                     </p>
                     <a
@@ -127,7 +127,7 @@ export default function ContactPage() {
 
               <Reveal delay={180}>
                 <div className="panel p-6">
-                  <p className="font-mono text-[0.58rem] tracking-[0.14em] text-faint uppercase">
+                  <p className="font-mono text-[0.74rem] tracking-[0.14em] text-faint uppercase">
                     Who you will be talking to
                   </p>
                   <ul className="mt-4 space-y-3">
@@ -137,7 +137,7 @@ export default function ContactPage() {
                           href={`/team/${person.slug}`}
                           className="group flex items-center gap-3.5 rounded-xl border border-line bg-white/[0.02] px-3.5 py-3 transition-all duration-500 hover:border-brand-bright/40 hover:bg-brand/8"
                         >
-                          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-brand/18 font-mono text-[0.62rem] text-brand-ice">
+                          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-brand/18 font-mono text-[0.76rem] text-brand-ice">
                             {person.initials}
                           </span>
                           <span className="flex flex-col leading-tight">
@@ -153,7 +153,7 @@ export default function ContactPage() {
 
               <Reveal delay={240}>
                 <div className="panel p-6">
-                  <p className="font-mono text-[0.58rem] tracking-[0.14em] text-faint uppercase">Based in</p>
+                  <p className="font-mono text-[0.74rem] tracking-[0.14em] text-faint uppercase">Based in</p>
                   <p className="mt-3 text-[0.95rem] text-paper">Remote-first · India</p>
                   <p className="mt-2 text-[0.85rem] leading-relaxed text-faint">
                     Priority markets are travel, hospitality and hotels across India, the wider Asia region and

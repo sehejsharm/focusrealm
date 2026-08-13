@@ -38,7 +38,7 @@ export default function LegalLayout({
         titleLines={titleLines}
         lede={lede}
       >
-        <p className="mt-7 font-mono text-[0.62rem] tracking-[0.14em] text-faint uppercase">
+        <p className="mt-7 font-mono text-[0.76rem] tracking-[0.14em] text-faint uppercase">
           Effective {legal.effectiveDate} · {legal.entity}
         </p>
       </PageHero>
@@ -48,7 +48,7 @@ export default function LegalLayout({
           <div className="grid gap-12 lg:grid-cols-[0.3fr_0.7fr] lg:gap-16">
             {/* Contents */}
             <nav aria-label="On this page" className="lg:sticky lg:top-28 lg:self-start">
-              <p className="font-mono text-[0.58rem] tracking-[0.16em] text-faint uppercase">Contents</p>
+              <p className="font-mono text-[0.74rem] tracking-[0.16em] text-faint uppercase">Contents</p>
               <ol className="mt-4 space-y-2">
                 {sections.map((section, index) => (
                   <li key={section.id}>
@@ -56,7 +56,7 @@ export default function LegalLayout({
                       href={`#${section.id}`}
                       className="flex gap-3 text-[0.85rem] text-muted transition-colors duration-300 hover:text-white"
                     >
-                      <span className="font-mono text-[0.68rem] text-brand-ice/70">
+                      <span className="font-mono text-[0.78rem] text-brand-ice/70">
                         {String(index + 1).padStart(2, "0")}
                       </span>
                       {section.heading}
@@ -66,7 +66,7 @@ export default function LegalLayout({
               </ol>
 
               <div className="mt-8 border-t border-line pt-6">
-                <p className="font-mono text-[0.58rem] tracking-[0.16em] text-faint uppercase">
+                <p className="font-mono text-[0.74rem] tracking-[0.16em] text-faint uppercase">
                   Other policies
                 </p>
                 <ul className="mt-4 space-y-2">
@@ -90,7 +90,7 @@ export default function LegalLayout({
                 <Reveal key={section.id} delay={index * 40}>
                   <section id={section.id} className="scroll-mt-28 border-t border-line py-9 first:border-t-0 first:pt-0">
                     <div className="flex items-baseline gap-3">
-                      <span className="font-mono text-[0.62rem] tracking-[0.16em] text-brand-ice">
+                      <span className="font-mono text-[0.76rem] tracking-[0.16em] text-brand-ice">
                         {String(index + 1).padStart(2, "0")}
                       </span>
                       <h2 className="text-[1.3rem] leading-snug font-semibold text-white">{section.heading}</h2>

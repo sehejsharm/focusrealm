@@ -79,7 +79,7 @@ export default function Logo({
             Focus Realm <span className="text-brand-ice">Hospitality</span>
           </span>
           {showTagline ? (
-            <span className="mt-1 font-mono text-[0.6rem] tracking-[0.16em] text-faint uppercase">
+            <span className="mt-1 font-mono text-[0.76rem] tracking-[0.16em] text-faint uppercase">
               Every shift, five-star
             </span>
           ) : null}

@@ -94,7 +94,7 @@ export default function TeamPage() {
                       <h2 className="mt-6 text-[clamp(1.5rem,3vw,2.1rem)] leading-tight font-semibold text-white">
                         {person.name}
                       </h2>
-                      <p className="mt-2.5 font-mono text-[0.62rem] tracking-[0.14em] text-brand-ice uppercase">
+                      <p className="mt-2.5 font-mono text-[0.76rem] tracking-[0.14em] text-brand-ice uppercase">
                         {person.role}
                       </p>
                       <span className="mt-6 inline-flex items-center gap-2 text-[0.85rem] text-brand-cyan transition-all duration-500 group-hover:gap-3">

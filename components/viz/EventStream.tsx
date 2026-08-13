@@ -55,9 +55,14 @@ export default function EventStream() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-14 bg-linear-to-t from-ink to-transparent"
       />
+      {/* Decorative. These are synthetic rows from the demo property that
+          rewrite themselves every couple of seconds; announcing them would
+          interrupt a screen-reader user continuously to read out data that
+          carries no information about this page. The same claim is made in
+          prose in the surrounding copy. */}
       <ul
-        aria-live="off"
-        className="space-y-px font-mono text-[0.68rem]"
+        aria-hidden
+        className="space-y-px font-mono text-[0.78rem]"
       >
         {events.map((event, index) => {
           const s = status[event.state];

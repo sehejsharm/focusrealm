@@ -94,14 +94,14 @@ export default function ProblemsPage() {
               >
                 <dt>
                   <span className="flex items-baseline gap-3">
-                    <span className="font-mono text-[0.62rem] tabular-nums text-brand-cyan">
+                    <span className="font-mono text-[0.76rem] tabular-nums text-brand-cyan">
                       {pain.index}
                     </span>
                     <span className="text-[1.15rem] leading-tight font-semibold text-white">
                       {pain.name}
                     </span>
                   </span>
-                  <span className="mt-2.5 block font-mono text-[0.55rem] tracking-[0.12em] text-faint uppercase">
+                  <span className="mt-2.5 block font-mono text-[0.72rem] tracking-[0.12em] text-faint uppercase">
                     {pain.metric}
                   </span>
                 </dt>
