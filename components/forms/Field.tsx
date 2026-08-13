@@ -5,6 +5,12 @@ import type { ComponentProps, ReactNode } from "react";
 const control =
   "w-full rounded-xl border border-line bg-white/[0.03] px-4 py-3 text-[0.92rem] text-paper placeholder:text-faint/75 transition-all duration-300 outline-none focus:border-brand-bright/70 focus:bg-brand/10 focus:ring-2 focus:ring-brand/30 disabled:opacity-60 aria-[invalid=true]:border-[#ff9b9b]/70 aria-[invalid=true]:bg-[#ff9b9b]/[0.06]";
 
+/** Screen readers get the hint and the error, in that order, if present. */
+function describedBy(id: string, hint?: string, error?: string) {
+  const ids = [hint ? `${id}-hint` : "", error ? `${id}-error` : ""].filter(Boolean);
+  return ids.length > 0 ? ids.join(" ") : undefined;
+}
+
 function Wrapper({
   label,
   htmlFor,
@@ -35,7 +41,11 @@ function Wrapper({
             </>
           ) : null}
         </span>
-        {hint ? <span className="normal-case tracking-normal text-faint">{hint}</span> : null}
+        {hint ? (
+          <span id={`${htmlFor}-hint`} className="normal-case tracking-normal text-faint">
+            {hint}
+          </span>
+        ) : null}
       </label>
       <div className="mt-2.5">{children}</div>
       {error ? (
@@ -60,7 +70,7 @@ export function TextField({
         id={id}
         className={control}
         aria-invalid={error ? true : undefined}
-        aria-describedby={error ? `${id}-error` : undefined}
+        aria-describedby={describedBy(id, hint, error)}
         {...rest}
       />
     </Wrapper>
@@ -88,7 +98,7 @@ export function SelectField({
           id={id}
           className={`${control} appearance-none pr-10`}
           aria-invalid={error ? true : undefined}
-          aria-describedby={error ? `${id}-error` : undefined}
+          aria-describedby={describedBy(id, hint, error)}
           {...rest}
         >
           {options.map((option) => (
@@ -124,7 +134,7 @@ export function TextArea({
         rows={4}
         className={`${control} resize-y`}
         aria-invalid={error ? true : undefined}
-        aria-describedby={error ? `${id}-error` : undefined}
+        aria-describedby={describedBy(id, hint, error)}
         {...rest}
       />
     </Wrapper>

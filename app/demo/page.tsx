@@ -154,6 +154,18 @@ export default function DemoPage() {
                 ))}
               </ol>
 
+              {/* Pre-empts the question nobody asks on the call but everybody
+                  has before booking one. No numbers: pilots are scoped per
+                  property, so a figure here would be invented. */}
+              <Reveal delay={170} className="mt-8">
+                <p className="border-l-2 border-brand/40 pl-5 text-[0.88rem] leading-relaxed text-muted">
+                  <span className="text-paper">And after that:</span> pilots are
+                  scoped per property against your own standards, so pricing comes
+                  out of the call rather than a rate card. No procurement process
+                  to start one, and no PMS integration to schedule.
+                </p>
+              </Reveal>
+
               <Reveal delay={200} className="mt-10">
                 <div className="panel flex items-center gap-6 overflow-hidden p-6">
                   <div className="w-[112px] shrink-0">

@@ -182,7 +182,7 @@ export default function PlatformPage() {
             </div>
             <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
               <ButtonLink href={site.prototypeUrl} variant="outline" external>
-                Open prototype
+                Open the live prototype
               </ButtonLink>
               <ButtonLink href="/demo">
                 Book a 15-min demo

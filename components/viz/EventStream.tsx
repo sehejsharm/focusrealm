@@ -67,7 +67,10 @@ export default function EventStream() {
               className="flex items-center gap-3 border-b border-line/60 py-2.5 last:border-b-0"
               style={{
                 animation: index === 0 ? "rise-in 0.5s var(--ease-out-expo) both" : undefined,
-                opacity: 1 - index * 0.16,
+                // Shallow ramp on purpose: at 0.16 a step the last rows landed
+                // at 3.0:1 and 2.1:1 against the panel, well under AA. The
+                // scrim below carries the "fading into history" read instead.
+                opacity: 1 - index * 0.06,
               }}
             >
               <span className="tabular-nums text-faint">{event.time}</span>
