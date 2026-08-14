@@ -162,6 +162,12 @@ export type Role = {
   name: string;
   device: "phone" | "desktop";
   deviceLabel: string;
+  /**
+   * Who this actually is, in the job titles a hotel uses. The role names alone
+   * ("Author") mean nothing to a buyer — they read it and guess, usually
+   * "trainer" — so every interface says out loud whose hands it is in.
+   */
+  who: string;
   persona: string;
   personaRole: string;
   headline: string;
@@ -176,7 +182,8 @@ export const roles: Role[] = [
     id: "staff",
     name: "Staff",
     device: "phone",
-    deviceLabel: "Mobile-first · built for a 340px viewport",
+    deviceLabel: "Mobile-first · built for the phone already in their pocket",
+    who: "Room attendants, F&B and front office — whoever does the work",
     persona: "Maya Fernando",
     personaRole: "Room attendant · Housekeeping",
     headline: "The whole standard,",
@@ -245,6 +252,7 @@ export const roles: Role[] = [
     name: "Manager",
     device: "desktop",
     deviceLabel: "Desktop-primary · the live service picture",
+    who: "Supervisors, duty managers and heads of department",
     persona: "Elena Rossi",
     personaRole: "Operations manager",
     headline: "Put attention",
@@ -304,11 +312,15 @@ export const roles: Role[] = [
   },
   {
     id: "author",
-    name: "Author",
+    // Display name only. The in-product screens still read "Author"; on the
+    // marketing site that word tests badly, so the buyer-facing label is the
+    // job, not the abstraction.
+    name: "Standards",
     device: "desktop",
-    deviceLabel: "Desktop-only · where the standard is written",
+    deviceLabel: "Desktop · where the standard gets written",
+    who: "Your training lead, quality manager or the HOD who owns the standard",
     persona: "Amina Rahman",
-    personaRole: "Standards author",
+    personaRole: "Head of Training & Standards",
     headline: "Turn the standard into",
     headlineAccent: "a clear shift sequence.",
     summary:
@@ -382,7 +394,7 @@ export const property = {
 export const personas = [
   { name: "Maya Fernando", role: "Room attendant", role_interface: "Staff", initials: "MF" },
   { name: "Elena Rossi", role: "Operations manager", role_interface: "Manager", initials: "ER" },
-  { name: "Amina Rahman", role: "Standards author", role_interface: "Author", initials: "AR" },
+  { name: "Amina Rahman", role: "Head of Training & Standards", role_interface: "Standards", initials: "AR" },
   { name: "Arjun Rao", role: "Duty manager", role_interface: "Manager", initials: "AR" },
   { name: "Jonas Lee", role: "Incoming shift", role_interface: "Staff", initials: "JL" },
 ] as const;
@@ -617,34 +629,50 @@ export const outcomes = [
   },
 ] as const;
 
-export const comparison = {
-  columns: ["Paper & WhatsApp", "A generic LMS", "Focus Realm"],
-  rows: [
+/**
+ * The five jobs a property already does, and where each one currently lives.
+ *
+ * This replaced a three-column comparison against paper and a generic LMS.
+ * Putting our column next to what a buyer already owns invites them to defend
+ * it — "we have that already, why replace it" — which is the opposite of the
+ * intended effect. Framing the same facts as five scattered jobs collapsing
+ * into one platform keeps the argument on consolidation, where it belongs, and
+ * never asks the reader to run the comparison themselves.
+ */
+export const convergence = {
+  jobs: [
     {
-      criterion: "Where the standard lives",
-      values: ["A binder", "A course", "Inside the task, on shift"],
+      job: "Write the standard",
+      today: "A binder, or last year's deck",
+      cost: "Rewritten every audit",
     },
     {
-      criterion: "What completion proves",
-      values: ["Someone said so", "A module finished", "The step ran, with a photo"],
+      job: "Get it onto the floor",
+      today: "Shift briefing, then the group chat",
+      cost: "Repeated every shift",
     },
     {
-      criterion: "Evidence",
-      values: ["Scattered in chat", "Quiz scores", "Per step, timestamped"],
+      job: "Run it to standard",
+      today: "Memory, and whoever is senior today",
+      cost: "Varies by person",
     },
     {
-      criterion: "Supervisor load",
-      values: ["Every question", "Unchanged", "Exceptions only"],
+      job: "Prove it happened",
+      today: "A photo in someone's camera roll",
+      cost: "Mostly unprovable",
     },
     {
-      criterion: "Audit prep",
-      values: ["A week", "Attendance reports", "A filter on existing data"],
-    },
-    {
-      criterion: "When someone leaves",
-      values: ["Knowledge goes", "Course stays, execution goes", "The standard still runs"],
+      job: "Produce it for the audit",
+      today: "Collating sign-in sheets and screenshots",
+      cost: "About a week",
     },
   ],
+  outcome: {
+    label: "One platform",
+    title: "All five, on the same shift.",
+    body: "The standard goes into the timed task, the task captures the evidence, and the evidence is already the audit file. Nothing to chase, collate or rebuild.",
+    proof: "One record · per step, per person, per property",
+  },
 } as const;
 
 /** Objection handling — the four things buyers actually push back on. */
@@ -678,7 +706,7 @@ export const faqs = [
   },
   {
     q: "How does Focus Realm handle SOP management for hotels?",
-    a: "Standards are authored once in the Author workspace — instruction, reference photo, final checklist, target time, and which steps require photo evidence. Publishing pushes the standard directly into the staff library and the manager's assignment desk, so it is executable on the next shift rather than filed as a document.",
+    a: "Standards are written once in the standards workspace — instruction, reference photo, final checklist, target time, and which steps require photo evidence. Publishing pushes the standard directly into the staff library and the manager's assignment desk, so it is executable on the next shift rather than filed as a document.",
   },
   {
     q: "What evidence does the platform capture?",
@@ -690,7 +718,7 @@ export const faqs = [
   },
   {
     q: "Who are the three role interfaces for?",
-    a: "Staff use a mobile-first interface built for a 340px viewport, where the timed task and evidence capture happen. Managers use a desktop-primary interface for oversight, assignment and exception handling. Authors use a desktop-only workspace to build and version standards.",
+    a: "The people doing the work — room attendants, F&B, front office — use a mobile-first interface on their own phone, where the timed task and evidence capture happen. Supervisors and heads of department use a desktop interface for oversight, assignment and exception handling. Whoever owns the standard at your property, usually the training lead or quality manager, uses a desktop workspace to write and version it.",
   },
   {
     q: "How does a Focus Realm pilot work?",

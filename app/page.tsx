@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import Comparison from "@/components/home/Comparison";
+import Convergence from "@/components/home/Convergence";
 import Faq from "@/components/home/Faq";
 import Hero from "@/components/home/Hero";
 import Mechanism from "@/components/home/Mechanism";
@@ -78,7 +78,7 @@ export default function HomePage() {
       <Rule />
       <RoleShowcase />
       <PainSnowball />
-      <Comparison />
+      <Convergence />
       <Testimonials />
       <TeamStrip />
       <Faq />

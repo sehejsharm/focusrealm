@@ -90,7 +90,7 @@ export const footerNav = [
       { href: "/platform", label: "Overview" },
       { href: "/platform#staff", label: "Staff · mobile" },
       { href: "/platform#manager", label: "Manager · desktop" },
-      { href: "/platform#author", label: "Author · desktop" },
+      { href: "/platform#author", label: "Standards · desktop" },
       { href: "/platform#service-record", label: "The service record" },
     ],
   },

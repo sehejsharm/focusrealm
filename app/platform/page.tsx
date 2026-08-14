@@ -13,10 +13,10 @@ import { site } from "@/lib/site";
 
 const title = "Hotel SOP platform — three interfaces";
 const description =
-  "Three role interfaces on one evidence trail: a mobile-first staff app, a manager service picture, and a workspace where hotel SOPs become timed tasks.";
+  "Three interfaces on one evidence trail: a staff app on their own phone, a supervisor service picture, and a workspace where hotel SOPs become timed tasks.";
 /** Social cards are not truncated at 155, so they keep the fuller pitch. */
 const ogDescription =
-  "Inside the Focus Realm service execution platform: a mobile-first staff interface built for a 340px viewport, a desktop-primary manager surface for the live service picture, and a desktop-only authoring workspace where hotel SOPs become timed tasks with mandatory photo evidence.";
+  "Inside the Focus Realm service execution platform: a mobile-first interface for the people doing the work, a desktop surface for supervisors and heads of department, and a standards workspace where hotel SOPs become timed tasks with mandatory photo evidence.";
 /** The <h1> and the JSON-LD name stay descriptive even though the tag is short. */
 const pageName = "Platform — three role interfaces, one service record";
 
@@ -113,6 +113,10 @@ export default function PlatformPage() {
                 </Reveal>
                 <Reveal delay={140}>
                   <p className="mt-5 text-[0.98rem] leading-relaxed text-muted">{role.summary}</p>
+                  <p className="mt-4 text-[0.88rem] leading-relaxed text-faint">
+                    <span className="text-brand-cyan">Who this is for: </span>
+                    {role.who}
+                  </p>
                 </Reveal>
                 <Reveal delay={200}>
                   <dl className="mt-8 space-y-4">
