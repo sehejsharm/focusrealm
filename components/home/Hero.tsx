@@ -45,8 +45,9 @@ export default function Hero() {
 
             <Reveal delay={300} immediate>
               <p className="mt-4 max-w-md text-[1.05rem] leading-relaxed text-muted">
-                Hotel SOP management that runs as timed tasks on staff phones.
-                The work produces the evidence. The evidence is the audit.
+                The hotel SOP management system that replaces the binder with a
+                service record. Standards run as timed tasks on staff phones,
+                the work produces the evidence, and the evidence is the audit.
               </p>
             </Reveal>
 

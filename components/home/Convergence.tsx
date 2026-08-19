@@ -29,7 +29,7 @@ export default function Convergence() {
             <Eyebrow>What it replaces</Eyebrow>
           </Reveal>
           <KineticHeading
-            text="Five places. One platform."
+            text="Five places. One hotel operations platform."
             variant="drift"
             accentFrom={2}
             className="mt-5 text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] font-semibold text-white"

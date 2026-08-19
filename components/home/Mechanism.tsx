@@ -24,11 +24,17 @@ export default function Mechanism() {
             <Eyebrow>How it works</Eyebrow>
           </Reveal>
           <KineticHeading
-            text="One loop, four moves."
+            text="Hotel SOP execution: one loop, four moves."
             variant="settle"
             accentFrom={2}
             className="mt-5 text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] font-semibold text-white"
           />
+          <Reveal delay={80}>
+            <p className="mt-5 text-[0.98rem] leading-relaxed text-muted">
+              Four moves turn hotel standard operating procedures into an
+              audit-ready compliance trail, without anyone filing anything.
+            </p>
+          </Reveal>
         </div>
 
         <Reveal delay={120} className="mt-12">

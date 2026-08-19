@@ -585,6 +585,15 @@ export const clients: Client[] = [
  * and uses the retired category noun — it is left verbatim because a
  * testimonial is attributed speech, not our own positioning.
  */
+/**
+ * Early-deployment quotes.
+ *
+ * Both predate the repositioning and use "LMS" and "training" language that
+ * now contradicts the rest of the site. They are real quotes from real
+ * customers, so they are not being reworded — instead the section states when
+ * they were given, and each carries the deployment it describes. Replace them
+ * as soon as either account signs off on a current one.
+ */
 export const testimonials = [
   {
     quote:
@@ -592,6 +601,7 @@ export const testimonials = [
     author: "Clarks Hotels & Resorts",
     role: "Multi-property hotel group",
     tag: "Multi-property operations",
+    context: "Compliance tracking across four properties",
   },
   {
     quote:
@@ -599,8 +609,13 @@ export const testimonials = [
     author: "TwoKey",
     role: "SaaS product team",
     tag: "Capability & upskilling",
+    context: "Team execution and performance measurement",
   },
 ] as const;
+
+/** Stated above the quotes, so the older vocabulary reads as history. */
+export const testimonialsNote =
+  "From our earliest deployments, given while the platform was still finding its category. The language is theirs and we have left it alone.";
 
 /* ------------------------------------------------------------------ *
  * Sales material: what changes, and what we are not.

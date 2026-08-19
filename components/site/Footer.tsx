@@ -27,8 +27,8 @@ export default function Footer() {
             <div>
               <Eyebrow>Start with one property</Eyebrow>
               <h2 className="mt-5 text-[clamp(1.9rem,3.6vw,2.9rem)] leading-[1.05] font-semibold text-white">
-                Bring us your hardest shift.
-                <span className="text-gradient"> We will show you the record it writes.</span>
+                Start your hotel operations pilot
+                <span className="text-gradient"> with one property.</span>
               </h2>
               <p className="mt-5 max-w-xl text-[1rem] leading-relaxed text-muted">
                 Fifteen minutes on the three role interfaces, run against a live property environment — then a
@@ -60,8 +60,8 @@ export default function Footer() {
               </span>
             </Link>
             <p className="mt-5 max-w-xs text-[0.88rem] leading-relaxed text-faint">
-              {site.categoryLine} Standards inside timed tasks, evidence captured by doing the work, an
-              audit-ready service record.
+              {site.categoryLine} Hotel SOP management, housekeeping task tracking and audit
+              compliance — captured while the work happens, not reconstructed afterwards.
             </p>
             <p className="mt-5 font-mono text-[0.78rem] tracking-[0.1em] text-brand-ice/80">
               {site.tagline.toUpperCase()}

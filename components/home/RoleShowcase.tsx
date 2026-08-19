@@ -59,14 +59,14 @@ export default function RoleShowcase({
             </Reveal>
             <Reveal delay={80}>
               <h2 className="mt-5 text-[clamp(2rem,4.6vw,3.5rem)] leading-[1.02] font-semibold text-white">
-                Three people. Three jobs.
-                <span className="text-gradient"> Three interfaces built for them.</span>
+                Three role interfaces
+                <span className="text-gradient"> for hotel operations teams.</span>
               </h2>
             </Reveal>
             <Reveal delay={160}>
               <p className="mt-6 max-w-2xl text-[1.02rem] leading-relaxed text-muted sm:text-[1.08rem]">
-                Not one responsive compromise. A room attendant on a 340px screen, a manager on a desk, and an
-                author writing the standard have nothing in common except the record they share.
+                Not one responsive compromise. A room attendant on their own phone, a supervisor at a desk, and
+                whoever writes the standard have nothing in common except the service record they share.
               </p>
             </Reveal>
           </div>

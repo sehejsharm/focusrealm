@@ -15,7 +15,7 @@ export default function Faq() {
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
           <SectionHeading
             eyebrow="Questions we get asked"
-            title="The short answers,"
+            title="Hotel SOP platform FAQ,"
             accent="in plain language."
             body="If you are comparing us against a hotel LMS or an SOP document tool, these are the differences that matter."
           />

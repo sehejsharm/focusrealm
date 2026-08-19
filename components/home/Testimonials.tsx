@@ -2,7 +2,7 @@ import { Magnetic, Scramble } from "@/components/fx/Kinetics";
 import Reveal from "@/components/fx/Reveal";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import { Container, Eyebrow } from "@/components/ui/Section";
-import { outcomes, testimonials } from "@/lib/content";
+import { outcomes, testimonials, testimonialsNote } from "@/lib/content";
 
 export default function Testimonials() {
   return (
@@ -29,6 +29,10 @@ export default function Testimonials() {
             <p className="mt-5 text-[clamp(1.6rem,3vw,2.2rem)] leading-[1.08] font-semibold text-white">
               Two clients, unedited.
             </p>
+            {/* Dates the vocabulary. Both quotes predate the repositioning and
+                say "LMS"; saying so is more honest than quietly reprinting
+                them under a page that argues the opposite. */}
+            <p className="mt-4 text-[0.85rem] leading-relaxed text-faint">{testimonialsNote}</p>
           </Reveal>
 
           <div className="grid gap-5 sm:grid-cols-2">
@@ -41,6 +45,9 @@ export default function Testimonials() {
                     <cite className="text-[0.84rem] font-medium text-white not-italic">{item.author}</cite>
                     <span className="text-[0.76rem] text-faint">{item.role}</span>
                   </figcaption>
+                  <p className="mt-2 font-mono text-[0.72rem] tracking-[0.1em] text-brand-cyan/80">
+                    {item.context}
+                  </p>
                 </figure>
               </Reveal>
             ))}

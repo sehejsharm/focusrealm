@@ -43,10 +43,25 @@ export default function EventStream() {
 
   useEffect(() => {
     if (reduced) return;
-    const id = setInterval(() => {
-      setEvents((current) => [make(next.current++), ...current].slice(0, 5));
-    }, 2400);
-    return () => clearInterval(id);
+    /*
+     * Held back until the page has settled.
+     *
+     * Every new row is a fresh paint, and a row wide enough to beat the hero
+     * text becomes the Largest Contentful Paint — so a ticker starting
+     * immediately kept moving LCP later with each tick (measured at 2.8s,
+     * against 1.0s for the hero itself). Five rows are already on screen from
+     * the server render; nothing is missing during the delay.
+     */
+    let id: ReturnType<typeof setInterval>;
+    const start = setTimeout(() => {
+      id = setInterval(() => {
+        setEvents((current) => [make(next.current++), ...current].slice(0, 5));
+      }, 2400);
+    }, 3200);
+    return () => {
+      clearTimeout(start);
+      clearInterval(id);
+    };
   }, [reduced]);
 
   return (
