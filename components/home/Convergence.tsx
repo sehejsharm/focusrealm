@@ -70,6 +70,9 @@ export default function Convergence() {
                           <p className="mt-1 text-[0.84rem] leading-relaxed text-faint">
                             {item.today}
                           </p>
+                          <p className="mt-1 text-[0.8rem] leading-relaxed text-faint/80">
+                            {item.where}
+                          </p>
                         </div>
                         <span className="shrink-0 font-mono text-[0.72rem] text-brand-cyan/80">
                           {item.cost}

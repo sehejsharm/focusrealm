@@ -630,6 +630,40 @@ export const outcomes = [
 ] as const;
 
 /**
+ * The question a property cannot answer quickly, and the two ways it goes.
+ *
+ * The record shown is the shape of a real service record, taken from the demo
+ * environment — deliberately not dressed up as a customer result, because we
+ * have one property per pilot and no aggregate outcomes to quote yet.
+ */
+export const fiveSeconds = {
+  question:
+    "Was room 208 reset to standard this morning, and can you prove it?",
+  today: {
+    label: "Today, in most properties",
+    chain: [
+      "Call the floor supervisor, who was not on that corridor.",
+      "The supervisor calls the room attendant, who is mid-shift.",
+      "The attendant thinks they took a photo.",
+      "The photo is in their personal camera roll, on their own phone.",
+      "It never reaches the audit file, because nothing routes it there.",
+    ],
+    verdict: "Elapsed: the rest of the morning. Proof: still none.",
+  },
+  withUs: {
+    label: "With Focus Realm",
+    record: [
+      { k: "Room", v: "208 · Floor 2" },
+      { k: "Standard", v: "HSK-101 Guest-ready reset" },
+      { k: "Completed", v: "08:39 · 24 min against a 26 min target" },
+      { k: "Evidence", v: "Photo attached at step 4, gated" },
+      { k: "Sign-off", v: "E. Rossi · 08:42" },
+    ],
+    verdict: "Elapsed: one filter on the service record.",
+  },
+} as const;
+
+/**
  * The five jobs a property already does, and where each one currently lives.
  *
  * This replaced a three-column comparison against paper and a generic LMS.
@@ -644,26 +678,32 @@ export const convergence = {
     {
       job: "Write the standard",
       today: "A binder, or last year's deck",
+      // The parenthetical is what a buyer would actually search for.
+      where: "Your hotel SOP document library — Drive, SharePoint, a shelf",
       cost: "Rewritten every audit",
     },
     {
       job: "Get it onto the floor",
       today: "Shift briefing, then the group chat",
+      where: "The WhatsApp group that is your shift briefing",
       cost: "Repeated every shift",
     },
     {
       job: "Run it to standard",
       today: "Memory, and whoever is senior today",
+      where: "No hotel task management system, no tracking",
       cost: "Varies by person",
     },
     {
       job: "Prove it happened",
       today: "A photo in someone's camera roll",
+      where: "No central hotel evidence capture",
       cost: "Mostly unprovable",
     },
     {
       job: "Produce it for the audit",
       today: "Collating sign-in sheets and screenshots",
+      where: "A week of hotel audit preparation, by hand",
       cost: "About a week",
     },
   ],
@@ -698,34 +738,34 @@ export const objections = [
 export const faqs = [
   {
     q: "What is Focus Realm Hospitality?",
-    a: "Focus Realm Hospitality is a mobile-first service execution platform for hotel operations. The operating standard lives inside a timed task on the staff member's phone; completing that task captures photo and supervisor evidence; and that evidence compounds into an audit-ready service record for the property.",
+    a: "Focus Realm Hospitality is a service execution platform for hotels. It turns your standard operating procedures into timed tasks that run on staff phones during the shift. Every step captures timestamped evidence — photos, supervisor sign-offs, completion times — so the audit record writes itself while the work happens. It is not a hotel LMS, not a document management system, and not a checklist app. It is where the standard and the shift become the same thing.",
   },
   {
     q: "Is Focus Realm a hotel LMS or a training platform?",
-    a: "No. Focus Realm is a service execution platform, not a learning management system. An LMS records that someone consumed a course. Focus Realm records that a specific standard was executed on a specific room at a specific time, with photo evidence and supervisor sign-off attached.",
+    a: "No. An LMS teaches people what to do. Focus Realm makes sure it gets done, on time, to standard, with evidence. Training shows a video of how to reset a guest room; Focus Realm puts the timed task on the attendant's phone, gates the step until the photo exists, and writes a service record the moment they finish. Compared against a hospitality LMS the difference is the output: they produce a completion certificate, we produce an audit-ready service record.",
   },
   {
     q: "How does Focus Realm handle SOP management for hotels?",
-    a: "Standards are written once in the standards workspace — instruction, reference photo, final checklist, target time, and which steps require photo evidence. Publishing pushes the standard directly into the staff library and the manager's assignment desk, so it is executable on the next shift rather than filed as a document.",
+    a: "Traditional hotel SOP management means a document — a binder, a PDF, a shared drive folder — that staff are supposed to read and follow. Focus Realm replaces the document with a timed task. The SOP becomes the unit of work: sequenced steps, a target time, photo gates, and supervisor sign-off built into the flow. When the task completes, the SOP has been executed rather than read, and the service record proves it. Digitising hotel SOPs this way means the standard reaches the floor on the next shift, not the next training cycle.",
   },
   {
     q: "What evidence does the platform capture?",
-    a: "Per step: a timestamp, completion state, photo evidence where the author marked it mandatory, and supervisor sign-off. A step that requires a photo cannot be ticked until the photo is captured, so the evidence trail is a gate rather than an afterthought.",
+    a: "Photos, supervisor sign-offs, step completion timestamps and task duration — captured as the work happens, not reconstructed afterwards. A step that requires photo evidence will not close until the photo exists, so the evidence trail is a gate rather than an afterthought. Every item is tied to a specific room, a specific staff member, a specific shift and a specific standard, which is what makes hotel inspection readiness a filter rather than a fire drill.",
   },
   {
     q: "Does Focus Realm need a PMS integration?",
-    a: "No. Focus Realm runs independently of the property management system by design at this stage. It is web-based, runs on standard browsers over mobile data, and requires no high-end hardware — which matters when the interface is a room attendant's own phone.",
+    a: "No. Focus Realm runs in any browser, on any phone, over mobile data. No PMS integration, no special hardware, no IT deployment project. Staff use the phones they already carry. This is deliberate: the platform should work on day one of a pilot, not after a six-week integration.",
   },
   {
     q: "Who are the three role interfaces for?",
-    a: "The people doing the work — room attendants, F&B, front office — use a mobile-first interface on their own phone, where the timed task and evidence capture happen. Supervisors and heads of department use a desktop interface for oversight, assignment and exception handling. Whoever owns the standard at your property, usually the training lead or quality manager, uses a desktop workspace to write and version it.",
+    a: "Three people, three jobs, three interfaces. The people doing the work — room attendants, F&B, front office — get a mobile-first timed task built for one thumb in bright daylight on a cheap Android. Supervisors and heads of department get a desktop view of live floor state, blocked rooms and department performance. Whoever owns the standard at your property, usually the training lead or quality manager, gets a desktop workspace where it is written once and published straight into the shift. Not one responsive compromise — three purpose-built tools sharing one service record.",
   },
   {
     q: "How does a Focus Realm pilot work?",
-    a: "A pilot is scoped to a single property so evidence starts accumulating inside the first thirty days: standards authored for the priority departments, staff executing timed tasks on their own phones, and a manager-side service picture that is live from week one.",
+    a: "One property. Your floors, your standards, your shift patterns. We scope narrow on purpose so the evidence is real. A 15-minute demo walks the three interfaces against a live environment; then we deploy to a single property, typically starting with housekeeping, and the service record builds itself over the first thirty days. Pilots are scoped per property, so pricing comes out of that call rather than a rate card.",
   },
   {
     q: "Who founded Focus Realm Hospitality?",
-    a: "Focus Realm Hospitality was founded by Sehej Sharma (Co-Founder & CEO) and Ali Electricwala (Co-Founder & COO), with Aditya Mishra as Chief Technology Officer.",
+    a: "Three co-founders. Sehej Sharma is Co-Founder and CEO, responsible for category, positioning and go-to-market. Ali Electricwala is Co-Founder and COO, responsible for pilot design, customer success and commercial operations. Aditya Mishra is Co-Founder and CTO, responsible for platform architecture and subtraction-first design on Google Cloud and Firebase. The founding discipline: remove it unless it helps the shift.",
   },
 ] as const;

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import Convergence from "@/components/home/Convergence";
 import Faq from "@/components/home/Faq";
+import FiveSeconds from "@/components/home/FiveSeconds";
 import Hero from "@/components/home/Hero";
 import Mechanism from "@/components/home/Mechanism";
 import PainSnowball from "@/components/home/PainSnowball";
@@ -25,7 +26,7 @@ const ogDescription =
 
 export const metadata: Metadata = {
   // Absolute so the layout template does not append the company name twice.
-  title: { absolute: `${site.name} — Hotel SOP Execution Platform` },
+  title: { absolute: `${site.shortName} | Hotel SOP Management & Service Execution Platform` },
   description: site.shortDescription,
   keywords: [
     "Focus Realm",
@@ -35,6 +36,10 @@ export const metadata: Metadata = {
     "hotel SOP software",
     "SOP development system",
     "hotel operations software",
+    "hotel housekeeping task management",
+    "hotel audit compliance software",
+    "housekeeping checklist software",
+    "hotel service standards platform",
     "Sehej Sharma",
     "Ali Electricwala",
     "Aditya Mishra",
@@ -42,7 +47,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/" },
   openGraph: {
-    title: `${site.name} — the operating system for hotel service standards`,
+    title: `${site.shortName} — hotel service standards that execute themselves`,
     description: ogDescription,
     url: "/",
     type: "website",
@@ -73,12 +78,18 @@ export default function HomePage() {
       />
 
       <Hero />
+      {/* The question lands before any feature: a reader who cannot answer it
+          about their own property has understood the problem already. */}
+      <FiveSeconds />
       <TrustedBy />
       <Mechanism />
       <Rule />
-      <RoleShowcase />
+      {/* Problem and consolidation now precede the role deep-dive — it is the
+          pain language that search traffic arrives on, and a visitor should
+          meet it before three interfaces. */}
       <PainSnowball />
       <Convergence />
+      <RoleShowcase />
       <Testimonials />
       <TeamStrip />
       <Faq />

@@ -46,7 +46,7 @@ export const site = {
     "Focus Realm Hospitality is a mobile-first service execution platform for hotel operations. The standard lives inside the timed task, completing the task captures photo and supervisor evidence, and that evidence compounds into an audit-ready service record.",
   /** Kept under 155 characters — this is the default meta description. */
   shortDescription:
-    "The service execution platform for hotel operations. The SOP lives inside the timed task, and the evidence it captures becomes an audit-ready record.",
+    "Turn hotel SOPs into timed tasks on staff phones. Photo evidence, supervisor sign-offs and audit-ready service records. Not an LMS. No PMS required.",
   /**
    * One public address, one domain. Everything on the site — footer, contact
    * routes, demo form, JSON-LD contactPoint, the policy pages — reads from

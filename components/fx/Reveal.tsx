@@ -88,7 +88,14 @@ export function MaskedLines({
           className={`mask-line ${lineClassName ?? ""}`}
           style={{ "--reveal-delay": `${delay + index * stagger}ms` } as CSSProperties}
         >
-          <span>{line}</span>
+          {/* The trailing space collapses visually (the span is a block) but
+              keeps the heading's text content readable: without it the lines
+              concatenate, and an H1 that reads "runinside the shift" is what
+              a crawler and a screen reader both receive. */}
+          <span>
+            {line}
+            {index < lines.length - 1 ? " " : ""}
+          </span>
         </span>
       ))}
     </span>

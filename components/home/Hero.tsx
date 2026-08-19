@@ -20,12 +20,16 @@ export default function Hero() {
               <Eyebrow>Service execution platform</Eyebrow>
             </Reveal>
 
+            {/* The H1 says what this is; the tagline follows as a subhead.
+                "The standard, inside the task" is the positioning line, but it
+                is a tagline — someone arriving from a search for hotel SOP
+                software does not yet know what "the standard" refers to. */}
             <h1 className="mt-6 text-[clamp(2.5rem,5.6vw,4.4rem)] leading-[1] font-semibold tracking-[-0.04em] text-white">
               <MaskedLines
                 lines={[
-                  <>The standard,</>,
+                  <>Hotel SOPs that run</>,
                   <>
-                    inside the <span className="text-gradient">task.</span>
+                    inside the <span className="text-gradient">shift.</span>
                   </>,
                 ]}
                 stagger={80}
@@ -33,9 +37,16 @@ export default function Hero() {
               />
             </h1>
 
+            <Reveal delay={260} immediate>
+              <p className="mt-5 text-[1.15rem] leading-snug font-medium text-brand-cyan">
+                The standard, inside the task.
+              </p>
+            </Reveal>
+
             <Reveal delay={300} immediate>
-              <p className="mt-6 max-w-md text-[1.05rem] leading-relaxed text-muted">
-                Hotel SOPs run as timed tasks on staff phones. The work produces the evidence.
+              <p className="mt-4 max-w-md text-[1.05rem] leading-relaxed text-muted">
+                Hotel SOP management that runs as timed tasks on staff phones.
+                The work produces the evidence. The evidence is the audit.
               </p>
             </Reveal>
 
