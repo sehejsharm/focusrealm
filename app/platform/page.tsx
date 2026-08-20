@@ -113,10 +113,6 @@ export default function PlatformPage() {
                 </Reveal>
                 <Reveal delay={140}>
                   <p className="mt-5 text-[0.98rem] leading-relaxed text-muted">{role.summary}</p>
-                  <p className="mt-4 text-[0.88rem] leading-relaxed text-faint">
-                    <span className="text-brand-cyan">Who this is for: </span>
-                    {role.who}
-                  </p>
                 </Reveal>
                 <Reveal delay={200}>
                   <dl className="mt-8 space-y-4">

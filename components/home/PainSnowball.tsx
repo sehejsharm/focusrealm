@@ -2,6 +2,7 @@ import Link from "next/link";
 import { KineticHeading } from "@/components/fx/Kinetics";
 import Reveal from "@/components/fx/Reveal";
 import PainChain from "@/components/viz/PainChain";
+import PainGlyph from "@/components/viz/PainGlyph";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import { Container, Eyebrow } from "@/components/ui/Section";
 import { pains } from "@/lib/content";
@@ -38,40 +39,56 @@ export default function PainSnowball() {
           <PainChain />
         </Reveal>
 
-        {/* All six, in full, on the page.
-            The chain above is the graphic; these are the words a hotel
-            operations manager actually types into a search box, and they were
-            previously only reachable behind a click to /problems. Kept to
-            three so the section stays short. */}
-        <div className="mt-14 grid gap-8 md:grid-cols-3 md:gap-10">
+        {/* Six marks, six one-liners, one answer.
+            This was six paragraphs of prose. Each pain now leads with a glyph
+            that draws its shape, states only what it costs, and carries its
+            own number — the resolution is stated once underneath rather than
+            six times, which is also closer to the truth: it is one mechanism,
+            not six fixes. The full write-ups live on /problems. */}
+        <ul className="mt-14 grid gap-x-10 gap-y-9 sm:grid-cols-2 lg:grid-cols-3">
           {pains.map((pain, index) => (
-            <Reveal key={pain.id} delay={(index % 3) * 70}>
-              <article className="border-t border-line pt-5">
-                <p className="font-mono text-[0.72rem] text-faint tabular-nums">{pain.index}</p>
-                <h3 className="mt-2 text-[1.05rem] font-semibold text-white">{pain.name}</h3>
-                <p className="mt-3 text-[0.88rem] leading-relaxed text-muted">{pain.statusQuo}</p>
-                <p className="mt-3 text-[0.88rem] leading-relaxed">
-                  <span className="font-mono text-[0.72rem] tracking-[0.12em] text-[#e8a0a0] uppercase">
-                    Costs you{" "}
-                  </span>
-                  <span className="text-paper">{pain.wound}</span>
-                </p>
-                <p className="mt-2.5 text-[0.88rem] leading-relaxed">
-                  <span className="font-mono text-[0.72rem] tracking-[0.12em] text-brand-cyan uppercase">
-                    Closed by{" "}
-                  </span>
-                  <span className="text-muted">{pain.answer}</span>
-                </p>
+            <li key={pain.id}>
+              <Reveal delay={(index % 3) * 70}>
                 <Link
                   href={`/problems#${pain.id}`}
-                  className="mt-4 inline-block text-[0.84rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:decoration-brand-bright"
+                  className="group block border-t border-line pt-5 transition-colors hover:border-brand-bright/60"
                 >
-                  {pain.name}: how Focus Realm closes it
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="text-brand-cyan transition-colors group-hover:text-brand-bright">
+                      <PainGlyph id={pain.id} />
+                    </span>
+                    <span className="font-mono text-[0.72rem] text-faint tabular-nums">
+                      {pain.index}
+                    </span>
+                  </div>
+                  <h3 className="mt-4 text-[1.02rem] font-semibold text-white">{pain.name}</h3>
+                  <p className="mt-2 text-[0.88rem] leading-relaxed text-muted">{pain.wound}</p>
+                  <p className="mt-3 font-mono text-[0.72rem] tracking-[0.08em] text-faint">
+                    {pain.metric}
+                  </p>
                 </Link>
-              </article>
-            </Reveal>
+              </Reveal>
+            </li>
           ))}
-        </div>
+        </ul>
+
+        {/* Said once, not six times. */}
+        <Reveal delay={120} className="mt-12">
+          <div className="flex flex-col gap-4 border-l-2 border-brand/50 py-1 pl-6 sm:flex-row sm:items-center sm:justify-between">
+            <p className="max-w-2xl text-[0.98rem] leading-relaxed text-muted">
+              <span className="text-paper">All six close the same way.</span> The
+              standard goes inside the timed task, so it is executed rather than
+              remembered — and the evidence that proves it comes out of the work
+              itself.
+            </p>
+            <Link
+              href="/problems"
+              className="shrink-0 text-[0.88rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:decoration-brand-bright"
+            >
+              Read all six in full
+            </Link>
+          </div>
+        </Reveal>
       </Container>
     </section>
   );

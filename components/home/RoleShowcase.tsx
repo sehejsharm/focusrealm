@@ -138,13 +138,6 @@ export default function RoleShowcase({
             </RoleHeading>
             <p className="mt-5 text-[0.98rem] leading-relaxed text-muted">{role.summary}</p>
 
-            {/* Names the actual job titles. Without this the interface names
-                are guesswork for anyone outside the company. */}
-            <p className="mt-4 text-[0.88rem] leading-relaxed text-faint">
-              <span className="text-brand-cyan">Who this is for: </span>
-              {role.who}
-            </p>
-
             <div className="mt-6 flex items-center gap-3 rounded-xl border border-line bg-white/[0.03] px-4 py-3">
               <span className="flex size-9 items-center justify-center rounded-full bg-brand/20 font-mono text-[0.78rem] text-brand-ice">
                 {role.persona
