@@ -35,9 +35,9 @@ export default function Testimonials() {
             <p className="mt-4 text-[0.85rem] leading-relaxed text-faint">{testimonialsNote}</p>
           </Reveal>
 
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid auto-rows-fr gap-5 sm:grid-cols-2">
             {testimonials.map((item, index) => (
-              <Reveal key={item.author} delay={index * 90}>
+              <Reveal key={item.author} delay={index * 90} className="h-full">
                 <figure className="flex h-full flex-col border-l border-brand/45 pl-5">
                   <blockquote className="text-[0.95rem] leading-relaxed text-paper">{item.quote}</blockquote>
                   <figcaption className="mt-5 flex items-center gap-2.5">

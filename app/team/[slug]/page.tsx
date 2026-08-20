@@ -196,9 +196,9 @@ export default async function PersonPage({ params }: Props) {
                   How {person.name.split(" ")[0]} operates
                 </h2>
               </Reveal>
-              <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              <div className="mt-5 grid auto-rows-fr gap-4 sm:grid-cols-2">
                 {person.traits.map((trait, index) => (
-                  <Reveal key={trait.title} delay={340 + index * 70}>
+                  <Reveal key={trait.title} delay={340 + index * 70} className="h-full">
                     <SpotlightCard className="panel h-full p-5">
                       <h3 className="text-[0.95rem] font-semibold text-white">{trait.title}</h3>
                       <p className="mt-2 text-[0.86rem] leading-relaxed text-muted">{trait.body}</p>
@@ -261,9 +261,9 @@ export default async function PersonPage({ params }: Props) {
       <section className="relative overflow-hidden py-20 sm:py-24">
         <Container>
           <Eyebrow>Also on the founding team</Eyebrow>
-          <div className="mt-8 grid gap-5 sm:grid-cols-2">
+          <div className="mt-8 grid auto-rows-fr gap-5 sm:grid-cols-2">
             {others.map((other, index) => (
-              <Reveal key={other.slug} delay={index * 90}>
+              <Reveal key={other.slug} delay={index * 90} className="h-full">
                 <SpotlightCard as="article" className="panel group h-full">
                   <Link href={`/team/${other.slug}`} className="block p-7">
                     <div className="flex items-center gap-4">

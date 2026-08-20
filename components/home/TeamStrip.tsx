@@ -41,9 +41,9 @@ export default function TeamStrip({
           </Reveal>
         </div>
 
-        <div className="mt-14 grid gap-5 md:grid-cols-3">
+        <div className="mt-14 grid auto-rows-fr gap-5 md:grid-cols-3">
           {people.map((person, index) => (
-            <Reveal key={person.slug} delay={index * 90}>
+            <Reveal key={person.slug} delay={index * 90} className="h-full">
               <SpotlightCard as="article" className="panel group h-full overflow-hidden">
                 <Link href={`/team/${person.slug}`} className="block h-full p-7">
                   <div className="flex items-center gap-4">

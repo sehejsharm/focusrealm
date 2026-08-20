@@ -120,9 +120,9 @@ export default function AboutPage() {
             body="Each one has cost us a feature somebody asked for."
           />
 
-          <div className="mt-14 grid gap-5 md:grid-cols-2">
+          <div className="mt-14 grid auto-rows-fr gap-5 md:grid-cols-2">
             {principles.map((principle, index) => (
-              <Reveal key={principle.number} delay={index * 90}>
+              <Reveal key={principle.number} delay={index * 90} className="h-full">
                 <SpotlightCard className="panel flex h-full flex-col p-8">
                   <span aria-hidden className="font-mono text-[2.4rem] leading-none font-semibold text-white/40">
                     {principle.number}

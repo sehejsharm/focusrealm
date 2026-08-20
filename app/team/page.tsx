@@ -142,10 +142,13 @@ export default function TeamPage() {
             body="Our demo environment carries five fixed personas. They are fictional, and they are the people whose shift the product is actually designed around."
           />
 
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* auto-rows-fr + h-full: the first row wraps to two lines and the
+              second does not, so without this the rows size independently and
+              the cards end up 104px against 86px. */}
+          <div className="mt-12 grid auto-rows-fr gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {personas.map((persona, index) => (
-              <Reveal key={persona.name} delay={index * 70}>
-                <div className="panel flex items-center gap-4 p-5">
+              <Reveal key={persona.name} delay={index * 70} className="h-full">
+                <div className="panel flex h-full items-center gap-4 p-5">
                   <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand/18 font-mono text-[0.75rem] text-brand-ice">
                     {persona.initials}
                   </span>

@@ -25,9 +25,9 @@ export default function FiveSeconds() {
           </Reveal>
         </div>
 
-        <div className="mt-10 grid gap-5 lg:grid-cols-2 lg:gap-6">
+        <div className="mt-10 grid auto-rows-fr gap-5 lg:grid-cols-2 lg:gap-6">
           {/* Today */}
-          <Reveal delay={100}>
+          <Reveal delay={100} className="h-full">
             <div className="h-full rounded-2xl border border-line p-7">
               <p className="font-mono text-[0.72rem] tracking-[0.16em] text-faint uppercase">
                 {fiveSeconds.today.label}
@@ -49,7 +49,7 @@ export default function FiveSeconds() {
           </Reveal>
 
           {/* With Focus Realm */}
-          <Reveal delay={160}>
+          <Reveal delay={160} className="h-full">
             <div className="panel h-full p-7">
               <p className="font-mono text-[0.72rem] tracking-[0.16em] text-brand-cyan uppercase">
                 {fiveSeconds.withUs.label}

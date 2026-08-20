@@ -42,9 +42,9 @@ export default function Convergence() {
           </Reveal>
         </div>
 
-        <div className="mt-12 grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_100px_minmax(0,340px)] lg:items-stretch lg:gap-0">
+        <div className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_100px_minmax(0,340px)] lg:items-stretch lg:gap-0">
           {/* The five jobs as they run today */}
-          <ol className="space-y-px lg:max-w-[560px] lg:self-center">
+          <ol className="space-y-px lg:max-w-[560px]">
             {jobs.map((item, index) => {
               const on = active === index;
               return (
@@ -129,8 +129,10 @@ export default function Convergence() {
           </div>
 
           {/* The one thing it becomes */}
-          <Reveal delay={140} variant="scale">
-            <div className="panel p-7">
+          <Reveal delay={140} variant="scale" className="lg:h-full">
+            {/* h-full so the card matches the list it sits beside, instead of
+                floating centred against it with both edges out of line. */}
+            <div className="panel flex h-full flex-col justify-center p-7">
               <p className="font-mono text-[0.72rem] tracking-[0.16em] text-brand-cyan uppercase">
                 {convergence.outcome.label}
               </p>
