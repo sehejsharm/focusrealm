@@ -84,7 +84,7 @@ export default function MechanismFlow() {
 
   return (
     <div ref={ref} onPointerEnter={() => setHeld(true)} onPointerLeave={() => setHeld(false)}>
-      <ol className="relative grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0">
+      <ol className="relative grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-0">
         {/* The wire */}
         <li aria-hidden className="pointer-events-none absolute inset-x-0 top-7 hidden lg:block">
           <div className="relative mx-[12.5%] h-px bg-line-strong">
@@ -107,7 +107,7 @@ export default function MechanismFlow() {
                 className="group flex w-full flex-col items-start gap-3 text-left lg:items-center lg:text-center"
               >
                 <span
-                  className="relative z-10 flex size-14 items-center justify-center rounded-2xl border transition-all duration-500 ease-out-expo"
+                  className="relative z-10 flex size-11 items-center justify-center rounded-2xl border transition-all duration-500 ease-out-expo sm:size-14"
                   style={{
                     borderColor: reached ? "color-mix(in oklab, #4ec4a1 55%, transparent)" : "var(--color-line)",
                     background: isActive ? "color-mix(in oklab, #2a947a 26%, #0b2126)" : "#0b2126",

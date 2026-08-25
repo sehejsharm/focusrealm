@@ -12,7 +12,7 @@ import { fiveSeconds } from "@/lib/content";
  */
 export default function FiveSeconds() {
   return (
-    <section id="five-seconds" className="relative overflow-hidden py-20 sm:py-24">
+    <section id="five-seconds" className="relative overflow-hidden py-12 sm:py-24">
       <Container>
         <div className="max-w-2xl">
           <Reveal>
@@ -34,7 +34,10 @@ export default function FiveSeconds() {
               </p>
               <ol className="mt-5 space-y-3">
                 {fiveSeconds.today.chain.map((step, index) => (
-                  <li key={step} className="flex gap-3 text-[0.92rem] leading-relaxed text-muted">
+                  <li
+                    key={step}
+                    className={`flex gap-3 text-[0.92rem] leading-relaxed text-muted ${index > 2 ? "max-sm:hidden" : ""}`}
+                  >
                     <span className="font-mono text-[0.72rem] text-faint tabular-nums">
                       {index + 1}
                     </span>

@@ -10,7 +10,7 @@ import { faqs } from "@/lib/content";
  */
 export default function Faq() {
   return (
-    <section id="faq" className="relative overflow-hidden py-24 sm:py-32">
+    <section id="faq" className="relative overflow-hidden py-14 sm:py-32">
       <Container>
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
           <SectionHeading

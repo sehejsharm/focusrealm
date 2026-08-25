@@ -15,7 +15,7 @@ import { Container, Eyebrow } from "@/components/ui/Section";
  */
 export default function Mechanism() {
   return (
-    <section id="mechanism" className="relative overflow-hidden py-24 sm:py-28">
+    <section id="mechanism" className="relative overflow-hidden py-14 sm:py-28">
       <Aurora variant="section" />
 
       <Container>
@@ -48,16 +48,16 @@ export default function Mechanism() {
             <Reveal className="panel p-6 sm:p-7">
               <FloorGrid />
             </Reveal>
-            <Reveal delay={80} className="panel p-6 sm:p-7">
+            <Reveal delay={80} className="panel p-6 sm:p-7 max-lg:hidden">
               <EvidenceChart />
             </Reveal>
           </div>
 
           <Parallax distance={-28} className="grid gap-5">
-            <Reveal delay={90} className="panel p-6 sm:p-7">
+            <Reveal delay={90} className="panel p-6 sm:p-7 max-lg:hidden">
               <ReadinessBars />
             </Reveal>
-            <Reveal delay={150} className="panel p-6 sm:p-7">
+            <Reveal delay={150} className="panel p-6 sm:p-7 max-lg:hidden">
               <TargetVsActual />
             </Reveal>
             <Reveal delay={200} className="panel p-6 sm:p-7">

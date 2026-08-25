@@ -10,7 +10,7 @@ import { Container, Eyebrow } from "@/components/ui/Section";
 
 export default function Hero() {
   return (
-    <section className="relative isolate overflow-hidden pt-32 pb-14 sm:pt-40 sm:pb-20">
+    <section className="relative isolate overflow-hidden pt-28 pb-10 sm:pt-32 sm:pb-14 sm:pt-40 sm:pb-20">
       <Aurora variant="hero" />
 
       <Container>

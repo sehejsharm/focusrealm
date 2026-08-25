@@ -48,7 +48,7 @@ export default function RoleShowcase({
   }
 
   return (
-    <section id="platform" className="relative overflow-hidden py-24 sm:py-32">
+    <section id="platform" className="relative overflow-hidden py-14 sm:py-32">
       <Aurora variant="section" />
 
       <Container>
@@ -155,7 +155,7 @@ export default function RoleShowcase({
               {role.capabilities.map((capability, index) => (
                 <li
                   key={capability.title}
-                  className="border-l border-line pl-5"
+                  className={`border-l border-line pl-5 ${index > 1 ? "max-sm:hidden" : ""}`}
                   style={{ animation: `rise-in 0.7s var(--ease-out-expo) ${140 + index * 90}ms both` }}
                 >
                   <CapabilityHeading className="text-[0.92rem] font-medium text-white">{capability.title}</CapabilityHeading>

@@ -20,7 +20,7 @@ export default function NotAnLms() {
   }, []);
 
   return (
-    <section id="not-an-lms" className="relative overflow-hidden py-24 sm:py-32">
+    <section id="not-an-lms" className="relative overflow-hidden py-14 sm:py-32">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,color-mix(in_oklab,var(--color-brand)_10%,transparent),transparent)]"

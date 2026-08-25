@@ -13,7 +13,7 @@ import { pains } from "@/lib/content";
  */
 export default function PainSnowball() {
   return (
-    <section id="problems" className="relative overflow-hidden py-24 sm:py-28">
+    <section id="problems" className="relative overflow-hidden py-14 sm:py-28">
       <Container>
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-xl">
@@ -63,7 +63,7 @@ export default function PainSnowball() {
                   </div>
                   <h3 className="mt-4 text-[1.02rem] font-semibold text-white">{pain.name}</h3>
                   <p className="mt-2 text-[0.88rem] leading-relaxed text-muted">{pain.wound}</p>
-                  <p className="mt-3 font-mono text-[0.72rem] tracking-[0.08em] text-faint">
+                  <p className="mt-3 font-mono text-[0.72rem] tracking-[0.08em] text-faint max-sm:hidden">
                     {pain.metric}
                   </p>
                 </Link>

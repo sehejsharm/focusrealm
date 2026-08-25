@@ -96,7 +96,7 @@ export default function PlatformPage() {
 
       {/* Per-role deep dives with every screen */}
       {roles.map((role, roleIndex) => (
-        <section key={role.id} id={role.id} className="relative overflow-hidden py-20 sm:py-28">
+        <section key={role.id} id={role.id} className="relative overflow-hidden py-14 sm:py-28">
           <Container>
             <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-14">
               <div className="lg:sticky lg:top-28">
@@ -171,7 +171,7 @@ export default function PlatformPage() {
 
       <Rule />
 
-      <section id="service-record" className="relative overflow-hidden py-20 sm:py-24">
+      <section id="service-record" className="relative overflow-hidden py-12 sm:py-24">
         <Container>
           <Reveal className="panel flex flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center">
             <div>

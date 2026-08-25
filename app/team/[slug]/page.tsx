@@ -258,7 +258,7 @@ export default async function PersonPage({ params }: Props) {
 
       <Rule />
 
-      <section className="relative overflow-hidden py-20 sm:py-24">
+      <section className="relative overflow-hidden py-12 sm:py-24">
         <Container>
           <Eyebrow>Also on the founding team</Eyebrow>
           <div className="mt-8 grid auto-rows-fr gap-5 sm:grid-cols-2">

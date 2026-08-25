@@ -17,7 +17,7 @@ const figures = [
  */
 export default function DemoProperty() {
   return (
-    <section id="demo-environment" className="relative overflow-hidden py-24 sm:py-32">
+    <section id="demo-environment" className="relative overflow-hidden py-14 sm:py-32">
       <Container>
         <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
           <div>

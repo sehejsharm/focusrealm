@@ -6,18 +6,18 @@ import { outcomes, testimonials, testimonialsNote } from "@/lib/content";
 
 export default function Testimonials() {
   return (
-    <section id="proof" className="relative overflow-hidden py-24 sm:py-28">
+    <section id="proof" className="relative overflow-hidden py-14 sm:py-28">
       <Container>
         {/* Facts, not forecasts */}
-        <div className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line lg:grid-cols-4">
           {outcomes.map((outcome, index) => (
             <div key={outcome.label} className="bg-ink/75">
-              <Reveal delay={index * 60} className="flex h-full flex-col px-6 py-7">
+              <Reveal delay={index * 60} className="flex h-full flex-col px-4 py-5 sm:px-6 sm:py-7">
                 <p className="text-[clamp(1.8rem,3vw,2.4rem)] leading-none font-semibold text-gradient">
                   <Scramble text={outcome.stat} />
                 </p>
                 <p className="mt-3 text-[0.88rem] font-medium text-white">{outcome.label}</p>
-                <p className="mt-2 text-[0.8rem] leading-relaxed text-faint">{outcome.body}</p>
+                <p className="mt-2 text-[0.8rem] leading-relaxed text-faint max-sm:hidden">{outcome.body}</p>
               </Reveal>
             </div>
           ))}
@@ -32,7 +32,7 @@ export default function Testimonials() {
             {/* Dates the vocabulary. Both quotes predate the repositioning and
                 say "LMS"; saying so is more honest than quietly reprinting
                 them under a page that argues the opposite. */}
-            <p className="mt-4 text-[0.85rem] leading-relaxed text-faint">{testimonialsNote}</p>
+            <p className="mt-4 text-[0.85rem] leading-relaxed text-faint max-sm:hidden">{testimonialsNote}</p>
           </Reveal>
 
           <div className="grid auto-rows-fr gap-5 sm:grid-cols-2">

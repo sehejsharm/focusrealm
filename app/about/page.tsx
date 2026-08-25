@@ -111,7 +111,7 @@ export default function AboutPage() {
       <Rule />
 
       {/* Principles */}
-      <section className="relative overflow-hidden py-24 sm:py-32">
+      <section className="relative overflow-hidden py-14 sm:py-32">
         <Container>
           <SectionHeading
             eyebrow="How we build"

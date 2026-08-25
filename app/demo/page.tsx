@@ -195,7 +195,7 @@ export default function DemoPage() {
 
       <Rule />
 
-      <section className="py-20 sm:py-24">
+      <section className="py-12 sm:py-24">
         <Container>
           <div className="grid gap-8 sm:grid-cols-3">
             {[

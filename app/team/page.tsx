@@ -133,7 +133,7 @@ export default function TeamPage() {
       <Rule className="mt-16" />
 
       {/* Demo personas — the other five names in every Focus Realm conversation */}
-      <section className="relative overflow-hidden py-24 sm:py-28">
+      <section className="relative overflow-hidden py-14 sm:py-28">
         <Container>
           <SectionHeading
             eyebrow="The other five names"

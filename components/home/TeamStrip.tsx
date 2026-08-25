@@ -24,7 +24,7 @@ export default function TeamStrip({
   const people = order === "home" ? teamHomeOrder : team;
 
   return (
-    <section id="team" className="relative overflow-hidden py-24 sm:py-32">
+    <section id="team" className="relative overflow-hidden py-14 sm:py-32">
       <Container>
         <div className="flex flex-wrap items-end justify-between gap-8">
           <SectionHeading
@@ -45,7 +45,7 @@ export default function TeamStrip({
           {people.map((person, index) => (
             <Reveal key={person.slug} delay={index * 90} className="h-full">
               <SpotlightCard as="article" className="panel group h-full overflow-hidden">
-                <Link href={`/team/${person.slug}`} className="block h-full p-7">
+                <Link href={`/team/${person.slug}`} className="block h-full p-5 sm:p-7">
                   <div className="flex items-center gap-4">
                     <Avatar person={person} className="size-14" sizes="112px" />
                     <span
@@ -60,10 +60,10 @@ export default function TeamStrip({
                   <p className="mt-2 font-mono text-[0.76rem] tracking-[0.14em] text-brand-ice uppercase">
                     {person.shortRole} · {site.shortName}
                   </p>
-                  <p className="mt-5 text-[0.88rem] leading-relaxed text-muted">
+                  <p className="mt-5 text-[0.88rem] leading-relaxed text-muted max-sm:hidden">
                     &ldquo;{person.quote}&rdquo;
                   </p>
-                  <ul className="mt-6 flex flex-wrap gap-1.5">
+                  <ul className="mt-6 flex flex-wrap gap-1.5 max-sm:hidden">
                     {person.focus.slice(0, 3).map((focus) => (
                       <li
                         key={focus}

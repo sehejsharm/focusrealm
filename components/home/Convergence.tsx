@@ -22,7 +22,7 @@ export default function Convergence() {
   const jobs = convergence.jobs;
 
   return (
-    <section id="one-platform" className="relative overflow-hidden py-24 sm:py-28">
+    <section id="one-platform" className="relative overflow-hidden py-14 sm:py-28">
       <Container>
         <div className="max-w-xl">
           <Reveal>
@@ -70,7 +70,7 @@ export default function Convergence() {
                           <p className="mt-1 text-[0.84rem] leading-relaxed text-faint">
                             {item.today}
                           </p>
-                          <p className="mt-1 text-[0.8rem] leading-relaxed text-faint/80">
+                          <p className="mt-1 text-[0.8rem] leading-relaxed text-faint/80 max-sm:hidden">
                             {item.where}
                           </p>
                         </div>

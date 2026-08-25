@@ -83,8 +83,14 @@ export default function FloorGrid() {
       </div>
 
       <div className="space-y-[3px]" onMouseLeave={() => setHover(null)}>
-        {floors.map((floor) => (
-          <div key={floor[0].floor} className="flex items-center gap-2.5">
+        {/* Fourteen floors of squares is 600px of scroll on a phone for a
+            picture whose point lands in six. The upper floors stay on the page
+            for the counts and for anything wider than a phone. */}
+        {floors.map((floor, floorIndex) => (
+          <div
+            key={floor[0].floor}
+            className={`flex items-center gap-2.5 ${floorIndex >= 6 ? "max-sm:hidden" : ""}`}
+          >
             <span className="w-5 shrink-0 text-right font-mono text-[0.72rem] tabular-nums text-faint">
               {floor[0].floor}
             </span>

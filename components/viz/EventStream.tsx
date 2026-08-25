@@ -84,7 +84,7 @@ export default function EventStream() {
           return (
             <li
               key={event.id}
-              className="flex items-center gap-3 border-b border-line/60 py-2.5 last:border-b-0"
+              className={`flex items-center gap-3 border-b border-line/60 py-2.5 last:border-b-0 ${index > 2 ? "max-sm:hidden" : ""}`}
               style={{
                 animation: index === 0 ? "rise-in 0.5s var(--ease-out-expo) both" : undefined,
                 // Shallow ramp on purpose: at 0.16 a step the last rows landed
