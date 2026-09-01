@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
-import { faqs, property, team, testimonials } from "@/lib/content";
+import { advisors, faqs, property, team, testimonials } from "@/lib/content";
 import { sehejGalleryPhotos } from "@/lib/gallery";
-import { teamPhoto } from "@/lib/team-photos";
+import { advisorPhoto, teamPhoto } from "@/lib/team-photos";
 import { absoluteUrl, site, siteUrl } from "@/lib/site";
 
 type PageMetaInput = {
@@ -227,6 +227,45 @@ export function sehejGallerySchema() {
     })),
     sameAs: [...(person.sameAs ?? []), absoluteUrl(`/team/${person.slug}`)],
   };
+}
+
+/**
+ * An advisor's Person node. They live on /team rather than on a route of their
+ * own, so the `@id` is a fragment of that page.
+ *
+ * The relationship is stated from the advisor's side (`affiliation`) rather
+ * than by adding them to the Organization node: the Organization is emitted on
+ * every page, and a `member` reference there would point at a node that only
+ * exists on /team. `worksFor` is their own company — an advisor is not staff,
+ * and the markup should not imply they are.
+ */
+export function advisorSchema(slug: string) {
+  const advisor = advisors.find((entry) => entry.slug === slug);
+  if (!advisor) return null;
+
+  const photo = advisorPhoto(advisor.slug);
+
+  return {
+    "@type": "Person",
+    "@id": `${absoluteUrl("/team")}#${advisor.slug}`,
+    name: advisor.name,
+    ...(advisor.alternateName ? { alternateName: advisor.alternateName } : {}),
+    givenName: advisor.name.split(" ")[0],
+    familyName: advisor.name.split(" ").slice(1).join(" "),
+    jobTitle: advisor.role,
+    description: `${advisor.name} — ${advisor.credentials.join(". ")}. Advisor to ${site.name}.`,
+    affiliation: { "@id": organizationId },
+    ...(advisor.company
+      ? { worksFor: { "@type": "Organization", name: advisor.company.name } }
+      : {}),
+    ...(photo ? { image: absoluteUrl(photo) } : {}),
+    mainEntityOfPage: { "@id": `${siteUrl}/team#webpage` },
+  };
+}
+
+/** Every advisor, in board order. */
+export function allAdvisorsSchema() {
+  return advisors.map((advisor) => advisorSchema(advisor.slug)).filter(Boolean);
 }
 
 /** All three founders, for pages that should answer a founder-name query. */

@@ -7,8 +7,9 @@ import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import Avatar from "@/components/ui/Avatar";
 import PageHero from "@/components/ui/PageHero";
 import { Container, Rule, SectionHeading } from "@/components/ui/Section";
-import { personas, team } from "@/lib/content";
-import { breadcrumbSchema, jsonLdGraph, personSchema, webPageSchema } from "@/lib/seo";
+import { advisors, personas, team } from "@/lib/content";
+import { allAdvisorsSchema, breadcrumbSchema, jsonLdGraph, personSchema, webPageSchema } from "@/lib/seo";
+import { advisorPhoto } from "@/lib/team-photos";
 import { site, siteUrl } from "@/lib/site";
 
 // The layout template appends "· Focus Realm", so the title must not repeat it.
@@ -30,6 +31,11 @@ export const metadata: Metadata = {
     "Aditya Mishra",
     "Focus Realm Hospitality founders",
     "Focus Realm CEO",
+    "Focus Realm advisors",
+    "Focus Realm board of advisors",
+    "Parul Sharma",
+    "Parul Masand Sharma",
+    "Renu Mehra",
   ],
   alternates: { canonical: "/team" },
   openGraph: { title: `${pageName} · ${site.shortName}`, description: ogDescription, url: "/team", type: "website" },
@@ -56,6 +62,16 @@ export default function TeamPage() {
               })),
             },
             ...team.map((person) => personSchema(person.slug)),
+            {
+              "@type": "ItemList",
+              name: `Board of advisors of ${site.name}`,
+              itemListElement: advisors.map((advisor, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                name: `${advisor.name} — ${advisor.role}`,
+              })),
+            },
+            ...allAdvisorsSchema(),
           ),
         }}
       />
@@ -131,6 +147,59 @@ export default function TeamPage() {
       </section>
 
       <Rule className="mt-16" />
+
+      {/* Board of advisors — outside operators who carry their own practice */}
+      <section id="advisors" className="relative overflow-hidden py-14 sm:py-28">
+        <Container>
+          <SectionHeading
+            eyebrow="Board of advisors"
+            title="The people who tell us"
+            accent="when we are wrong."
+            body="Our advisors run their own practices in hospitality training and image consulting. They are not staff — which is exactly why their read on the product is worth having."
+          />
+
+          <div className="mt-12 grid auto-rows-fr gap-5 md:grid-cols-2">
+            {advisors.map((advisor, index) => (
+              <Reveal key={advisor.slug} delay={index * 90} className="h-full">
+                <SpotlightCard as="article" className="panel h-full p-7 sm:p-8">
+                  <div className="flex items-start gap-5">
+                    <Avatar
+                      person={advisor}
+                      src={advisorPhoto(advisor.slug)}
+                      alt={`${advisor.name} — ${advisor.role}`}
+                      className="size-16"
+                      rounded="rounded-2xl"
+                      sizes="128px"
+                    />
+                    <div>
+                      <h3 className="text-[1.2rem] leading-tight font-semibold text-white">
+                        {advisor.name}
+                      </h3>
+                      {advisor.alternateName ? (
+                        <p className="mt-1 text-[0.82rem] text-faint">{advisor.alternateName}</p>
+                      ) : null}
+                      <p className="mt-2 font-mono text-[0.74rem] tracking-[0.14em] text-brand-ice uppercase">
+                        {advisor.role}
+                      </p>
+                    </div>
+                  </div>
+
+                  <ul className="mt-6 space-y-2 border-t border-line pt-6">
+                    {advisor.credentials.map((credential) => (
+                      <li key={credential} className="flex gap-3 text-[0.9rem] leading-relaxed text-muted">
+                        <span aria-hidden className="mt-2 size-1 shrink-0 rounded-full bg-brand-cyan" />
+                        {credential}
+                      </li>
+                    ))}
+                  </ul>
+                </SpotlightCard>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <Rule />
 
       {/* Demo personas — the other five names in every Focus Realm conversation */}
       <section className="relative overflow-hidden py-14 sm:py-28">

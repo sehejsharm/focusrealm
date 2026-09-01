@@ -1,27 +1,44 @@
 import Image from "next/image";
+import type { StaticImageData } from "next/image";
 
-import type { Person } from "@/lib/content";
 import { teamPhoto } from "@/lib/team-photos";
 
+/** The minimum an Avatar needs. Both `Person` and `Advisor` satisfy it. */
+type AvatarSubject = {
+  slug: string;
+  name: string;
+  initials: string;
+  shortRole?: string;
+  photo?: StaticImageData;
+};
+
 /**
- * Founder portrait. Renders the photo when one exists at
- * `public/team/<slug>.<ext>`, and a monogram plate until then — the layout is
- * identical either way, so dropping a file in is the only change needed.
+ * Portrait plate. Renders the photo when one exists and a monogram until then
+ * — the layout is identical either way, so dropping a file in is the only
+ * change needed.
+ *
+ * Founders resolve their own file from `public/team/<slug>.<ext>`. Anyone who
+ * is not on staff passes `src` and `alt` explicitly, because the default alt
+ * text names them as Focus Realm leadership and that is only true of founders.
  */
 export default function Avatar({
   person,
+  src: srcOverride,
+  alt,
   className = "size-14",
   rounded = "rounded-2xl",
   sizes = "112px",
   priority = false,
 }: {
-  person: Person;
+  person: AvatarSubject;
+  src?: string;
+  alt?: string;
   className?: string;
   rounded?: string;
   sizes?: string;
   priority?: boolean;
 }) {
-  const src = person.photo?.src ?? teamPhoto(person.slug);
+  const src = srcOverride ?? person.photo?.src ?? teamPhoto(person.slug);
 
   if (src) {
     return (
@@ -30,7 +47,7 @@ export default function Avatar({
       >
         <Image
           src={src}
-          alt={`${person.name} — ${person.shortRole}, Focus Realm Hospitality`}
+          alt={alt ?? `${person.name} — ${person.shortRole}, Focus Realm Hospitality`}
           fill
           sizes={sizes}
           priority={priority}

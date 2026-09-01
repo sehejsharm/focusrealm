@@ -564,6 +564,53 @@ export const team: Person[] = [
 /** Home-page order: the CEO sits in the centre of the three-up. */
 export const teamHomeOrder: Person[] = [team[1], team[0], team[2]];
 
+/* ------------------------------------------------------------------ *
+ * Board of advisors.
+ * ------------------------------------------------------------------ */
+
+/**
+ * Advisors are not staff and not founders. They carry their own companies and
+ * their own reputations, which is the point of listing them — so the type is
+ * deliberately lighter than `Person` and no advisor gets a profile route.
+ */
+export type Advisor = {
+  slug: string;
+  name: string;
+  /** Fuller form of the name, when they are known by more than one. */
+  alternateName?: string;
+  /** The line that sits under the name. */
+  role: string;
+  initials: string;
+  /** Their own company, if they run one. */
+  company?: { name: string; role: string };
+  /** Standing, one item per line. Rendered verbatim. */
+  credentials: string[];
+};
+
+export const advisors: Advisor[] = [
+  {
+    slug: "parul-sharma",
+    name: "Parul Sharma",
+    alternateName: "Parul Masand Sharma",
+    role: "Hospitality Training Consultant",
+    initials: "PS",
+    company: { name: "'All' of Finesse", role: "Co-Founder" },
+    credentials: ["Ex-Faculty, IHM Aurangabad", "Co-Founder, 'All' of Finesse"],
+  },
+  {
+    slug: "renu-mehra",
+    name: "Renu Mehra",
+    role: "Luxury & Celebrity Image Consultant & Corporate Trainer",
+    initials: "RM",
+    company: { name: "RMIC", role: "Founder" },
+    credentials: ["Founder, RMIC"],
+  },
+];
+
+export function advisorBySlug(slug: string) {
+  return advisors.find((entry) => entry.slug === slug);
+}
+
 export function personBySlug(slug: string) {
   return team.find((entry) => entry.slug === slug);
 }
