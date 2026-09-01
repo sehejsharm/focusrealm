@@ -17,5 +17,5 @@ field in that advisor's `Person` structured data.
 under the chin is not. Until a file exists the monogram plate renders instead
 and the layout is unchanged.
 
-The portraits supplied for both advisors are head-and-shoulders shots on a
-light background; crop them square around the face before dropping them in.
+Both current portraits were cropped square from the supplied originals
+(1071x1469 and 864x878) and resized to 800x800.
