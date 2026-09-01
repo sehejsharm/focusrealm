@@ -31,7 +31,23 @@ export default function TeamStrip({
             eyebrow="Founded by"
             title="The Focus Realm team. One discipline:"
             accent="remove it unless it helps the shift."
-            body={`${site.name} was founded by Sehej Sharma (Co-Founder & CEO), Ali Electricwala (Co-Founder & COO) and Aditya Mishra (Co-Founder & CTO).`}
+            body={
+              <>
+                {site.name} was founded by{" "}
+                <Link href="/team/sehej-sharma" className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white">
+                  Sehej Sharma
+                </Link>{" "}
+                (Co-Founder &amp; CEO),{" "}
+                <Link href="/team/ali-electricwala" className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white">
+                  Ali Electricwala
+                </Link>{" "}
+                (Co-Founder &amp; COO) and{" "}
+                <Link href="/team/aditya-mishra" className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white">
+                  Aditya Mishra
+                </Link>{" "}
+                (Co-Founder &amp; CTO).
+              </>
+            }
           />
           <Reveal delay={200}>
             <ButtonLink href="/team" variant="outline">

@@ -104,8 +104,9 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          This website is built to run without advertising or cross-site tracking cookies. Any cookies set are
-          strictly necessary for the site to function, or are first-party measurement used in aggregate.
+          This website is built to run without advertising or retargeting cookies. Any cookies set are
+          strictly necessary for the site to function, or belong to Google Analytics, which we use to
+          measure audience in aggregate.
         </p>
         <p>
           Full detail, including how to refuse or delete cookies in your browser, is on the{" "}
@@ -124,6 +125,10 @@ const sections: LegalSection[] = [
           <li>
             <strong>Infrastructure and hosting</strong> — Google Cloud and Firebase host the platform; the
             website is served by our hosting provider.
+          </li>
+          <li>
+            <strong>Website analytics</strong> — Google Analytics and Google Tag Manager measure how this
+            website is used. They receive page and device data, not the contents of anything you send us.
           </li>
           <li>
             <strong>Communication tools</strong> — the email provider that carries your message to us.

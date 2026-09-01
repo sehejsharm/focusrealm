@@ -9,8 +9,8 @@ import Avatar from "@/components/ui/Avatar";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import { Container, Eyebrow, Rule } from "@/components/ui/Section";
 import { team } from "@/lib/content";
-import { breadcrumbSchema, jsonLdGraph, personSchema, webPageSchema } from "@/lib/seo";
-import { absoluteUrl, site } from "@/lib/site";
+import { breadcrumbSchema, jsonLdGraph, personId, personSchema, webPageSchema } from "@/lib/seo";
+import { site } from "@/lib/site";
 
 export function generateStaticParams() {
   return team.map((person) => ({ slug: person.slug }));
@@ -78,7 +78,7 @@ export default async function PersonPage({ params }: Props) {
                 description: `${person.name} is the ${person.role} of ${site.name}.`,
               }),
               "@type": "ProfilePage",
-              mainEntity: { "@id": absoluteUrl(`/team/${person.slug}#person`) },
+              mainEntity: { "@id": personId(person.slug) },
             },
             personSchema(person.slug),
             breadcrumbSchema([
@@ -156,11 +156,19 @@ export default async function PersonPage({ params }: Props) {
               </Reveal>
 
               <Reveal delay={320}>
-                <div className="mt-8">
+                <div className="mt-8 flex flex-wrap items-center gap-5">
                   <ButtonLink href="/contact" variant="outline">
                     Get in touch
                     <ArrowRight />
                   </ButtonLink>
+                  {person.photosPath ? (
+                    <Link
+                      href={person.photosPath}
+                      className="inline-flex min-h-11 items-center text-[0.88rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white"
+                    >
+                      Photos
+                    </Link>
+                  ) : null}
                 </div>
               </Reveal>
             </div>

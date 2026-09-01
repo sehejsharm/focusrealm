@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { faqs, property, team, testimonials } from "@/lib/content";
+import { sehejGalleryPhotos } from "@/lib/gallery";
 import { teamPhoto } from "@/lib/team-photos";
 import { absoluteUrl, site, siteUrl } from "@/lib/site";
 
@@ -54,6 +55,17 @@ const organizationId = `${siteUrl}/#organization`;
 const websiteId = `${siteUrl}/#website`;
 const softwareId = `${siteUrl}/#software`;
 
+/**
+ * The `@id` every node uses to refer to a founder. Defaults to the profile
+ * URL, but a person described on more than one company site carries a shared
+ * identifier instead (`person.schema.id`) so the profiles resolve to one
+ * human. Always go through this — a reference that does not match the node's
+ * own `@id` silently creates a second, empty entity.
+ */
+export function personId(slug: string) {
+  return team.find((entry) => entry.slug === slug)?.schema?.id ?? `${siteUrl}/team/${slug}#person`;
+}
+
 export const organizationSchema = {
   "@type": "Organization",
   "@id": organizationId,
@@ -82,10 +94,16 @@ export const organizationSchema = {
     "housekeeping quality assurance",
     "hotel staff readiness",
   ],
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Pune",
+    addressRegion: "Maharashtra",
+    addressCountry: "IN",
+  },
   founder: team
     .filter((person) => person.role.includes("Co-Founder"))
-    .map((person) => ({ "@id": `${siteUrl}/team/${person.slug}#person` })),
-  employee: team.map((person) => ({ "@id": `${siteUrl}/team/${person.slug}#person` })),
+    .map((person) => ({ "@id": personId(person.slug) })),
+  employee: team.map((person) => ({ "@id": personId(person.slug) })),
   brand: { "@type": "Brand", name: site.shortName, logo: absoluteUrl("/logo.svg") },
   numberOfEmployees: { "@type": "QuantitativeValue", minValue: 3 },
   makesOffer: {
@@ -155,27 +173,59 @@ export function personSchema(slug: string) {
   const person = team.find((entry) => entry.slug === slug);
   if (!person) return null;
 
+  // The local portrait leads because it is same-origin and guaranteed to
+  // resolve; anything in `schema.images` follows as an alternate depiction.
+  const localPhoto = person.photo?.src ?? teamPhoto(person.slug);
+  const images = [
+    ...(localPhoto ? [absoluteUrl(localPhoto)] : []),
+    ...(person.schema?.images ?? []),
+  ];
+
   return {
     "@type": "Person",
-    "@id": `${siteUrl}/team/${person.slug}#person`,
+    "@id": personId(person.slug),
     name: person.name,
     givenName: person.name.split(" ")[0],
     familyName: person.name.split(" ").slice(1).join(" "),
     url: absoluteUrl(`/team/${person.slug}`),
-    jobTitle: person.role,
-    description: `${person.name} is the ${person.role} of ${site.name}, the ${site.category.toLowerCase()} for hotel operations. ${person.headline}`,
+    jobTitle: person.schema?.jobTitle ?? person.role,
+    description:
+      person.schema?.description ??
+      `${person.name} is the ${person.role} of ${site.name}, the ${site.category.toLowerCase()} for hotel operations. ${person.headline}`,
     worksFor: { "@id": organizationId },
     affiliation: { "@id": organizationId },
     memberOf: { "@id": organizationId },
     knowsAbout: [...person.focus, "hotel service standards", "SOP execution", "hospitality operations"],
     // Only emitted once a portrait exists in public/team/ — a 404 in
     // structured data is worse than omitting the property.
-    ...(() => {
-      const photo = person.photo?.src ?? teamPhoto(person.slug);
-      return photo ? { image: absoluteUrl(photo) } : {};
-    })(),
+    ...(images.length ? { image: images.length === 1 ? images[0] : images } : {}),
     ...(person.sameAs?.length ? { sameAs: person.sameAs } : {}),
     mainEntityOfPage: { "@id": `${siteUrl}/team/${person.slug}#webpage` },
+  };
+}
+
+/**
+ * The Person node for the photo page. Same `@id` as the profile node, so the
+ * two pages describe one person; `image` carries every photograph as an
+ * ImageObject, which is what makes them eligible for image search against
+ * his name rather than as anonymous page decoration.
+ */
+export function sehejGallerySchema() {
+  const person = team.find((entry) => entry.slug === "sehej-sharma");
+  if (!person) return null;
+
+  return {
+    "@type": "Person",
+    "@id": personId(person.slug),
+    name: person.name,
+    url: absoluteUrl("/about-sehej-sharma"),
+    image: sehejGalleryPhotos.map((photo) => ({
+      "@type": "ImageObject",
+      contentUrl: photo.contentUrl,
+      name: photo.alt,
+      caption: photo.caption,
+    })),
+    sameAs: [...(person.sameAs ?? []), absoluteUrl(`/team/${person.slug}`)],
   };
 }
 

@@ -6,7 +6,13 @@
  * canonical tag, sitemap entry, OG URL and JSON-LD @id is derived from it.
  */
 
-const fallbackUrl = "https://www.focusrealm.org";
+/**
+ * The apex domain is what is actually deployed and served. Keep this in sync
+ * with the host in DNS: every canonical, sitemap entry, OG URL and JSON-LD
+ * `@id` on the site is derived from it, and a mismatch between this string
+ * and the live host splits the site into two entities in Google's index.
+ */
+const fallbackUrl = "https://focusrealm.org";
 
 /**
  * Deliberately does NOT fall back to Vercel's deployment URL.
@@ -108,7 +114,7 @@ export const footerNav = [
     heading: "Company",
     links: [
       { href: "/team", label: "Team" },
-      { href: "/team/sehej-sharma", label: "Sehej Sharma · CEO" },
+      { href: "/team/sehej-sharma", label: "Sehej Sharma" },
       { href: "/team/ali-electricwala", label: "Ali Electricwala · COO" },
       { href: "/team/aditya-mishra", label: "Aditya Mishra · CTO" },
       { href: "/contact", label: "Contact" },

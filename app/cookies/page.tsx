@@ -22,12 +22,17 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          This website is deliberately light. It carries no advertising pixels, no cross-site trackers and no
-          third-party marketing tags. Nothing on this site follows you to another one.
+          This website is deliberately light. It carries no advertising pixels and no retargeting or
+          ad-personalisation tags. Nothing on this site follows you around the web to sell you something.
         </p>
         <p>
-          That is a design decision, not a legal formality — the same subtraction-first thinking we apply to
-          the product applies here.
+          It does measure its own audience. We use Google Analytics and Google Tag Manager to understand
+          which pages are useful and where visitors arrive from. That is the only third-party tag on the
+          site, and it is named below rather than buried.
+        </p>
+        <p>
+          Keeping the list that short is a design decision, not a legal formality — the same
+          subtraction-first thinking we apply to the product applies here.
         </p>
       </>
     ),
@@ -44,8 +49,11 @@ const sections: LegalSection[] = [
             marketing identifier.
           </li>
           <li>
-            <strong>Aggregate measurement.</strong> Where we measure which pages are useful, it is first-party
-            and reported in aggregate — page counts and referrers, not individual profiles.
+            <strong>Analytics.</strong> Google Analytics 4, loaded through Google Tag Manager&rsquo;s
+            infrastructure, sets cookies in the <code>_ga</code> family to tell one visit from another. We
+            read the result in aggregate — page counts, referrers, countries and broad device types, not
+            individual profiles. We do not enable Google Signals, ad personalisation or the advertising
+            features that would share this data with Google&rsquo;s ad products.
           </li>
         </ul>
         <p>
@@ -65,8 +73,15 @@ const sections: LegalSection[] = [
           strictly necessary cookies may break parts of the site; blocking everything else will not.
         </p>
         <p>
-          Browsers also offer a &ldquo;Do Not Track&rdquo; or global privacy control signal. We do not perform
-          cross-site tracking, so there is nothing for that signal to switch off here.
+          Browsers also offer a &ldquo;Do Not Track&rdquo; or global privacy control signal. We do not
+          advertise or retarget, so there is nothing of that kind for it to switch off here.
+        </p>
+        <p>
+          To opt out of Google Analytics specifically, install Google&rsquo;s{" "}
+          <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">
+            browser opt-out add-on
+          </a>
+          , or block analytics cookies in your browser. The site works exactly the same either way.
         </p>
       </>
     ),

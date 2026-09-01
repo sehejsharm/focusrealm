@@ -422,6 +422,25 @@ export type Person = {
   /** Public profiles. Emitted as schema.org sameAs — the strongest signal
    *  tying a founder's name query to this site. Add the real URLs. */
   sameAs?: string[];
+  /** Route of a photo gallery for this person, when one exists. */
+  photosPath?: string;
+  /**
+   * Overrides merged into this person's schema.org Person node. Only set what
+   * differs from the values `personSchema()` derives from the fields above.
+   */
+  schema?: {
+    /**
+     * Shared identifier for a person who is also described on another site.
+     * Both sites emit the same `@id`, which is how Google resolves the two
+     * profiles to one human instead of two. It is an identifier, not a URL —
+     * nothing needs to be hosted at it.
+     */
+    id?: string;
+    jobTitle?: string;
+    description?: string;
+    /** Absolute image URLs added alongside the local portrait. */
+    images?: string[];
+  };
 };
 
 /**
@@ -465,6 +484,21 @@ export const team: Person[] = [
     focus: ["Category & positioning", "Product thesis", "Go-to-market", "Hospitality partnerships", "Founder-led sales"],
     quote:
       "Standards stop being a document nobody reads the moment they become the unit of work a staff member is doing right now.",
+    photosPath: "/about-sehej-sharma",
+    sameAs: [
+      "https://www.wikidata.org/wiki/Q141209007",
+      "https://www.linkedin.com/in/sehejsharma",
+      "https://www.crunchbase.com/person/sehej-sharma",
+      "https://rechargachargine.com/team/sehej-sharma",
+    ],
+    schema: {
+      // Shared with his Recharga Chargine profile so both resolve to one person.
+      id: "https://rechargachargine.com/team/sehej-sharma#person",
+      jobTitle: "Co-Founder & CEO",
+      description:
+        "Co-Founder & CEO of Focus Realm and Founder & CEO of Recharga Chargine. Based in Jaipur, India.",
+      images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Sehej%20Sharma.png"],
+    },
   },
   {
     slug: "ali-electricwala",

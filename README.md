@@ -43,11 +43,12 @@ Generated automatically: `/sitemap.xml`, `/robots.txt`, `/manifest.webmanifest`,
 
 ## Set this before launch
 
-**`NEXT_PUBLIC_SITE_URL`** — the production origin, e.g.
-`https://www.focusrealm.com`. Every canonical tag, sitemap URL, Open Graph URL
-and JSON-LD `@id` derives from it (`lib/site.ts`). Without it the site falls
-back to `https://www.focusrealm.com`, and on Vercel it will use
-`VERCEL_PROJECT_PRODUCTION_URL` if that is set.
+**`NEXT_PUBLIC_SITE_URL`** — the production origin. Every canonical tag,
+sitemap URL, Open Graph URL and JSON-LD `@id` derives from it (`lib/site.ts`).
+Without it the site falls back to `https://focusrealm.org`, the deployed apex
+domain. If this variable is set anywhere in hosting it **must** be the apex —
+setting it to the `www.` host republishes every canonical and every `@id` on a
+second origin, which splits the site into two entities in Google's index.
 
 Add it in Vercel → Project → Settings → Environment Variables, for Production
 and Preview.
