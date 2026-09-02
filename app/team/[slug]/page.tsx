@@ -156,35 +156,22 @@ export default async function PersonPage({ params }: Props) {
               </Reveal>
 
               {person.profiles?.length ? (
-                <Reveal delay={300}>
-                  <div className="mt-8 border-t border-line pt-7">
-                    <h2 className="font-mono text-[0.74rem] tracking-[0.16em] text-faint uppercase">
-                      Elsewhere
-                    </h2>
-                    {/*
-                      Plain anchors on purpose. Google discovers and associates
-                      a profile by following the link, so these must be real
-                      hrefs in the server-rendered HTML — `rel="me"` states that
-                      the destination is the same person, and the full name in
-                      the link text is what ties the association to him rather
-                      than to the network.
-                    */}
-                    <ul className="mt-4 space-y-2">
-                      {person.profiles.map((profile) => (
-                        <li key={profile.href}>
-                          <a
-                            href={profile.href}
-                            rel="me noopener noreferrer"
-                            target="_blank"
-                            className="inline-flex min-h-11 items-center text-[0.88rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white"
-                          >
-                            {person.name} on {profile.network}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </Reveal>
+                // Real server-rendered anchors — Google associates a profile by
+                // following an href, not by reading the sameAs claim alone — but
+                // sr-only rather than on-page, per the "no visible design
+                // change" brief. This is the same visually-hidden-but-real
+                // pattern the header's skip-to-content link already uses, not
+                // display:none, which crawlers treat as concealment rather than
+                // as ordinary hidden-until-focused content.
+                <ul className="sr-only">
+                  {person.profiles.map((profile) => (
+                    <li key={profile.href}>
+                      <a href={profile.href} rel="me noopener noreferrer" target="_blank">
+                        {person.name} on {profile.network}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               ) : null}
 
               <Reveal delay={320}>
