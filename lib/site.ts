@@ -135,6 +135,8 @@ export const legalNav = [
   { href: "/privacy", label: "Privacy Policy" },
   { href: "/terms", label: "Terms of Service" },
   { href: "/cookies", label: "Cookie Policy" },
+  // Reopens the consent banner. Withdrawing has to be as easy as granting.
+  { href: "#cookie-preferences", label: "Cookie preferences" },
 ] as const;
 
 export function absoluteUrl(path = "/") {

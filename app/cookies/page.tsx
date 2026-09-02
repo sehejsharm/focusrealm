@@ -77,6 +77,12 @@ const sections: LegalSection[] = [
           advertise or retarget, so there is nothing of that kind for it to switch off here.
         </p>
         <p>
+          Visitors in the EEA, the UK and Switzerland are asked before any analytics cookie is set. Until
+          that question is answered the analytics tag runs in a consent-denied state and stores nothing.
+          You can change your answer at any time from the{" "}
+          <a href="#cookie-preferences">Cookie preferences</a> link in the footer.
+        </p>
+        <p>
           To opt out of Google Analytics specifically, install Google&rsquo;s{" "}
           <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">
             browser opt-out add-on

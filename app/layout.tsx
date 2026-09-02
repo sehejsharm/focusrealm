@@ -2,7 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import CursorField from "@/components/fx/CursorField";
-import { AnalyticsNoScript, AnalyticsScripts } from "@/components/site/Analytics";
+import { AnalyticsNoScript, AnalyticsScripts, ConsentDefaults } from "@/components/site/Analytics";
+import ConsentBanner from "@/components/site/ConsentBanner";
 import RouteTransition from "@/components/fx/RouteTransition";
 import Footer from "@/components/site/Footer";
 import Header from "@/components/site/Header";
@@ -104,6 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </noscript>
       </head>
       <body className="min-h-dvh bg-void antialiased">
+        <ConsentDefaults />
         <AnalyticsNoScript />
         {/* Site-wide entity graph: Organization, WebSite and the product itself. */}
         <script
@@ -120,6 +122,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
         <StickyCta />
         <AnalyticsScripts />
+        <ConsentBanner />
       </body>
     </html>
   );

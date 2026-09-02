@@ -192,6 +192,10 @@ export default function TeamPage() {
                       </li>
                     ))}
                   </ul>
+
+                  <p className="mt-6 border-l-2 border-brand/40 pl-5 text-[0.88rem] leading-relaxed text-paper">
+                    {advisor.problem}
+                  </p>
                 </SpotlightCard>
               </Reveal>
             ))}

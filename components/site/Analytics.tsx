@@ -1,5 +1,6 @@
 import Script from "next/script";
 
+import { consentDefaultsScript } from "@/lib/consent";
 import { isUnindexableHost } from "@/lib/site";
 
 /**
@@ -19,6 +20,28 @@ const GTM_CONTAINER_ID = "GTM-N7L25365";
 
 export const analyticsEnabled = process.env.NODE_ENV === "production" && !isUnindexableHost;
 
+/**
+ * Consent Mode v2 defaults.
+ *
+ * `beforeInteractive` is load-bearing, not a performance choice: these calls
+ * are only meaningful if they reach the dataLayer before gtag.js and gtm.js
+ * read it. Downgrade the strategy and the tags start denied-by-nothing —
+ * storage is set first and the defaults arrive too late to have prevented it.
+ */
+export function ConsentDefaults() {
+  if (!analyticsEnabled) return null;
+
+  return (
+    // The rule below is a Pages Router rule — it wants beforeInteractive in
+    // pages/_document.js. The App Router documentation requires the opposite:
+    // "beforeInteractive scripts must be placed inside the root layout".
+    // eslint-disable-next-line @next/next/no-before-interactive-script-outside-document
+    <Script id="consent-defaults" strategy="beforeInteractive">
+      {consentDefaultsScript()}
+    </Script>
+  );
+}
+
 export function AnalyticsScripts() {
   if (!analyticsEnabled) return null;
 
@@ -31,6 +54,7 @@ export function AnalyticsScripts() {
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
       />
       <Script id="ga4-init" strategy="afterInteractive">
+        {/* dataLayer and gtag() already exist — ConsentDefaults defines them. */}
         {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());

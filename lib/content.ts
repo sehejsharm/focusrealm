@@ -585,6 +585,14 @@ export type Advisor = {
   company?: { name: string; role: string };
   /** Standing, one item per line. Rendered verbatim. */
   credentials: string[];
+  /**
+   * The problem in their field that makes an operating standard matter.
+   *
+   * Written in the site's own voice, never presented as something the advisor
+   * said — attributing invented words to a real, named person would be a
+   * misrepresentation. Kept to the problem, with no mention of the product.
+   */
+  problem: string;
 };
 
 export const advisors: Advisor[] = [
@@ -596,6 +604,8 @@ export const advisors: Advisor[] = [
     initials: "PS",
     company: { name: "'All' of Finesse", role: "Co-Founder" },
     credentials: ["Ex-Faculty, IHM Aurangabad", "Co-Founder, 'All' of Finesse"],
+    problem:
+      "Teaching a standard and running it are different problems. When the SOP stops at the classroom, service quality comes down to who happens to be on shift — and inconsistency is what caps a property's rating long before its rooms do.",
   },
   {
     slug: "renu-mehra",
@@ -604,6 +614,8 @@ export const advisors: Advisor[] = [
     initials: "RM",
     company: { name: "RMIC", role: "Founder" },
     credentials: ["Founder, RMIC"],
+    problem:
+      "Guests decide how they feel about a hotel in the first minute, on details nobody ever wrote down. Presentation that is never defined cannot be taught or repeated, so it never compounds into the reputation a property grows on.",
   },
 ];
 
