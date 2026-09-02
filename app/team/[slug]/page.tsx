@@ -155,6 +155,38 @@ export default async function PersonPage({ params }: Props) {
                 </dl>
               </Reveal>
 
+              {person.profiles?.length ? (
+                <Reveal delay={300}>
+                  <div className="mt-8 border-t border-line pt-7">
+                    <h2 className="font-mono text-[0.74rem] tracking-[0.16em] text-faint uppercase">
+                      Elsewhere
+                    </h2>
+                    {/*
+                      Plain anchors on purpose. Google discovers and associates
+                      a profile by following the link, so these must be real
+                      hrefs in the server-rendered HTML — `rel="me"` states that
+                      the destination is the same person, and the full name in
+                      the link text is what ties the association to him rather
+                      than to the network.
+                    */}
+                    <ul className="mt-4 space-y-2">
+                      {person.profiles.map((profile) => (
+                        <li key={profile.href}>
+                          <a
+                            href={profile.href}
+                            rel="me noopener noreferrer"
+                            target="_blank"
+                            className="inline-flex min-h-11 items-center text-[0.88rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white"
+                          >
+                            {person.name} on {profile.network}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </Reveal>
+              ) : null}
+
               <Reveal delay={320}>
                 <div className="mt-8 flex flex-wrap items-center gap-5">
                   <ButtonLink href="/contact" variant="outline">

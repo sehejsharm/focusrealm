@@ -169,6 +169,19 @@ export const softwareSchema = {
   },
 } as const;
 
+/**
+ * Every off-site URL that identifies this person: the listed profiles plus
+ * anything rendered as a link on the page. Deduped, because a URL appearing
+ * twice in `sameAs` is a validation warning for no benefit.
+ */
+export function personSameAs(slug: string) {
+  const person = team.find((entry) => entry.slug === slug);
+  if (!person) return [];
+  return [
+    ...new Set([...(person.sameAs ?? []), ...(person.profiles ?? []).map((p) => p.href)]),
+  ];
+}
+
 export function personSchema(slug: string) {
   const person = team.find((entry) => entry.slug === slug);
   if (!person) return null;
@@ -199,7 +212,7 @@ export function personSchema(slug: string) {
     // Only emitted once a portrait exists in public/team/ — a 404 in
     // structured data is worse than omitting the property.
     ...(images.length ? { image: images.length === 1 ? images[0] : images } : {}),
-    ...(person.sameAs?.length ? { sameAs: person.sameAs } : {}),
+    ...(personSameAs(person.slug).length ? { sameAs: personSameAs(person.slug) } : {}),
     mainEntityOfPage: { "@id": `${siteUrl}/team/${person.slug}#webpage` },
   };
 }
@@ -225,7 +238,7 @@ export function sehejGallerySchema() {
       name: photo.alt,
       caption: photo.caption,
     })),
-    sameAs: [...(person.sameAs ?? []), absoluteUrl(`/team/${person.slug}`)],
+    sameAs: [...personSameAs(person.slug), absoluteUrl(`/team/${person.slug}`)],
   };
 }
 

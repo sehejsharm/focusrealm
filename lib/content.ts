@@ -422,6 +422,16 @@ export type Person = {
   /** Public profiles. Emitted as schema.org sameAs — the strongest signal
    *  tying a founder's name query to this site. Add the real URLs. */
   sameAs?: string[];
+  /**
+   * Social profiles rendered as real links on the profile page, and folded
+   * into `sameAs` automatically so the markup and the visible page can never
+   * disagree about which accounts are his.
+   *
+   * Crawlers reach these by following an anchor, so they have to be ordinary
+   * server-rendered `<a href>` elements carrying `rel="me"` — an icon button
+   * that navigates from JavaScript is invisible to that process.
+   */
+  profiles?: { network: string; href: string }[];
   /** Route of a photo gallery for this person, when one exists. */
   photosPath?: string;
   /**
@@ -485,9 +495,13 @@ export const team: Person[] = [
     quote:
       "Standards stop being a document nobody reads the moment they become the unit of work a staff member is doing right now.",
     photosPath: "/about-sehej-sharma",
+    profiles: [
+      { network: "Instagram", href: "https://www.instagram.com/sehejsharma03" },
+      { network: "X (Twitter)", href: "https://x.com/thisissehej" },
+      { network: "LinkedIn", href: "https://www.linkedin.com/in/sehejsharma" },
+    ],
     sameAs: [
       "https://www.wikidata.org/wiki/Q141209007",
-      "https://www.linkedin.com/in/sehejsharma",
       "https://www.crunchbase.com/person/sehej-sharma",
       "https://rechargachargine.com/team/sehej-sharma",
     ],
