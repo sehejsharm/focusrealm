@@ -4,14 +4,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-import { usePageProgress } from "@/components/fx/useScrollProgress";
+import { usePageProgressVar } from "@/components/fx/useScrollProgress";
 import Logo from "@/components/site/Logo";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import { nav } from "@/lib/site";
 
 export default function Header() {
   const pathname = usePathname();
-  const progress = usePageProgress();
+  // Publishes --page-progress to :root; nothing re-renders as you scroll.
+  usePageProgressVar();
   const [condensed, setCondensed] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
@@ -130,7 +131,7 @@ export default function Header() {
         <div
           aria-hidden
           className="h-px origin-left bg-linear-to-r from-brand via-brand-bright to-brand-cyan transition-opacity duration-500"
-          style={{ transform: `scaleX(${progress})`, opacity: condensed ? 1 : 0 }}
+          style={{ transform: "scaleX(var(--page-progress, 0))", opacity: condensed ? 1 : 0 }}
         />
       </header>
 

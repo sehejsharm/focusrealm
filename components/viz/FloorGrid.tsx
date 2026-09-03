@@ -6,22 +6,37 @@ import { buildFloors, status, type Room, type StatusKey } from "@/lib/viz";
 
 const order: StatusKey[] = ["released", "running", "blocked", "queued"];
 
-function Glyph({ kind, className = "size-2.5" }: { kind: string; className?: string }) {
+/**
+ * `dense` thickens every stroke for the in-cell copies, which render at roughly
+ * 9px. The shapes are deliberately the same ones the legend uses — a key that
+ * does not match the marks it explains is worse than no key.
+ */
+function Glyph({
+  kind,
+  className = "size-2.5",
+  dense = false,
+}: {
+  kind: string;
+  className?: string;
+  dense?: boolean;
+}) {
+  const w = dense ? 2.4 : 1.8;
+  const thin = dense ? 2 : 1.4;
   return (
     <svg viewBox="0 0 12 12" className={className} fill="none" aria-hidden>
       {kind === "check" ? (
-        <path d="M2 6.4 4.8 9.2 10 3.4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        <path d="M2 6.4 4.8 9.2 10 3.4" stroke="currentColor" strokeWidth={w} strokeLinecap="round" />
       ) : null}
       {kind === "clock" ? (
         <>
-          <circle cx="6" cy="6" r="4.2" stroke="currentColor" strokeWidth="1.4" />
-          <path d="M6 3.6V6l1.8 1.2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+          <circle cx="6" cy="6" r="4.2" stroke="currentColor" strokeWidth={thin} />
+          <path d="M6 3.6V6l1.8 1.2" stroke="currentColor" strokeWidth={thin} strokeLinecap="round" />
         </>
       ) : null}
       {kind === "cross" ? (
-        <path d="M3.2 3.2 8.8 8.8M8.8 3.2 3.2 8.8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        <path d="M3.2 3.2 8.8 8.8M8.8 3.2 3.2 8.8" stroke="currentColor" strokeWidth={w} strokeLinecap="round" />
       ) : null}
-      {kind === "dot" ? <circle cx="6" cy="6" r="2.2" fill="currentColor" /> : null}
+      {kind === "dot" ? <circle cx="6" cy="6" r={dense ? 2.6 : 2.2} fill="currentColor" /> : null}
     </svg>
   );
 }
@@ -30,8 +45,13 @@ function Glyph({ kind, className = "size-2.5" }: { kind: string; className?: str
  * The property, one square per room, fourteen floors deep.
  *
  * Status is a reserved scale that collapses under protanopia, so every cell
- * carries its glyph as well as its colour, and hovering reads the exact state
- * out in text.
+ * carries its glyph as well as its colour — the same four marks the legend
+ * uses — and hovering reads the exact state out in text.
+ *
+ * The grid itself is `aria-hidden`. 280 focusable squares would be a hostile
+ * tab order, and the information is not per-room: what the picture says is
+ * "the top floors are done, the low floors are not". That sentence, plus the
+ * per-floor counts, is given to assistive tech as text in `FloorSummary`.
  */
 export default function FloorGrid() {
   const floors = useMemo(() => buildFloors(), []);
@@ -82,7 +102,44 @@ export default function FloorGrid() {
         })}
       </div>
 
-      <div className="space-y-[3px]" onMouseLeave={() => setHover(null)}>
+      {/*
+        The text alternative. Visually hidden, but it carries everything the
+        picture carries: the headline reading, the totals, and each floor's
+        breakdown. A screen-reader user gets the chart's meaning as a sentence
+        instead of "280 rooms tracked" beside 280 unlabelled squares.
+      */}
+      <div className="sr-only">
+        <p>
+          Demo floor state at 08:36 across {floors.length} guest floors,{" "}
+          {floors[0].length} rooms each, {total} rooms in total:{" "}
+          {order.map((key) => `${counts[key]} ${status[key].label.toLowerCase()}`).join(", ")}.
+          Work runs top down — the upper floors are largely released, the lower floors are still
+          queued.
+        </p>
+        <ul>
+          {floors.map((floor) => {
+            const c: Record<StatusKey, number> = {
+              released: 0,
+              running: 0,
+              blocked: 0,
+              queued: 0,
+            };
+            for (const room of floor) c[room.state] += 1;
+            return (
+              <li key={floor[0].floor}>
+                Floor {floor[0].floor}:{" "}
+                {order
+                  .filter((key) => c[key] > 0)
+                  .map((key) => `${c[key]} ${status[key].label.toLowerCase()}`)
+                  .join(", ")}
+                .
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      <div className="space-y-[3px]" aria-hidden onMouseLeave={() => setHover(null)}>
         {/* Fourteen floors of squares is 600px of scroll on a phone for a
             picture whose point lands in six. The upper floors stay on the page
             for the counts and for anything wider than a phone. */}
@@ -103,13 +160,19 @@ export default function FloorGrid() {
                   <div
                     key={room.index}
                     onMouseEnter={() => setHover(room)}
-                    className="h-3.5 rounded-[2px] transition-all duration-200 sm:h-4"
+                    className="flex h-4 items-center justify-center rounded-[2px] transition-all duration-200 sm:h-5"
                     style={{
                       background: `color-mix(in oklab, ${s.color} ${dim ? 10 : on ? 66 : 34}%, transparent)`,
                       boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${s.color} ${dim ? 16 : 60}%, transparent)`,
                       opacity: dim ? 0.3 : 1,
+                      // The mark is a bright tint of the state's own hue: it
+                      // keeps the colour association for people who can use it
+                      // and still reads as a shape for people who cannot.
+                      color: `color-mix(in oklab, ${s.color} 30%, white)`,
                     }}
-                  />
+                  >
+                    <Glyph kind={s.glyph} dense className="size-[9px] sm:size-[11px]" />
+                  </div>
                 );
               })}
             </div>

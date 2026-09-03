@@ -58,17 +58,34 @@ export function useScrollProgress<T extends HTMLElement = HTMLDivElement>() {
   return { ref, progress };
 }
 
-/** Page-level scroll progress, 0 → 1. */
-export function usePageProgress() {
-  const [progress, setProgress] = useState(0);
-
+/**
+ * Page-level scroll progress, 0 → 1, published as a CSS custom property.
+ *
+ * Deliberately returns nothing. The previous version held progress in React
+ * state, and because the value changes on essentially every frame of every
+ * scroll, it re-rendered its consumer — the whole Header tree, logo SVG, nav
+ * list, mobile sheet and CTAs — roughly sixty times a second on all 24 routes,
+ * to move a one-pixel bar. Writing a custom property keeps that entirely off
+ * the React render path: the compositor reads the variable, nothing reconciles.
+ *
+ * Read it with `transform: scaleX(var(--page-progress, 0))`.
+ */
+export function usePageProgressVar(varName = "--page-progress") {
   useEffect(() => {
     let frame = 0;
+    let last = -1;
+    const root = document.documentElement;
 
     const measure = () => {
       frame = 0;
-      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(scrollable <= 0 ? 0 : Math.min(1, Math.max(0, window.scrollY / scrollable)));
+      const scrollable = root.scrollHeight - window.innerHeight;
+      const next =
+        scrollable <= 0 ? 0 : Math.min(1, Math.max(0, window.scrollY / scrollable));
+      // Quantised so a sub-pixel scroll does not touch the DOM at all.
+      const rounded = Math.round(next * 1000) / 1000;
+      if (rounded === last) return;
+      last = rounded;
+      root.style.setProperty(varName, String(rounded));
     };
 
     const onScroll = () => {
@@ -83,8 +100,7 @@ export function usePageProgress() {
       if (frame) cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      root.style.removeProperty(varName);
     };
-  }, []);
-
-  return progress;
+  }, [varName]);
 }
