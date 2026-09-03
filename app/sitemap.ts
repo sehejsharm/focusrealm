@@ -55,3 +55,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [...core, ...people, ...gallery];
 }
+
+// Required by `output: "export"` — this route is generated at build time.
+export const dynamic = "force-static";

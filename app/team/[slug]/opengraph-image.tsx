@@ -168,3 +168,6 @@ export default async function Image({ params }: { params: Promise<{ slug: string
     size,
   );
 }
+
+// Required by `output: "export"` — this route is generated at build time.
+export const dynamic = "force-static";

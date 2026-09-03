@@ -21,3 +21,6 @@ export default function robots(): MetadataRoute.Robots {
     host: siteUrl,
   };
 }
+
+// Required by `output: "export"` — this route is generated at build time.
+export const dynamic = "force-static";

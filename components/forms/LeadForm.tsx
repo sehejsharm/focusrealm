@@ -40,7 +40,13 @@ export type FieldSpec =
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-type Status = "idle" | "submitting" | "sent" | "fallback";
+/**
+ * `handoff` is the mail client opening because that is how this form works on
+ * the static build. `fallback` is the mail client opening because a POST
+ * failed. They look the same to the browser and must not read the same to the
+ * visitor — one is the design, the other is an apology.
+ */
+type Status = "idle" | "submitting" | "sent" | "handoff" | "fallback";
 
 /** Fires a conversion event into whichever analytics layer is present. */
 function trackConversion(formId: string, reference?: string) {
@@ -75,7 +81,14 @@ export default function LeadForm({
   successTitle?: string;
   successBody?: string;
 }) {
-  const [values, setValues] = useState<Record<string, string>>({});
+  // Seeded from the specs so a <select> the visitor never touches still submits
+  // the option they can see. Starting from {} meant untouched selects sent "",
+  // which the payload builder and the mail body both dropped silently.
+  const [values, setValues] = useState<Record<string, string>>(() =>
+    Object.fromEntries(
+      fields.map((field) => [field.name, field.kind === "select" ? field.options[0] : ""]),
+    ),
+  );
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<Status>("idle");
   const [formError, setFormError] = useState("");
@@ -91,7 +104,7 @@ export default function LeadForm({
 
   // Move focus to the confirmation so screen-reader users are told it worked.
   useEffect(() => {
-    if (status === "sent" || status === "fallback") successRef.current?.focus();
+    if (status === "sent" || status === "fallback" || status === "handoff") successRef.current?.focus();
   }, [status]);
 
   function set(name: string, value: string) {
@@ -143,6 +156,16 @@ export default function LeadForm({
     setStatus("submitting");
     setFormError("");
 
+    // On the static export there is no /api/lead route to post to, so hand the
+    // visitor straight to their mail client. Posting first would guarantee a
+    // 404 round-trip and a misleading "submitting" flicker before the same
+    // fallback ran. Set NEXT_PUBLIC_LEAD_API=1 when a server runtime exists.
+    if (process.env.NEXT_PUBLIC_LEAD_API !== "1") {
+      setStatus("handoff");
+      window.location.href = mailtoHref();
+      return;
+    }
+
     const payload = {
       formId,
       subject,
@@ -187,8 +210,9 @@ export default function LeadForm({
     }
   }
 
-  if (status === "sent" || status === "fallback") {
+  if (status === "sent" || status === "fallback" || status === "handoff") {
     const fell = status === "fallback";
+    const handed = status === "handoff";
     return (
       <div
         ref={successRef}
@@ -209,12 +233,18 @@ export default function LeadForm({
           </svg>
         </span>
         <h3 className="mt-6 text-[1.4rem] font-semibold text-white">
-          {fell ? "Our form is having a moment." : successTitle}
+          {fell
+            ? "Our form is having a moment."
+            : handed
+              ? "Your email is ready to send."
+              : successTitle}
         </h3>
         <p className="mt-3 max-w-md text-[0.95rem] leading-relaxed text-muted">
           {fell
             ? "We could not reach our server, so we have opened your mail client with everything filled in. Send that and it reaches the same inbox."
-            : successBody}
+            : handed
+              ? "We have opened your mail client with everything you entered already filled in. Send it and a founder picks it up — usually within one working day. If nothing opened, the address is below."
+              : successBody}
         </p>
         {reference ? (
           <p className="mt-4 font-mono text-[0.72rem] tracking-[0.1em] text-faint uppercase">

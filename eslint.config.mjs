@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Deploy audits, the deploy guide and their generator. Tooling output that
+    // ships with the repo for reference — not application source.
+    ".ag/**",
   ]),
 ]);
 

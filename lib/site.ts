@@ -32,14 +32,22 @@ function resolveSiteUrl() {
 export const siteUrl = resolveSiteUrl();
 
 /**
- * True for anything that is not the real production site — Vercel previews and
- * branch deploys, or a deployment still being served from a *.vercel.app host.
- * These are kept out of the index entirely: a presentation link should not
- * compete with the production domain in search results.
+ * True for anything that is not the real production site — a preview or branch
+ * deploy, or a build whose site URL is still a platform-issued host rather than
+ * the production domain. These are kept out of the index entirely: a
+ * presentation link should not compete with the production domain in search.
+ *
+ * The host check is platform-neutral. This site is built as a static export for
+ * Firebase Hosting, where `*.web.app` and `*.firebaseapp.com` are the throwaway
+ * hosts; the Vercel and Netlify entries are kept so the guard still holds if it
+ * is ever built somewhere else.
  */
+const PREVIEW_HOST = /\.(web\.app|firebaseapp\.com|vercel\.app|netlify\.app)$/;
+
 export const isUnindexableHost =
   (process.env.VERCEL_ENV !== undefined && process.env.VERCEL_ENV !== "production") ||
-  /\.vercel\.app$/.test(new URL(siteUrl).hostname);
+  (process.env.CONTEXT !== undefined && process.env.CONTEXT !== "production") ||
+  PREVIEW_HOST.test(new URL(siteUrl).hostname);
 
 export const site = {
   name: "Focus Realm Hospitality",
