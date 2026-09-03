@@ -35,7 +35,10 @@ export default function PainChain() {
                 onFocus={() => setFrom(index)}
                 onBlur={() => setFrom(null)}
                 aria-describedby="pain-chain-hint"
-                className="group relative flex min-h-11 w-full min-w-[104px] flex-col items-start gap-2 rounded-lg px-1 py-2 text-left transition-colors duration-300 sm:min-w-0"
+                /* items-start let each row size to its own content, so labels
+                   spilled over their neighbours across the 640-1100px band.
+                   items-stretch keeps every row inside its own track. */
+                className="group relative flex min-h-11 w-full min-w-[104px] flex-col items-stretch gap-2 rounded-lg px-1 py-2 text-left transition-colors duration-300 sm:min-w-0"
               >
                 <span className="relative h-[3px] w-full overflow-hidden rounded-full bg-white/[0.07]">
                   <span
@@ -50,7 +53,7 @@ export default function PainChain() {
                     }}
                   />
                 </span>
-                <span className="flex items-baseline gap-2">
+                <span className="flex w-full min-w-0 items-baseline gap-2">
                   <span
                     className="font-mono text-[0.72rem] tabular-nums transition-colors duration-300"
                     style={{ color: origin ? "#a8ecd4" : "var(--color-faint)" }}
@@ -58,7 +61,7 @@ export default function PainChain() {
                     {entry.index}
                   </span>
                   <span
-                    className="truncate text-[0.76rem] leading-tight transition-colors duration-300 sm:text-[0.8rem]"
+                    className="min-w-0 truncate text-[0.76rem] leading-tight transition-colors duration-300 sm:text-[0.8rem]"
                     style={{ color: lit ? "#ffffff" : "var(--color-muted)" }}
                   >
                     {entry.name}

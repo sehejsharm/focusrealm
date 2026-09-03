@@ -49,7 +49,11 @@ export default function NotAnLms() {
           {/* Live word swap */}
           <Reveal delay={240} className="mt-14">
             <div className="flex min-h-[4.5rem] flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[clamp(1.5rem,4.2vw,2.6rem)] font-semibold tracking-[-0.03em]">
-              <span className="relative text-white/28">
+              {/* white/28 measured 2.5:1 — an AA failure on the half of the
+                  argument that names what Focus Realm is not. The line-through
+                  already carries the "retired" signal, so the opacity does not
+                  need to. white/55 measures 4.95:1 on the panel. */}
+              <span className="relative text-white/55">
                 <span className="line-through decoration-[#ff9b9b]/70 decoration-[3px]">
                   {vocabulary[index].avoid}
                 </span>

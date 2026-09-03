@@ -45,6 +45,11 @@
 
   --color-line: color-mix(in oklab, #94d4c1 16%, transparent);
   --color-line-strong: color-mix(in oklab, #94d4c1 30%, transparent);
+  /* Form-control boundary. WCAG 1.4.11 wants 3:1 for the visual boundary of an
+     input; --color-line measures 1.44:1 on a panel, which read as label-then-
+     empty-card. #94d4c1 at 60% composites to rgb(101,149,141) over the panel
+     — about 3.5:1 — and still reads as a hairline rather than a hard outline. */
+  --color-control-line: color-mix(in oklab, #94d4c1 60%, transparent);
 
   --animate-marquee: marquee 44s linear infinite;
   --animate-marquee-slow: marquee 90s linear infinite;
@@ -198,8 +203,20 @@
   --header-h: 4.5rem;
 }
 
-* {
-  border-color: var(--color-line);
+/*
+  Default border colour, so an unqualified `border` utility draws a hairline
+  rather than currentColor.
+
+  This MUST stay inside @layer base. Unlayered CSS outranks every cascade layer,
+  so as a bare `*` rule it silently beat every `border-<color>` utility on the
+  site — `focus:border-brand-bright/70` and `aria-[invalid=true]:border-…` on
+  the form controls included, which meant a field that failed validation never
+  turned red. Anything that sets a border colour must be able to win over this.
+*/
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
 }
 
 html {
@@ -509,6 +526,48 @@ p {
   background-size: 72px 72px;
   -webkit-mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 20%, transparent 75%);
   mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 20%, transparent 75%);
+}
+
+/*
+  Print. The legal pages are the ones that actually get printed — a buyer's
+  counsel reads /privacy and /terms on paper — and each sets its h1 with
+  .text-gradient, which is `color: transparent` over a background image.
+  Printing suppresses background graphics by default and keeps the transparent
+  colour, so the page title silently vanished. Restore ink, and drop the dark
+  ground so the page is legible rather than a solid block.
+*/
+@media print {
+  body {
+    background: #ffffff;
+    color: #000000;
+  }
+
+  .text-gradient,
+  .text-dim-gradient {
+    background-image: none;
+    color: #000000;
+    -webkit-text-fill-color: #000000;
+  }
+
+  /* Site chrome carries nothing onto paper. */
+  header,
+  footer,
+  nav,
+  [role="dialog"] {
+    display: none !important;
+  }
+
+  .panel {
+    border: 1px solid #cccccc;
+    background: none;
+    box-shadow: none;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    word-break: break-all;
+  }
 }
 
 .grain {

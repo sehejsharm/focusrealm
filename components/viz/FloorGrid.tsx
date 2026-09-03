@@ -51,7 +51,7 @@ export default function FloorGrid() {
     <figure className="relative">
       <figcaption className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
         <span className="font-mono text-[0.74rem] tracking-[0.16em] text-brand-cyan uppercase">
-          Live floor state · 08:36
+          Demo floor state · 08:36
         </span>
         <span className="font-mono text-[0.76rem] tabular-nums text-faint">
           {shown ? `Floor ${shown.floor} · room ${String(shown.index + 1).padStart(2, "0")} · ${status[shown.state].label} · ${shown.minutes} min target` : `${total} rooms tracked`}

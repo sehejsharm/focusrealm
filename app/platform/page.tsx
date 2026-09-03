@@ -98,8 +98,15 @@ export default function PlatformPage() {
       {roles.map((role, roleIndex) => (
         <section key={role.id} id={role.id} className="relative overflow-hidden py-14 sm:py-28">
           <Container>
-            <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-14">
-              <div className="lg:sticky lg:top-28">
+            {/*
+              `minmax(0,…)` on both tracks. The DeviceFrame in the right column
+              has a min-content width wider than a phone viewport, and a grid
+              item's default `min-width: auto` let it push the whole section
+              ~99px past the screen edge — hidden, not scrollable, because body
+              sets `overflow-x: clip`.
+            */}
+            <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-start lg:gap-14">
+              <div className="min-w-0 lg:sticky lg:top-28">
                 <Reveal>
                   <Eyebrow>
                     Interface 0{roleIndex + 1} · {role.name}

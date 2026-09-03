@@ -35,8 +35,19 @@ export default function RoleShowcase({
   const interacted = useRef(false);
 
   // Auto-advance the screen rail while the section is on screen and idle.
+  //
+  // WCAG 2.2.2: this moves for longer than five seconds and carries meaning, so
+  // it has to stop for anyone who asked their OS for less motion — the guard the
+  // four sibling auto-advancing components already have. Focus pauses it too, so
+  // a keyboard user reading the capability list is not interrupted mid-sentence.
   useEffect(() => {
     if (!inView || paused) return;
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
     const id = setInterval(() => setScreenIndex((i) => (i + 1) % total), 4200);
     return () => clearInterval(id);
   }, [inView, paused, total]);
@@ -126,6 +137,10 @@ export default function RoleShowcase({
           className="mt-10 grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-14"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
+          // Mirror the hover pause for keyboard users — focusing anything in
+          // the rail stops the rotation, the same way hovering it does.
+          onFocusCapture={() => setPaused(true)}
+          onBlurCapture={() => setPaused(false)}
         >
           {/* Copy */}
           <div key={role.id} style={{ animation: "rise-in 0.75s var(--ease-out-expo) both" }}>

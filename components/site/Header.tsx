@@ -41,7 +41,7 @@ export default function Header() {
     <>
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:rounded-full focus:bg-brand focus:px-4 focus:py-2 focus:text-sm focus:text-white"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:rounded-full focus:bg-brand-deep focus:px-4 focus:py-2 focus:text-sm focus:text-white"
       >
         Skip to content
       </a>
@@ -142,7 +142,17 @@ export default function Header() {
         onClick={() => setOpen(false)}
       >
         <div className="absolute inset-0 bg-void/92 backdrop-blur-2xl" />
-        <nav aria-label="Mobile" className="relative flex h-full flex-col justify-center px-6 pt-20 pb-10">
+        {/*
+          `justify-center` on a sheet taller than the viewport pushes the first
+          and last items off both edges, and with body scroll locked they were
+          unreachable in landscape. `justify-start` from a short viewport plus
+          its own scroll container keeps every item reachable; it still centres
+          when there is room to spare.
+        */}
+        <nav
+          aria-label="Mobile"
+          className="relative flex h-full flex-col justify-start overflow-y-auto overscroll-contain px-6 pt-20 pb-10 [@media(min-height:600px)]:justify-center"
+        >
           <ul className="space-y-1">
             {nav.map((item, index) => (
               <li key={item.href}>

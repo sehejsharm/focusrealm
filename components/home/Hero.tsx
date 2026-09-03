@@ -14,8 +14,15 @@ export default function Hero() {
       <Aurora variant="hero" />
 
       <Container>
-        <div className="grid items-center gap-12 lg:grid-cols-[0.88fr_1.12fr] lg:gap-14">
-          <div>
+        {/*
+          `min-w-0` on both tracks: a grid item's default `min-width: auto` lets
+          its min-content width push the track wider than the viewport. The
+          EventStream ticker in the right column is `whitespace-nowrap`, which
+          gave it a 341px min-content floor and clipped the headline mid-word
+          below ~361px. `overflow-x: clip` on body hid it rather than scrolling.
+        */}
+        <div className="grid grid-cols-[minmax(0,1fr)] items-center gap-12 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-14">
+          <div className="min-w-0">
             <Reveal immediate>
               <Eyebrow>Service execution platform</Eyebrow>
             </Reveal>
@@ -70,7 +77,7 @@ export default function Hero() {
             {/* The ledger, writing itself */}
             <Reveal delay={520} immediate className="mt-10 border-t border-line pt-5">
               <p className="mb-2 font-mono text-[0.72rem] tracking-[0.16em] text-faint uppercase">
-                Service record · writing now
+                Service record · demo property
               </p>
               <EventStream />
             </Reveal>

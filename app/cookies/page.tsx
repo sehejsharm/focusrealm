@@ -55,6 +55,13 @@ const sections: LegalSection[] = [
             individual profiles. We do not enable Google Signals, ad personalisation or the advertising
             features that would share this data with Google&rsquo;s ad products.
           </li>
+          <li>
+            <strong>Your answer to this banner.</strong> When you accept or decline, we keep that
+            choice in your browser&rsquo;s local storage under{" "}
+            <code>fr-analytics-consent</code> so you are not asked again on every page. It holds one
+            word — <code>granted</code> or <code>denied</code> — it never leaves your device, and
+            clearing your browser data removes it.
+          </li>
         </ul>
         <p>
           Signing in to the Focus Realm platform is separate from this website and uses a session cookie to
