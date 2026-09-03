@@ -90,11 +90,22 @@ function getServerSnapshot() {
  * week arrives denied again until this tells the tag otherwise.
  */
 function updateConsent(choice: ConsentChoice) {
-  const w = window as typeof window & { dataLayer?: unknown[] };
-  w.dataLayer = w.dataLayer ?? [];
-  // Pushed in gtag's arguments form so it reaches the same queue the inline
-  // defaults script writes to, whether or not gtag.js has finished loading.
-  w.dataLayer.push(["consent", "update", { analytics_storage: choice }]);
+  const w = window as typeof window & {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+  };
+
+  // gtag dispatches a consent command only from an *Arguments* object. Pushing
+  // a plain Array — `dataLayer.push(["consent","update",…])` — looks like an
+  // unrelated dotted-path call, is swallowed, and made both Accept and Decline
+  // silent no-ops. `gtag()` is the shim the inline defaults script defines
+  // (lib/consent.ts), and it pushes `arguments` correctly; it exists before
+  // gtag.js loads and writes to the same queue, so this works either way.
+  if (typeof w.gtag === "function") {
+    w.gtag("consent", "update", { analytics_storage: choice });
+  }
+  // No gtag means analytics is disabled for this build (preview host or
+  // development), so there is no tag whose consent state could need updating.
 }
 
 export default function ConsentBanner() {
