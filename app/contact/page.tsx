@@ -21,8 +21,8 @@ export const metadata: Metadata = {
   description,
   keywords: ["contact Focus Realm", "Focus Realm Hospitality contact", "hotel SOP software enquiry"],
   alternates: { canonical: "/contact" },
-  openGraph: { title: `${title} · ${site.shortName}`, description: ogDescription, url: "/contact", type: "website" },
-  twitter: { card: "summary_large_image", description: ogDescription },
+  openGraph: { images: ["/opengraph-image"], title: `${title} · ${site.shortName}`, description: ogDescription, url: "/contact", type: "website" },
+  twitter: { card: "summary_large_image", images: ["/opengraph-image"], description: ogDescription },
 };
 
 const fields: FieldSpec[] = [

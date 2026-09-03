@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: "/privacy" },
-  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/privacy", type: "website" },
+  openGraph: { images: ["/opengraph-image"], title: `${title} · ${site.shortName}`, description, url: "/privacy", type: "website" },
   robots: { index: true, follow: true },
 };
 

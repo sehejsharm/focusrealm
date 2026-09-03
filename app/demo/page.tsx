@@ -26,8 +26,8 @@ export const metadata: Metadata = {
     "hotel SOP pilot",
   ],
   alternates: { canonical: "/demo" },
-  openGraph: { title: `${title} · ${site.shortName}`, description: ogDescription, url: "/demo", type: "website" },
-  twitter: { card: "summary_large_image", description: ogDescription },
+  openGraph: { images: ["/opengraph-image"], title: `${title} · ${site.shortName}`, description: ogDescription, url: "/demo", type: "website" },
+  twitter: { card: "summary_large_image", images: ["/opengraph-image"], description: ogDescription },
 };
 
 const fields: FieldSpec[] = [

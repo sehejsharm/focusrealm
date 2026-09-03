@@ -222,6 +222,13 @@
 html {
   background-color: var(--color-void);
   scroll-behavior: smooth;
+  /*
+    The header is fixed and 72px tall, so an anchor jump — every #fragment in
+    the footer, and the skip link — used to land the target underneath it.
+    --header-h existed for exactly this and was never consumed; the extra rem
+    is breathing room so the heading is not flush against the chrome.
+  */
+  scroll-padding-top: calc(var(--header-h) + 1rem);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -465,7 +472,20 @@ p {
   .animate-sheen,
   .animate-scan,
   .animate-float,
-  .animate-pulse-ring {
+  .animate-pulse-ring,
+  /* animate-tick was the one utility this list forgot, and it is the only one
+     that runs forever — a 1s steps(1) blink that never settles. */
+  .animate-tick {
+    animation: none !important;
+  }
+
+  /*
+    The mobile menu staggers its items with an inline `animation: rise-in …`.
+    An inline style cannot be beaten by a class rule, so match the attribute
+    itself; otherwise the one surface a reduced-motion user opens to navigate
+    is the one that still animates at them.
+  */
+  [style*="rise-in"] {
     animation: none !important;
   }
 }
@@ -526,6 +546,24 @@ p {
   background-size: 72px 72px;
   -webkit-mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 20%, transparent 75%);
   mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 20%, transparent 75%);
+}
+
+/*
+  Chrome paints autofilled fields with its own near-white background and near-
+  black text, which on this dark palette turns a filled form into three white
+  slabs. There is no property to disable it; the standard route is an inset
+  shadow large enough to cover the field, plus text-fill-color for the value.
+*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-paper);
+  -webkit-box-shadow: 0 0 0 1000px var(--color-brand-navy) inset;
+  box-shadow: 0 0 0 1000px var(--color-brand-navy) inset;
+  caret-color: var(--color-paper);
+  transition: background-color 9999s ease-in-out 0s;
 }
 
 /*

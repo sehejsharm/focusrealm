@@ -38,6 +38,22 @@ export default function Header() {
     };
   }, [open]);
 
+  // Escape closes the sheet and hands focus back to the control that opened it.
+  // Without this a keyboard user could open the menu and had no way to dismiss
+  // it, and on close focus was left on a now-hidden element.
+  const toggleRef = useRef<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    if (!open) return;
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setOpen(false);
+        toggleRef.current?.focus();
+      }
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
   return (
     <>
       <a
@@ -104,6 +120,7 @@ export default function Header() {
 
               <button
                 type="button"
+                ref={toggleRef}
                 onClick={() => setOpen((v) => !v)}
                 aria-expanded={open}
                 aria-controls="mobile-nav"

@@ -26,13 +26,13 @@ export const metadata: Metadata = {
     "Sehej Sharma polo",
   ],
   alternates: { canonical: "/about-sehej-sharma" },
-  openGraph: {
+  openGraph: { images: ["/team/sehej-sharma/opengraph-image"],
     type: "profile",
     title,
     description,
     url: "/about-sehej-sharma",
   },
-  twitter: { card: "summary_large_image", title, description },
+  twitter: { card: "summary_large_image", images: ["/team/sehej-sharma/opengraph-image"], title, description },
 };
 
 export default function SehejPhotosPage() {

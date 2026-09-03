@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: "/cookies" },
-  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/cookies", type: "website" },
+  openGraph: { images: ["/opengraph-image"], title: `${title} · ${site.shortName}`, description, url: "/cookies", type: "website" },
 };
 
 const sections: LegalSection[] = [

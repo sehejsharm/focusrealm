@@ -44,14 +44,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ...person.focus,
     ],
     alternates: { canonical: `/team/${person.slug}` },
-    openGraph: {
+    openGraph: { images: ["/opengraph-image"],
       type: "profile",
       title: `${person.name} — ${person.shortRole}, ${site.name}`,
       description: ogDescription,
       url: `/team/${person.slug}`,
     },
     twitter: {
-      card: "summary_large_image",
+      card: "summary_large_image", images: ["/opengraph-image"],
       title: `${person.name} — ${person.shortRole}, ${site.name}`,
       description: ogDescription,
     },

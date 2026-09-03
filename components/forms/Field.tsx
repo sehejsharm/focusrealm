@@ -3,7 +3,11 @@
 import type { ComponentProps, ReactNode } from "react";
 
 const control =
-  "w-full rounded-xl border border-control-line bg-white/[0.03] px-4 py-3 text-[0.92rem] text-paper placeholder:text-faint/75 transition-all duration-300 outline-none focus:border-brand-bright/70 focus:bg-brand/10 focus:ring-2 focus:ring-brand/30 disabled:opacity-60 aria-[invalid=true]:border-[#ff9b9b]/70 aria-[invalid=true]:bg-[#ff9b9b]/[0.06]";
+  // text-base (16px) is not a style choice: iOS Safari zooms the whole page in
+  // when a focused control is under 16px, and 0.92rem computed to 14.72px. The
+  // zoom is not undone on blur, so every field focus left the visitor stranded
+  // at a scaled viewport on the site's only conversion path.
+  "w-full rounded-xl border border-control-line bg-white/[0.03] px-4 py-3 text-base text-paper placeholder:text-faint/75 transition-all duration-300 outline-none focus:border-brand-bright/70 focus:bg-brand/10 focus:ring-2 focus:ring-brand/30 disabled:opacity-60 aria-[invalid=true]:border-[#ff9b9b]/70 aria-[invalid=true]:bg-[#ff9b9b]/[0.06]";
 
 /** Screen readers get the hint and the error, in that order, if present. */
 function describedBy(id: string, hint?: string, error?: string) {

@@ -38,8 +38,8 @@ export const metadata: Metadata = {
     "Renu Mehra",
   ],
   alternates: { canonical: "/team" },
-  openGraph: { title: `${pageName} · ${site.shortName}`, description: ogDescription, url: "/team", type: "website" },
-  twitter: { card: "summary_large_image", description: ogDescription },
+  openGraph: { images: ["/opengraph-image"], title: `${pageName} · ${site.shortName}`, description: ogDescription, url: "/team", type: "website" },
+  twitter: { card: "summary_large_image", images: ["/opengraph-image"], description: ogDescription },
 };
 
 export default function TeamPage() {

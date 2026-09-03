@@ -116,7 +116,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <CursorField />
         <Header />
-        <main id="main">
+        {/* tabIndex -1 so the skip link actually moves focus. Without it the
+            browser scrolls to #main but leaves focus at the top of the page,
+            and the next Tab walks back into the header the user just skipped. */}
+        <main id="main" tabIndex={-1} className="outline-none">
           <RouteTransition>{children}</RouteTransition>
         </main>
         <Footer />

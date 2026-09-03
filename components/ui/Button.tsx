@@ -4,8 +4,13 @@ import type { ComponentProps, ReactNode } from "react";
 type Variant = "primary" | "outline" | "ghost";
 type Size = "md" | "lg";
 
+// `will-change: transform` is a hint for an animation about to happen, not a
+// baseline. Left on unconditionally it promoted every button on the page —
+// around 18 of them — to its own compositor layer and held them there at rest.
+// Scoped to hover, the hint arrives when it is actually useful and is dropped
+// again afterwards.
 const base =
-  "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-medium tracking-[-0.01em] transition-all duration-500 ease-out-expo will-change-transform";
+  "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-medium tracking-[-0.01em] transition-all duration-500 ease-out-expo hover:will-change-transform";
 
 const sizes: Record<Size, string> = {
   md: "h-11 px-5 text-[0.9rem]",

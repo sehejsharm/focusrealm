@@ -28,8 +28,8 @@ export const metadata: Metadata = {
     "hotel supervisor workload",
   ],
   alternates: { canonical: "/problems" },
-  openGraph: { title: `${pageName} · ${site.shortName}`, description: ogDescription, url: "/problems", type: "website" },
-  twitter: { card: "summary_large_image", description: ogDescription },
+  openGraph: { images: ["/opengraph-image"], title: `${pageName} · ${site.shortName}`, description: ogDescription, url: "/problems", type: "website" },
+  twitter: { card: "summary_large_image", images: ["/opengraph-image"], description: ogDescription },
 };
 
 export default function ProblemsPage() {

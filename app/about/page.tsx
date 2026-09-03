@@ -28,8 +28,8 @@ export const metadata: Metadata = {
     "hotel operations software company",
   ],
   alternates: { canonical: "/about" },
-  openGraph: { title: `${title} · ${site.shortName}`, description: ogDescription, url: "/about", type: "website" },
-  twitter: { card: "summary_large_image", description: ogDescription },
+  openGraph: { images: ["/opengraph-image"], title: `${title} · ${site.shortName}`, description: ogDescription, url: "/about", type: "website" },
+  twitter: { card: "summary_large_image", images: ["/opengraph-image"], description: ogDescription },
 };
 
 const principles = [

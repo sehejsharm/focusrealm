@@ -32,8 +32,8 @@ export const metadata: Metadata = {
     "hotel standard authoring tool",
   ],
   alternates: { canonical: "/platform" },
-  openGraph: { title: `${pageName} · ${site.shortName}`, description: ogDescription, url: "/platform", type: "website" },
-  twitter: { card: "summary_large_image", description: ogDescription },
+  openGraph: { images: ["/opengraph-image"], title: `${pageName} · ${site.shortName}`, description: ogDescription, url: "/platform", type: "website" },
+  twitter: { card: "summary_large_image", images: ["/opengraph-image"], description: ogDescription },
 };
 
 const routeFor = { staff: "/staff/today", manager: "/manager/overview", author: "/author/create" } as const;

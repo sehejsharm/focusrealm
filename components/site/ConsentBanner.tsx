@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useSyncExternalStore } from "react";
 
 import { Button } from "@/components/ui/Button";
 import {
@@ -110,6 +110,17 @@ function updateConsent(choice: ConsentChoice) {
 
 export default function ConsentBanner() {
   const open = useSyncExternalStore(subscribe, shouldShow, getServerSnapshot);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // A role="dialog" that never takes focus is announced to nobody: a screen
+  // reader carries on reading the page and the banner is just a thing at the
+  // bottom. Move focus in when it opens, and let Escape dismiss it the way any
+  // dialog should — declining, since refusing must be at least as easy as
+  // accepting.
+  useEffect(() => {
+    if (!open) return;
+    panelRef.current?.focus();
+  }, [open]);
 
   // Side effect only — replaying a previous answer, never setting state.
   useEffect(() => {
@@ -130,6 +141,15 @@ export default function ConsentBanner() {
     emit();
   }, []);
 
+  useEffect(() => {
+    if (!open) return;
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") answer("denied");
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open, answer]);
+
   if (!open) return null;
 
   return (
@@ -138,7 +158,11 @@ export default function ConsentBanner() {
       aria-labelledby="consent-title"
       className="fixed inset-x-0 bottom-0 z-[60] p-4 sm:p-6"
     >
-      <div className="panel mx-auto flex max-w-3xl flex-col gap-5 p-6 backdrop-blur-xl sm:flex-row sm:items-center sm:gap-8">
+      <div
+        ref={panelRef}
+        tabIndex={-1}
+        className="panel mx-auto flex max-w-3xl flex-col gap-5 p-6 backdrop-blur-xl outline-none sm:flex-row sm:items-center sm:gap-8"
+      >
         <div>
           <p id="consent-title" className="text-[0.95rem] font-semibold text-white">
             Analytics cookies
