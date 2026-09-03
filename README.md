@@ -50,8 +50,14 @@ domain. If this variable is set anywhere in hosting it **must** be the apex —
 setting it to the `www.` host republishes every canonical and every `@id` on a
 second origin, which splits the site into two entities in Google's index.
 
-Add it in Vercel → Project → Settings → Environment Variables, for Production
-and Preview.
+It is baked in **at build time**, not read at runtime — this is a static
+export. A normal production build needs nothing set. If the site is ever served
+from another origin, rebuild with that value or every canonical and Open Graph
+URL will point at the wrong host.
+
+Any host matching `*.web.app`, `*.firebaseapp.com`, `*.vercel.app` or
+`*.netlify.app` is served `noindex`, so a preview link never competes with the
+production domain.
 
 ### Confirm before launch — legal
 
@@ -126,8 +132,10 @@ Off-page work the site cannot do for itself — do these after the domain is liv
    make each founder's LinkedIn headline read
    "Co-Founder & CEO at Focus Realm Hospitality" and link the website field
    back to their `/team/<slug>` page, so the corroboration runs both ways.
-4. Point the domain at Vercel with `www` → apex (or the reverse) as a permanent
-   redirect so link equity lands on one hostname.
+4. Add `focusrealm.org` as a custom domain on the `fr-main-landing` Firebase
+   Hosting site and point DNS at it, with `www` → apex as a permanent redirect
+   so link equity lands on one hostname. The apex is what `lib/site.ts` bakes
+   into every canonical and `@id`.
 5. Get the founders' names onto third-party pages that already rank — podcast
    guest bios, conference speaker pages, press mentions, Crunchbase — each
    linking to `/team/<slug>`. Structured data states the fact; external links
@@ -175,4 +183,63 @@ npm run lint
 ## Stack
 
 Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind CSS v4.
-All 21 routes prerender statically — no server runtime needed to host it.
+Every route prerenders — there is no server runtime.
+
+## Deploy
+
+Firebase Hosting, as a static export. Firebase's framework-aware Hosting is
+permanently closed to new Next.js projects, so this ships as plain files on the
+CDN: `next.config.ts` sets `output: "export"`, there is no `app/api/`, and the
+lead forms hand off to the visitor's mail client.
+
+| | |
+|---|---|
+| Firebase project | `focus-realm-1` |
+| Hosting site | `fr-main-landing` → https://fr-main-landing.web.app |
+| Publish directory | `out/` |
+
+```bash
+npm ci && npm run build          # writes ./out
+firebase emulators:start --only hosting   # preview at 127.0.0.1:5000
+firebase deploy --only hosting
+```
+
+That project holds several sites, so the `site` key in `firebase.json` is what
+keeps a deploy off `focus-realm-1`, `fr-hotels` and the rest.
+
+`firebase.json` also states `Content-Type: image/png` for `/icon`,
+`/apple-icon`, `/opengraph-image` and `/team/*/opengraph-image`. Next's metadata
+routes export those **without a file extension**, so Firebase cannot infer a
+type, and with `nosniff` set an unlabelled image will not render in a social
+card. The emulator does not apply the `headers` block at all — headers can only
+be confirmed against a real deploy.
+
+### Deploy-ready branch convention
+
+**Every deployable state is committed to its own branch before it goes live**,
+named:
+
+```
+deploy_ready_fb_<YYYY-MM-DD>            e.g. deploy_ready_fb_2026-09-03
+deploy_ready_fb_<YYYY-MM-DD>_<HHMM>     when there is more than one that day
+```
+
+`fb` is the host — Firebase. A different host takes a different token, so the
+branch says where the snapshot was destined.
+
+Why: the deploy layer (static-export config, `firebase.json`, the removed API
+route, the mail-handoff form) does not live on `main`. Without a snapshot,
+pulling `main` silently discards it, and there is no way to answer "what exactly
+is live right now?" These branches are the answer, and they are what you roll
+back to.
+
+The loop is:
+
+1. `git checkout main && git pull` — take the latest application code.
+2. Re-apply the deploy layer on top.
+3. Build, lint, and walk the site in the emulator.
+4. Commit to a new `deploy_ready_fb_<date>` branch. `main` stays untouched.
+5. Deploy from that branch.
+
+`main` is never modified by a deploy. It stays a clean mirror of the
+application code.
