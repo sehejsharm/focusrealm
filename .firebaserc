@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "default": "focus-realm-1"
+  },
+  "targets": {
+    "focus-realm-1": {
+      "hosting": {
+        "main-landing": ["fr-main-landing"]
+      }
+    }
+  }
+}

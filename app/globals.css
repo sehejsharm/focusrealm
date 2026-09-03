@@ -1,0 +1,526 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ *
+ * Design tokens.
+ * ------------------------------------------------------------------ */
+
+/*
+ * Palette sampled directly from the product screenshots in assets/platform/
+ * so the site and the app read as one system:
+ *
+ *   #102830 / #122e35  deep teal ground and sidebar
+ *   #1d4044            elevated card
+ *   #33927b            emerald accent ("remarkable.", "service needs it.")
+ *   #94d4c1            mint (status dots, light accents)
+ *   #dbbc5f            gold (logo tile, active nav)
+ *   #f6f7f1            paper
+ *
+ * Text tokens are set above 4.5:1 against every surface they appear on,
+ * including the lightest card (#1d3e42) — see the contrast note per token.
+ */
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --color-void: #061417;
+  --color-ink: #0b2126;
+  --color-ink-2: #122e35;
+  --color-ink-3: #1d3e42;
+
+  --color-brand: #33927b;
+  --color-brand-bright: #4fbf9f;
+  --color-brand-deep: #1f6d5b;
+  --color-brand-navy: #0f3b39;
+  --color-brand-ice: #b9e6d8;
+  --color-brand-cyan: #94d4c1;
+
+  --color-gold: #dbbc5f;
+  --color-gold-deep: #c9a94a;
+
+  --color-paper: #f2f6f3;
+  /* 9.5:1 on void, 6.2:1 on the lightest card */
+  --color-muted: #a8c4c0;
+  /* 8.1:1 on void, 5.3:1 on the lightest card — safe for 9px mono labels */
+  --color-faint: #9ab5b1;
+
+  --color-line: color-mix(in oklab, #94d4c1 16%, transparent);
+  --color-line-strong: color-mix(in oklab, #94d4c1 30%, transparent);
+
+  --animate-marquee: marquee 44s linear infinite;
+  --animate-marquee-slow: marquee 90s linear infinite;
+  --animate-drift: drift 22s ease-in-out infinite alternate;
+  --animate-drift-slow: drift 34s ease-in-out infinite alternate-reverse;
+  --animate-pulse-ring: pulse-ring 2.6s ease-out infinite;
+  --animate-sheen: sheen 6s ease-in-out infinite;
+  --animate-scan: scan 7s linear infinite;
+  --animate-tick: tick 1s steps(1) infinite;
+  --animate-float: float 7s ease-in-out infinite;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(6%, -4%, 0) scale(1.16);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.8);
+  }
+  70% {
+    opacity: 0;
+    transform: scale(2.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.1);
+  }
+}
+
+@keyframes sheen {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateX(-120%) skewX(-18deg);
+  }
+  45% {
+    opacity: 0.5;
+  }
+  70% {
+    opacity: 0;
+    transform: translateX(220%) skewX(-18deg);
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-8%);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.55;
+  }
+  88% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(108%);
+    opacity: 0;
+  }
+}
+
+@keyframes tick {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes mask-up {
+  from {
+    transform: translate3d(0, 108%, 0) rotate(2deg);
+  }
+  to {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes route-sweep {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(430vw, 0, 0);
+  }
+}
+
+@keyframes route-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes draw-line {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Base.
+ * ------------------------------------------------------------------ */
+
+:root {
+  color-scheme: dark;
+  --header-h: 4.5rem;
+}
+
+* {
+  border-color: var(--color-line);
+}
+
+html {
+  background-color: var(--color-void);
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background-color: var(--color-void);
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: clip;
+}
+
+::selection {
+  background-color: color-mix(in oklab, var(--color-brand) 45%, transparent);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-bright);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+  letter-spacing: -0.032em;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-void);
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--color-brand) 34%, transparent);
+  border-radius: 99px;
+  border: 3px solid var(--color-void);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, var(--color-brand) 60%, transparent);
+}
+
+/* ------------------------------------------------------------------ *
+ * Utilities.
+ * ------------------------------------------------------------------ */
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Eyebrow labels: monospace, uppercase, letter-spaced. Used everywhere. */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-brand-cyan);
+}
+
+/*
+ * Accent type. Every stop stays inside the mint/emerald family: headlines are
+ * split across masked lines, so a gradient that started at white would land
+ * mid-word and read like a rendering fault.
+ */
+@utility text-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-brand-ice) 0%,
+    var(--color-brand-bright) 48%,
+    var(--color-brand-cyan) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@utility text-dim-gradient {
+  background-image: linear-gradient(180deg, #ffffff 0%, color-mix(in oklab, #ffffff 42%, transparent) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Frosted panel — the base surface for every card on the site. */
+@utility panel {
+  position: relative;
+  border-radius: 1.25rem;
+  border: 1px solid var(--color-line);
+  background:
+    linear-gradient(180deg, color-mix(in oklab, #ffffff 6%, transparent) 0%, color-mix(in oklab, #ffffff 2%, transparent) 100%),
+    color-mix(in oklab, var(--color-ink-2) 88%, transparent);
+  /*
+   * Frosting is a per-frame GPU cost on every card. Phones pay it hardest
+   * and see it least, so it starts at the tablet breakpoint.
+   */
+  @media (min-width: 768px) {
+    backdrop-filter: blur(14px);
+  }
+}
+
+@utility hairline {
+  background: linear-gradient(90deg, transparent, var(--color-line-strong) 18%, var(--color-line-strong) 82%, transparent);
+  height: 1px;
+}
+
+/* ------------------------------------------------------------------ *
+ * Scroll reveals. Driven by IntersectionObserver setting data-show.
+ * ------------------------------------------------------------------ */
+
+/*
+ * Short and shallow on purpose. Long reveals meant a headline could sit
+ * visibly mid-transition while the reader was already looking at it.
+ */
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition:
+    opacity 0.45s var(--ease-out-expo),
+    transform 0.55s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal="left"] {
+  transform: translate3d(-18px, 0, 0);
+}
+[data-reveal="right"] {
+  transform: translate3d(18px, 0, 0);
+}
+[data-reveal="scale"] {
+  transform: scale(0.975);
+}
+
+[data-reveal][data-show="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/*
+ * Above-the-fold content. It paints fully opaque on the very first frame and
+ * moves with transform only.
+ *
+ * The ordinary reveal starts at opacity 0 and waits for the observer, which
+ * cannot fire until hydration — so the hero paragraph, the largest element on
+ * the page, was invisible for the first second and Largest Contentful Paint
+ * was measuring hydration rather than paint. Transform does not affect LCP
+ * eligibility, so the motion survives and the metric reflects reality.
+ */
+[data-reveal][data-immediate="true"] {
+  opacity: 1;
+  animation: reveal-settle 0.6s var(--ease-out-expo) both;
+  animation-delay: var(--reveal-delay, 0ms);
+  transition: none;
+}
+
+@keyframes reveal-settle {
+  from {
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* Line-by-line headline mask. */
+.mask-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.mask-line > span {
+  display: block;
+  transform: translate3d(0, 108%, 0);
+  transition: transform 0.6s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-show="true"] .mask-line > span,
+.mask-line[data-show="true"] > span {
+  transform: none;
+}
+
+/*
+ * Hero headline. Driven by a CSS animation that starts at first paint rather
+ * than by an observer that cannot fire until hydration, so the largest text on
+ * the page is not waiting on JavaScript to become visible — and still shows if
+ * the JS never arrives at all.
+ */
+[data-immediate="true"] .mask-line > span {
+  transform: translate3d(0, 108%, 0);
+  transition: none;
+  animation: mask-rise 0.62s var(--ease-out-expo) both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+@keyframes mask-rise {
+  from {
+    transform: translate3d(0, 108%, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal][data-immediate="true"],
+  [data-reveal][data-show="true"] {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none;
+    transition: none;
+    animation: none !important;
+  }
+  [data-immediate="true"] .mask-line > span,
+  .mask-line > span {
+    transform: none;
+    transition: none;
+  }
+  .animate-marquee,
+  .animate-marquee-slow,
+  .animate-drift,
+  .animate-drift-slow,
+  .animate-sheen,
+  .animate-scan,
+  .animate-float,
+  .animate-pulse-ring {
+    animation: none !important;
+  }
+}
+
+/* Spotlight cards read the pointer position from --mx / --my. */
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    340px circle at var(--mx, 50%) var(--my, 0%),
+    color-mix(in oklab, var(--color-brand-bright) 55%, transparent),
+    transparent 62%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+}
+.spotlight:hover::before,
+.spotlight:focus-within::before {
+  opacity: 1;
+}
+
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 0%),
+    color-mix(in oklab, var(--color-brand) 12%, transparent),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+}
+.spotlight:hover::after,
+.spotlight:focus-within::after {
+  opacity: 1;
+}
+
+/* Technical grid, faded at the edges. */
+.grid-backdrop {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, #94d4c1 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, #94d4c1 8%, transparent) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 20%, transparent 75%);
+}
+
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+}
+
+.edge-fade-x {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* Product screenshots: cool the warm UI slightly so it sits in the palette. */
+.screen-tint {
+  filter: saturate(1.02) contrast(1.02);
+}
