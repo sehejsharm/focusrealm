@@ -2,7 +2,7 @@
 
 import type { Contract } from "@/lib/onboarding/contract";
 import { formatLongDate } from "@/lib/onboarding/contract";
-import type { Signature } from "@/lib/onboarding/types";
+import type { CompanySignature, Signature } from "@/lib/onboarding/types";
 
 /**
  * The agreement rendered on paper stock rather than the navy shell — this is
@@ -11,9 +11,11 @@ import type { Signature } from "@/lib/onboarding/types";
 export default function ContractDocument({
   contract,
   signature,
+  companySignature,
 }: {
   contract: Contract;
   signature?: Signature | null;
+  companySignature?: CompanySignature | null;
 }) {
   return (
     <article
@@ -78,10 +80,22 @@ export default function ContractDocument({
           </p>
           <p className="mt-1 text-sm font-bold">FocusRealm (to be incorporated)</p>
           <dl className="mt-4 space-y-3 text-sm">
-            <SignatureLine label="Signature" />
-            <SignatureLine label="Name" />
-            <SignatureLine label="Designation" value="Authorized Signatory" />
-            <SignatureLine label="Date" />
+            <SignatureLine
+              label="Signature"
+              value={companySignature?.typedName}
+              script={Boolean(companySignature)}
+            />
+            <SignatureLine label="Name" value={companySignature?.typedName} />
+            <SignatureLine
+              label="Designation"
+              value={companySignature?.designation ?? "Authorized Signatory"}
+            />
+            <SignatureLine
+              label="Date"
+              value={
+                companySignature ? formatLongDate(new Date(companySignature.signedAt)) : undefined
+              }
+            />
           </dl>
         </div>
 
@@ -107,14 +121,28 @@ export default function ContractDocument({
         </div>
       </div>
 
-      {signature && (
-        <p className="mt-8 rounded-lg bg-stone-100 px-4 py-3 text-[11px] leading-relaxed text-stone-600">
-          Signed electronically by {signature.typedName} on{" "}
-          {new Date(signature.signedAt).toLocaleString("en-IN")}
-          {signature.ip ? ` from ${signature.ip}` : ""}. The intern affirmed they had read and
-          accepted this agreement in full. Aadhaar number is masked in this view; the full number is
-          held on the signed record.
-        </p>
+      {(signature || companySignature) && (
+        <div className="mt-8 space-y-2 rounded-lg bg-stone-100 px-4 py-3 text-[11px] leading-relaxed text-stone-600">
+          {signature && (
+            <p>
+              Signed electronically by {signature.typedName} (Intern) on{" "}
+              {new Date(signature.signedAt).toLocaleString("en-IN")}
+              {signature.ip ? ` from ${signature.ip}` : ""}, affirming they had read and accepted
+              this agreement in full.
+            </p>
+          )}
+          {companySignature && (
+            <p>
+              Countersigned electronically by {companySignature.typedName},{" "}
+              {companySignature.designation}, for FocusRealm on{" "}
+              {new Date(companySignature.signedAt).toLocaleString("en-IN")}
+              {companySignature.ip ? ` from ${companySignature.ip}` : ""}.
+            </p>
+          )}
+          <p>
+            Aadhaar number is masked in this view; the full number is held on the signed record.
+          </p>
+        </div>
       )}
     </article>
   );

@@ -122,6 +122,18 @@ export interface Signature {
   contractSnapshot: string;
 }
 
+/**
+ * Focus Realm's side of the agreement. Countersigning is what verifies the
+ * intern's signature — there is no separate approval step, because a
+ * countersigned agreement is exactly what "verified" means here.
+ */
+export interface CompanySignature {
+  typedName: string;
+  designation: string;
+  signedAt: string;
+  ip: string | null;
+}
+
 export interface Mailbox {
   address: string;
   provisionedAt: string;
@@ -158,6 +170,7 @@ export interface Candidate {
   /** Test id → every attempt, oldest first. */
   tests: Record<string, TestAttempt[]>;
   signature?: Signature;
+  companySignature?: CompanySignature;
   /** Appended each time a founder opens the Aadhaar copy. Newest last. */
   aadhaarAccess?: AadhaarAccess[];
   contractVerifiedAt?: string;
@@ -187,6 +200,7 @@ export interface CandidateView {
   resources: Record<string, string>;
   tests: Record<string, TestAttempt[]>;
   signedAt: string | null;
+  companySignature: CompanySignature | null;
   contractVerifiedAt: string | null;
   contractRejection: { note: string; at: string } | null;
   emailRequestedAt: string | null;

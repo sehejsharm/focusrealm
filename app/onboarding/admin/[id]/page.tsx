@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Check, ExternalLink, FileWarning, Mail, Upload, X } from "lucide-react";
+import { ArrowLeft, Check, Download, ExternalLink, FileWarning, Mail, Upload, X } from "lucide-react";
 import ContractDocument from "@/components/onboarding/ContractDocument";
 import {
   Button,
@@ -316,20 +316,44 @@ export default function AdminCandidatePage() {
                 )}${candidate.signature.ip ? ` from ${candidate.signature.ip}` : ""}.`}
               />
 
-              {candidate.contractVerifiedAt ? (
+              {candidate.companySignature ? (
                 <Notice tone="good">
-                  Verified {formatDateTime(candidate.contractVerifiedAt)}.
+                  Countersigned by {candidate.companySignature.typedName},{" "}
+                  {candidate.companySignature.designation}, on{" "}
+                  {formatDateTime(candidate.companySignature.signedAt)}. Fully executed.
                 </Notice>
               ) : (
-                <VerifyActions
-                  onVerify={() => act({ action: "verify" })}
+                <CountersignActions
+                  alreadyVerified={Boolean(candidate.contractVerifiedAt)}
+                  onCountersign={(typedName, designation) =>
+                    act({ action: "countersign", typedName, designation })
+                  }
                   onReject={(note) => act({ action: "reject", note })}
                 />
+              )}
+
+              {candidate.contract && (
+                <a
+                  href={`/api/onboarding/admin/candidates/${id}/contract/pdf`}
+                  className="mt-5 inline-flex min-h-12 items-center gap-2 rounded-xl px-4 text-sm font-bold"
+                  style={{
+                    backgroundColor: "var(--fr-navy-soft)",
+                    border: "1px solid var(--fr-line)",
+                    color: "var(--fr-paper)",
+                  }}
+                >
+                  <Download className="size-4" aria-hidden />
+                  Download agreement (PDF)
+                </a>
               )}
             </Card>
 
             {candidate.contract && (
-              <ContractDocument contract={candidate.contract} signature={candidate.signature} />
+              <ContractDocument
+                contract={candidate.contract}
+                signature={candidate.signature}
+                companySignature={candidate.companySignature}
+              />
             )}
           </>
         )}
@@ -387,15 +411,19 @@ export default function AdminCandidatePage() {
   );
 }
 
-function VerifyActions({
-  onVerify,
+function CountersignActions({
+  alreadyVerified,
+  onCountersign,
   onReject,
 }: {
-  onVerify: () => void;
+  alreadyVerified: boolean;
+  onCountersign: (typedName: string, designation: string) => void;
   onReject: (note: string) => void;
 }) {
   const [rejecting, setRejecting] = useState(false);
   const [note, setNote] = useState("");
+  const [typedName, setTypedName] = useState("");
+  const [designation, setDesignation] = useState("Authorized Signatory");
 
   if (rejecting) {
     return (
@@ -422,15 +450,55 @@ function VerifyActions({
   }
 
   return (
-    <div className="flex flex-wrap gap-3">
-      <Button onClick={onVerify}>
-        <Check className="size-4" aria-hidden />
-        Verify signature
-      </Button>
-      <Button variant="ghost" onClick={() => setRejecting(true)}>
-        <X className="size-4" aria-hidden />
-        Send back for correction
-      </Button>
+    <div className="space-y-4">
+      {alreadyVerified && (
+        <Notice tone="warn">
+          Verified earlier, before countersigning existed. Sign below to complete the company side —
+          it will not disturb anything the intern has already done.
+        </Notice>
+      )}
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="Signatory's full name" hint="Whoever signs for FocusRealm.">
+          <input
+            value={typedName}
+            onChange={(e) => setTypedName(e.target.value)}
+            placeholder="Sehej Sharma"
+            className={inputClass}
+            style={inputStyle}
+            autoComplete="off"
+          />
+        </Field>
+        <Field label="Designation">
+          <input
+            value={designation}
+            onChange={(e) => setDesignation(e.target.value)}
+            className={inputClass}
+            style={inputStyle}
+          />
+        </Field>
+      </div>
+
+      <p className="text-xs" style={{ color: "var(--fr-muted)" }}>
+        Typing the name is the company&apos;s electronic signature. It is recorded with the time and
+        IP address, and cannot be undone — the agreement becomes fully executed.
+      </p>
+
+      <div className="flex flex-wrap gap-3">
+        <Button
+          disabled={!typedName.trim() || !designation.trim()}
+          onClick={() => onCountersign(typedName.trim(), designation.trim())}
+        >
+          <Check className="size-4" aria-hidden />
+          Countersign for FocusRealm
+        </Button>
+        {!alreadyVerified && (
+          <Button variant="ghost" onClick={() => setRejecting(true)}>
+            <X className="size-4" aria-hidden />
+            Send back for correction
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

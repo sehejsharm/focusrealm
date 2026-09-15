@@ -42,13 +42,19 @@ export async function GET(
         bytes: plan.document.bytes,
       },
       signature: candidate.signature ?? null,
+      companySignature: candidate.companySignature ?? null,
     });
   }
 
   const contract = buildContract(candidate);
   if (!contract) return error("Could not prepare the agreement.", 500);
 
-  return json({ kind: "standard", contract, signature: candidate.signature ?? null });
+  return json({
+    kind: "standard",
+    contract,
+    signature: candidate.signature ?? null,
+    companySignature: candidate.companySignature ?? null,
+  });
 }
 
 export async function POST(

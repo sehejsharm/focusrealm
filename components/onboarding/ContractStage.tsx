@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Clock, ExternalLink, FileSignature, Printer } from "lucide-react";
+import { Clock, Download, ExternalLink, FileSignature } from "lucide-react";
 import type { Contract } from "@/lib/onboarding/contract";
-import type { CandidateView, Signature } from "@/lib/onboarding/types";
+import type { CandidateView, CompanySignature, Signature } from "@/lib/onboarding/types";
 import ContractDocument from "./ContractDocument";
 import { SIGNING_CONSENT } from "@/lib/onboarding/compliance";
 import { Button, Card, Field, Notice, SectionTitle, formatDateTime, inputClass, inputStyle } from "./ui";
@@ -26,6 +26,7 @@ export default function ContractStage({
   );
   const [notReady, setNotReady] = useState(false);
   const [signature, setSignature] = useState<Signature | null>(null);
+  const [companySignature, setCompanySignature] = useState<CompanySignature | null>(null);
   const [typedName, setTypedName] = useState("");
   const [affirmed, setAffirmed] = useState(false);
   const [signingConsent, setSigningConsent] = useState(false);
@@ -49,6 +50,7 @@ export default function ContractStage({
         setContract((data.contract as Contract) ?? null);
         setDocument(data.kind === "bespoke" ? data.document : null);
         setSignature(data.signature as Signature | null);
+        setCompanySignature(data.companySignature as CompanySignature | null);
       })
       .catch(() => {});
 
@@ -130,13 +132,19 @@ export default function ContractStage({
           </div>
         )}
 
-        {isSigned && (
-          <div className="mt-4">
-            <Button variant="ghost" onClick={() => window.print()}>
-              <Printer className="size-4" aria-hidden />
-              Print or save as PDF
-            </Button>
-          </div>
+        {isSigned && contract && (
+          <a
+            href={`/api/onboarding/session/${token}/contract/pdf`}
+            className="mt-4 inline-flex min-h-12 items-center gap-2 rounded-xl px-4 text-sm font-bold"
+            style={{
+              backgroundColor: "var(--fr-navy-soft)",
+              border: "1px solid var(--fr-line)",
+              color: "var(--fr-paper)",
+            }}
+          >
+            <Download className="size-4" aria-hidden />
+            Download agreement (PDF)
+          </a>
         )}
       </Card>
 
@@ -173,7 +181,13 @@ export default function ContractStage({
         </Card>
       )}
 
-      {contract && <ContractDocument contract={contract} signature={signature} />}
+      {contract && (
+        <ContractDocument
+          contract={contract}
+          signature={signature}
+          companySignature={companySignature}
+        />
+      )}
 
       {(contract || document) && !isSigned && (
         <Card>

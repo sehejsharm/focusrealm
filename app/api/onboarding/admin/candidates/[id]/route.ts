@@ -1,4 +1,4 @@
-import { error, isAdmin, json } from "@/lib/onboarding/api.server";
+import { clientIp, error, isAdmin, json } from "@/lib/onboarding/api.server";
 import { getCandidate, updateCandidate } from "@/lib/onboarding/store.server";
 import { buildContract } from "@/lib/onboarding/contract";
 import { currentStage } from "@/lib/onboarding/stage";
@@ -54,15 +54,32 @@ export async function POST(
     note?: string;
     address?: string;
     password?: string;
+    typedName?: string;
+    designation?: string;
   } | null;
 
   switch (body?.action) {
-    case "verify": {
-      if (!candidate.signature) return error("Nothing has been signed yet.", 409);
+    // Focus Realm's side of the agreement. Countersigning is also what marks it
+    // verified — a countersigned agreement is what "verified" means. Records
+    // verified before countersigning existed can still be signed here, which
+    // fills in their company block without disturbing their stage.
+    case "countersign": {
+      if (!candidate.signature) return error("The intern has not signed yet.", 409);
+      if (candidate.companySignature) return error("This is already countersigned.", 409);
+
+      const typedName = body.typedName?.trim();
+      const designation = body.designation?.trim() || "Authorized Signatory";
+      if (!typedName) return error("Type the signatory's full name.");
 
       const updated = await updateCandidate(id, (c) => ({
         ...c,
-        contractVerifiedAt: new Date().toISOString(),
+        companySignature: {
+          typedName,
+          designation,
+          signedAt: new Date().toISOString(),
+          ip: clientIp(request),
+        },
+        contractVerifiedAt: c.contractVerifiedAt ?? new Date().toISOString(),
         contractRejection: undefined,
       }));
       return json({ ok: true, stage: updated ? currentStage(updated) : null });
@@ -72,6 +89,9 @@ export async function POST(
       const note = body.note?.trim();
       if (!note) return error("Say what needs correcting.");
       if (!candidate.signature) return error("Nothing has been signed yet.", 409);
+      if (candidate.companySignature) {
+        return error("This agreement is countersigned and cannot be sent back.", 409);
+      }
 
       const updated = await updateCandidate(id, (c) => ({
         ...c,
