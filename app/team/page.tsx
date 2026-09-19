@@ -7,7 +7,7 @@ import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import Avatar from "@/components/ui/Avatar";
 import PageHero from "@/components/ui/PageHero";
 import { Container, Rule, SectionHeading } from "@/components/ui/Section";
-import { advisors, personas, team } from "@/lib/content";
+import { advisors, team } from "@/lib/content";
 import { allAdvisorsSchema, breadcrumbSchema, jsonLdGraph, personSchema, webPageSchema } from "@/lib/seo";
 import { advisorPhoto } from "@/lib/team-photos";
 import { site, siteUrl } from "@/lib/site";
@@ -205,38 +205,9 @@ export default function TeamPage() {
 
       <Rule />
 
-      {/* Demo personas — the other five names in every Focus Realm conversation */}
       <section className="relative overflow-hidden py-14 sm:py-28">
         <Container>
-          <SectionHeading
-            eyebrow="The other five names"
-            title="And the people we"
-            accent="build for."
-            body="Our demo environment carries five fixed personas. They are fictional, and they are the people whose shift the product is actually designed around."
-          />
-
-          {/* auto-rows-fr + h-full: the first row wraps to two lines and the
-              second does not, so without this the rows size independently and
-              the cards end up 104px against 86px. */}
-          <div className="mt-12 grid auto-rows-fr gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {personas.map((persona, index) => (
-              <Reveal key={persona.name} delay={index * 70} className="h-full">
-                <div className="panel flex h-full items-center gap-4 p-5">
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand/18 font-mono text-[0.75rem] text-brand-ice">
-                    {persona.initials}
-                  </span>
-                  <div>
-                    <p className="text-[0.92rem] font-medium text-white">{persona.name}</p>
-                    <p className="mt-0.5 text-[0.78rem] text-faint">
-                      {persona.role} · {persona.role_interface} interface
-                    </p>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal delay={200} className="mt-14">
+          <Reveal>
             <div className="panel flex flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center">
               <div>
                 <p className="text-[1.2rem] font-semibold text-white">Talk to the founding team directly.</p>
