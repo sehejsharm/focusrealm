@@ -15,6 +15,13 @@ type RevealProps = {
   style?: CSSProperties;
   id?: string;
   /**
+   * Forwarded to the rendered element. Without this the attribute is accepted
+   * by the caller and silently dropped, so a decorative block wrapped in a
+   * Reveal stays in the accessibility tree — the footer wordmark was being
+   * read out in full.
+   */
+  "aria-hidden"?: boolean;
+  /**
    * For content in the initial viewport. Renders opaque from the first paint
    * and animates transform only, instead of waiting for the observer — which
    * cannot fire until hydration and so delays Largest Contentful Paint.
@@ -32,6 +39,7 @@ export default function Reveal({
   style,
   id,
   immediate = false,
+  "aria-hidden": ariaHidden,
 }: RevealProps) {
   const { ref, inView } = useInView<HTMLDivElement>({ threshold });
 
@@ -39,6 +47,7 @@ export default function Reveal({
     <Tag
       id={id}
       ref={ref}
+      aria-hidden={ariaHidden}
       data-reveal={variant}
       data-immediate={immediate ? "true" : undefined}
       data-show={immediate || inView ? "true" : "false"}
