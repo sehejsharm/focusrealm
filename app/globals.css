@@ -75,6 +75,30 @@ a,
   touch-action: manipulation;
 }
 
+/*
+ * Tailwind v4's reset returns buttons to cursor: default, so nothing that acts
+ * on click signalled it on hover. :where() keeps specificity at zero, so a
+ * utility such as cursor-not-allowed on a single element still wins.
+ */
+:where(
+    button,
+    [role="button"],
+    summary,
+    select,
+    label:has(> input[type="checkbox"], > input[type="radio"]),
+    input[type="checkbox"],
+    input[type="radio"],
+    input[type="file"],
+    input[type="submit"],
+    input[type="button"]
+  ):not(:disabled, [aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+:where(button, input, select, [role="button"]):is(:disabled, [aria-disabled="true"]) {
+  cursor: not-allowed;
+}
+
 /* A single, consistent focus treatment for the whole console. */
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--color-gold-500);
