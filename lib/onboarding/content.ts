@@ -4,11 +4,15 @@
  * change lives here rather than being scattered through components.
  */
 
+import type { Company } from "./types";
+
 export type ResourceKind = "handbook" | "video";
 
 export interface Resource {
   id: string;
   kind: ResourceKind;
+  /** The company this material belongs to. */
+  company: Company;
   title: string;
   subtitle: string;
   /** What the candidate should take away — shown under the title. */
@@ -31,6 +35,7 @@ export const VIDEO_FOLDER_URL =
 export const RESOURCES: Resource[] = [
   {
     id: "handbook-focus-realm",
+    company: "focus-realm",
     kind: "handbook",
     title: "Intern Onboarding & Company Handbook",
     subtitle: "Focus Realm",
@@ -41,6 +46,7 @@ export const RESOURCES: Resource[] = [
   },
   {
     id: "handbook-recharga",
+    company: "recharga",
     kind: "handbook",
     title: "Complete Company & Product Onboarding Guide",
     subtitle: "Recharga Chargine",
@@ -51,6 +57,7 @@ export const RESOURCES: Resource[] = [
   },
   {
     id: "video-focus-realm",
+    company: "focus-realm",
     kind: "video",
     title: "Focus Realm — company walkthrough",
     subtitle: "Video briefing",
@@ -62,6 +69,7 @@ export const RESOURCES: Resource[] = [
   },
   {
     id: "video-recharga",
+    company: "recharga",
     kind: "video",
     title: "Recharga Chargine — product walkthrough",
     subtitle: "Video briefing",
@@ -72,6 +80,38 @@ export const RESOURCES: Resource[] = [
     linkPending: true,
   },
 ];
+
+export interface CompanyDefinition {
+  id: Company;
+  label: string;
+  /** The assessment covering this company's handbook. */
+  testId: string;
+}
+
+export const COMPANIES: CompanyDefinition[] = [
+  { id: "focus-realm", label: "Focus Realm", testId: "test-focus-realm" },
+  { id: "recharga", label: "Recharga Chargine", testId: "test-recharga" },
+];
+
+export const ALL_COMPANIES: Company[] = COMPANIES.map((c) => c.id);
+
+export function isCompany(value: unknown): value is Company {
+  return ALL_COMPANIES.includes(value as Company);
+}
+
+export function companyLabel(id: Company): string {
+  return COMPANIES.find((c) => c.id === id)?.label ?? id;
+}
+
+/** The handbooks and videos for the chosen companies, in canonical order. */
+export function resourcesFor(companies: Company[]): Resource[] {
+  return RESOURCES.filter((r) => companies.includes(r.company));
+}
+
+/** The assessments for the chosen companies, in canonical order. */
+export function testIdsFor(companies: Company[]): string[] {
+  return COMPANIES.filter((c) => companies.includes(c.id)).map((c) => c.testId);
+}
 
 export function getResource(id: string): Resource | undefined {
   return RESOURCES.find((r) => r.id === id);
@@ -108,3 +148,8 @@ export const OUTLOOK_STEPS = [
   "The username is the full email address — not just the part before the @. Enter the temporary password from this page.",
   "Finish, then send yourself a test message to confirm both directions work. Change your password in webmail once you are in.",
 ];
+
+/** "both assessments are passed" / "your assessment is passed" — copy that counts. */
+export function assessmentsPassedPhrase(count: number): string {
+  return count === 1 ? "your assessment is passed" : "both assessments are passed";
+}

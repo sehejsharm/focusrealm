@@ -1,7 +1,7 @@
 import { clientIp, error, isAdmin, json } from "@/lib/onboarding/api.server";
 import { getCandidate, updateCandidate } from "@/lib/onboarding/store.server";
 import { buildContract } from "@/lib/onboarding/contract";
-import { currentStage } from "@/lib/onboarding/stage";
+import { companiesOf, currentStage } from "@/lib/onboarding/stage";
 import { formatAadhaar } from "@/lib/onboarding/contract";
 import { generatePassword, seal } from "@/lib/onboarding/security.server";
 
@@ -21,6 +21,7 @@ export async function GET(
   return json({
     ...rest,
     stage: currentStage(candidate),
+    companies: companiesOf(candidate),
     aadhaarFormatted: candidate.details ? formatAadhaar(candidate.details.aadhaarNumber) : null,
     contract: buildContract(candidate),
     // The sealed password is never returned — it is the candidate's to view.

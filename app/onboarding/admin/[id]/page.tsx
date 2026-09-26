@@ -25,9 +25,13 @@ import {
   type Candidate,
   type Stage,
 } from "@/lib/onboarding/types";
+import type { Company } from "@/lib/onboarding/types";
+import { COMPANIES, companyLabel } from "@/lib/onboarding/content";
 
-interface AdminCandidate extends Omit<Candidate, "mailbox"> {
+interface AdminCandidate extends Omit<Candidate, "mailbox" | "companies"> {
   stage: Stage;
+  /** Resolved by the API — records predating the choice come back as both. */
+  companies: Company[];
   aadhaarFormatted: string | null;
   contract: Contract | null;
   mailbox: {
@@ -285,24 +289,26 @@ export default function AdminCandidatePage() {
         )}
 
         <Card>
-          <SectionTitle title="Assessments" lead="Pass mark is 75% on each, judged separately." />
+          <SectionTitle
+            title="Onboarding into"
+            lead={`${candidate.companies.map(companyLabel).join(" and ")}. Each company's handbook, video and assessment is required; the pass mark is 75% on each assessment, judged separately.`}
+          />
           <ul className="space-y-2">
-            {Object.entries(candidate.tests).map(([testId, attempts]) => {
-              const best = Math.max(...attempts.map((a) => a.score));
+            {COMPANIES.filter((c) => candidate.companies.includes(c.id)).map((company) => {
+              const attempts = candidate.tests[company.testId] ?? [];
+              const best = attempts.length ? Math.max(...attempts.map((a) => a.score)) : null;
               const passed = attempts.some((a) => a.passed);
               return (
-                <li key={testId} className="flex flex-wrap items-center justify-between gap-3 text-sm">
-                  <span className="font-bold">{testId}</span>
+                <li key={company.id} className="flex flex-wrap items-center justify-between gap-3 text-sm">
+                  <span className="font-bold">{company.label} assessment</span>
                   <span style={{ color: passed ? "var(--fr-gold-soft)" : "var(--fr-muted)" }}>
-                    {attempts.length} attempt{attempts.length === 1 ? "" : "s"} · best {best}% ·{" "}
-                    {passed ? "passed" : "not passed"}
+                    {attempts.length === 0
+                      ? "not attempted yet"
+                      : `${attempts.length} attempt${attempts.length === 1 ? "" : "s"} · best ${best}% · ${passed ? "passed" : "not passed"}`}
                   </span>
                 </li>
               );
             })}
-            {Object.keys(candidate.tests).length === 0 && (
-              <li style={{ color: "var(--fr-muted)" }}>No attempts yet.</li>
-            )}
           </ul>
         </Card>
 

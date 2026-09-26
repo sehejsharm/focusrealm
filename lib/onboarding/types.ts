@@ -13,6 +13,12 @@
  */
 export type InternTrack = string;
 
+/**
+ * The companies an intern can be onboarded into. Each has its own handbook,
+ * video briefing and assessment; the founders choose one or both at invite.
+ */
+export type Company = "focus-realm" | "recharga";
+
 export interface TrackDefinition {
   id: InternTrack;
   /**
@@ -157,6 +163,12 @@ export interface Candidate {
   termMonths: number;
   /** Which agreement this candidate signs, and whether it is ready to sign. */
   agreement: AgreementPlan;
+  /**
+   * Which companies' material this candidate works through. Absent on records
+   * created before the choice existed — those are treated as both, which is
+   * what they were onboarded under.
+   */
+  companies?: Company[];
   /** What we knew at invite time, before the candidate submits anything. */
   invitedName: string;
   invitedEmail: string;
@@ -186,6 +198,8 @@ export interface CandidateView {
   endDate: string;
   /** "standard" or "bespoke" — the candidate sees which document they sign. */
   agreementKind: AgreementPlan["kind"];
+  /** Resolved — never empty. Drives which handbooks, videos and tests appear. */
+  companies: Company[];
   agreementDocumentName: string | null;
   /** Resolved role — the candidate never needs to know about track ids. */
   role: TrackDefinition;

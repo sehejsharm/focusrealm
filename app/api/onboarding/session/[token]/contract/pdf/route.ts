@@ -1,7 +1,8 @@
 import { error } from "@/lib/onboarding/api.server";
 import { getCandidateByToken } from "@/lib/onboarding/store.server";
 import { buildContract } from "@/lib/onboarding/contract";
-import { currentStage } from "@/lib/onboarding/stage";
+import { currentStage, requiredTestIds } from "@/lib/onboarding/stage";
+import { assessmentsPassedPhrase } from "@/lib/onboarding/content";
 import { contractFilename, renderContractPdf } from "@/lib/onboarding/pdf.server";
 
 /** The candidate's own copy, to keep or forward. */
@@ -16,7 +17,7 @@ export async function GET(
 
   const stage = currentStage(candidate);
   if (stage === "details" || stage === "learning" || stage === "tests") {
-    return error("Your agreement is prepared once both assessments are passed.", 409);
+    return error(`Your agreement is prepared once ${assessmentsPassedPhrase(requiredTestIds(candidate).length)}.`, 409);
   }
 
   // Bespoke roles sign an uploaded document, not the generated template —

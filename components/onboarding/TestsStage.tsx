@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Check, RotateCcw } from "lucide-react";
 import type { ClientTest } from "@/lib/onboarding/tests.server";
 import type { CandidateView, TestAttempt } from "@/lib/onboarding/types";
-import { TEST_IDS } from "@/lib/onboarding/stage";
+import { assessmentsPassedPhrase, testIdsFor } from "@/lib/onboarding/content";
 import { Button, Card, Notice, SectionTitle, formatDateTime } from "./ui";
 
 const TEST_META: Record<string, { title: string; subtitle: string }> = {
@@ -28,8 +28,9 @@ interface SubmitResult {
 }
 
 /**
- * Step three: both assessments, each passed on its own at 75%. Answers are
- * scored on the server, so the key never reaches the browser.
+ * Step three: one assessment per company the candidate is onboarding into,
+ * each passed on its own at 75%. Answers are scored on the server, so the key
+ * never reaches the browser.
  */
 export default function TestsStage({
   token,
@@ -63,28 +64,36 @@ export default function TestsStage({
     );
   }
 
-  const passedCount = TEST_IDS.filter((id) =>
+  const testIds = testIdsFor(candidate.companies);
+  const single = testIds.length === 1;
+  const passedCount = testIds.filter((id) =>
     (candidate.tests[id] ?? []).some((a) => a.passed),
   ).length;
 
   return (
     <Card>
       <SectionTitle
-        eyebrow={`Step 3 of 6 · ${passedCount} of ${TEST_IDS.length} passed`}
-        title="Assessments"
-        lead={`Twelve questions each, drawn from the handbooks. You need ${PASS_MARK}% on each one separately — nine of twelve. Retakes are unlimited, and a failed attempt tells you which sections to reread.`}
+        eyebrow={`Step 3 of 6 · ${passedCount} of ${testIds.length} passed`}
+        title={single ? "Assessment" : "Assessments"}
+        lead={
+          single
+            ? `Twelve questions, drawn from the handbook. You need ${PASS_MARK}% — nine of twelve. Retakes are unlimited, and a failed attempt tells you which sections to reread.`
+            : `Twelve questions each, drawn from the handbooks. You need ${PASS_MARK}% on each one separately — nine of twelve. Retakes are unlimited, and a failed attempt tells you which sections to reread.`
+        }
       />
 
       {locked && (
         <div className="mb-5">
           <Notice tone="warn">
-            Mark both handbooks and both videos as done first — the assessments open straight after.
+            {single
+              ? "Mark your handbook and video as done first — the assessment opens straight after."
+              : "Mark both handbooks and both videos as done first — the assessments open straight after."}
           </Notice>
         </div>
       )}
 
       <ul className="space-y-3">
-        {TEST_IDS.map((testId) => {
+        {testIds.map((testId) => {
           const attempts = candidate.tests[testId] ?? [];
           const best = attempts.length ? Math.max(...attempts.map((a) => a.score)) : null;
           const passed = attempts.some((a) => a.passed);
@@ -196,7 +205,7 @@ function TestRunner({
           title={`${attempt.score}% — ${attempt.correct} of ${attempt.total} correct`}
           lead={
             attempt.passed
-              ? "That clears the bar. Your internship agreement is prepared once both assessments are passed."
+              ? `That clears the bar. Your internship agreement is prepared once ${assessmentsPassedPhrase(result.candidate.companies.length)}.`
               : `You need ${result.passMark}% to pass. Reread the sections below and take it again — there is no limit on attempts.`
           }
         />

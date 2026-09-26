@@ -1,9 +1,8 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { error, json } from "@/lib/onboarding/api.server";
-import { getResource } from "@/lib/onboarding/content";
 import { getCandidateByToken, updateCandidate } from "@/lib/onboarding/store.server";
-import { toCandidateView } from "@/lib/onboarding/stage";
+import { requiredResources, toCandidateView } from "@/lib/onboarding/stage";
 
 /**
  * Handbooks are internal documents, so they stream through this token-gated
@@ -18,7 +17,9 @@ export async function GET(
   const candidate = await getCandidateByToken(token);
   if (!candidate) return error("This onboarding link is not valid.", 404);
 
-  const resource = getResource(resourceId);
+  // Another company's handbook is confidential to that company's interns —
+  // it does not exist as far as this candidate is concerned.
+  const resource = requiredResources(candidate).find((r) => r.id === resourceId);
   if (!resource?.file) return error("Not found.", 404);
 
   try {
@@ -44,7 +45,9 @@ export async function POST(
 
   const candidate = await getCandidateByToken(token);
   if (!candidate) return error("This onboarding link is not valid.", 404);
-  if (!getResource(resourceId)) return error("Not found.", 404);
+  if (!requiredResources(candidate).some((r) => r.id === resourceId)) {
+    return error("Not found.", 404);
+  }
 
   const updated = await updateCandidate(candidate.id, (c) => ({
     ...c,

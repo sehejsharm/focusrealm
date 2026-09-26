@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { BookOpen, Check, ExternalLink, PlayCircle } from "lucide-react";
-import { RESOURCES } from "@/lib/onboarding/content";
+import { resourcesFor } from "@/lib/onboarding/content";
 import type { CandidateView } from "@/lib/onboarding/types";
 import { Button, Card, Notice, SectionTitle } from "./ui";
 
 /**
- * Step two: both handbooks and both video briefings. Handbooks open through a
- * token-gated route — they are internal documents, not public files.
+ * Step two: the handbook and video briefing for each company the candidate is
+ * onboarding into. Handbooks open through a token-gated route — they are
+ * internal documents, not public files.
  */
 export default function LearningStage({
   token,
@@ -22,7 +23,9 @@ export default function LearningStage({
   locked: boolean;
 }) {
   const [busy, setBusy] = useState<string | null>(null);
-  const done = RESOURCES.filter((r) => candidate.resources[r.id]).length;
+  const resources = resourcesFor(candidate.companies);
+  const single = candidate.companies.length === 1;
+  const done = resources.filter((r) => candidate.resources[r.id]).length;
 
   async function markDone(resourceId: string) {
     setBusy(resourceId);
@@ -36,9 +39,13 @@ export default function LearningStage({
   return (
     <Card>
       <SectionTitle
-        eyebrow={`Step 2 of 6 · ${done} of ${RESOURCES.length} done`}
-        title="Handbooks and videos"
-        lead="Read both handbooks end to end and watch both briefings. The assessments come straight out of them, and they unlock once all four are marked done."
+        eyebrow={`Step 2 of 6 · ${done} of ${resources.length} done`}
+        title={single ? "Handbook and video" : "Handbooks and videos"}
+        lead={
+          single
+            ? "Read the handbook end to end and watch the briefing. The assessment comes straight out of them, and it unlocks once both are marked done."
+            : "Read both handbooks end to end and watch both briefings. The assessments come straight out of them, and they unlock once all four are marked done."
+        }
       />
 
       {locked && (
@@ -48,7 +55,7 @@ export default function LearningStage({
       )}
 
       <ul className="space-y-3">
-        {RESOURCES.map((resource) => {
+        {resources.map((resource) => {
           const completedAt = candidate.resources[resource.id];
           const isHandbook = resource.kind === "handbook";
           const href = isHandbook

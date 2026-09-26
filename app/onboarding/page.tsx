@@ -8,8 +8,8 @@ import { Button, Card, Notice, SectionTitle, Wordmark, inputClass, inputStyle } 
 
 const STEPS = [
   "Submit your details and a copy of your Aadhaar card",
-  "Read both handbooks and watch both video briefings",
-  "Pass both assessments — 75% on each",
+  "Read your company handbooks and watch the video briefings",
+  "Pass the assessments — 75% on each",
   "Review and sign your internship agreement",
   "We verify the signed agreement",
   "Request your Focus Realm email and set it up",

@@ -1,8 +1,7 @@
 import { error, json } from "@/lib/onboarding/api.server";
 import { getCandidateByToken, updateCandidate } from "@/lib/onboarding/store.server";
 import { getTest, scoreTest, toClientTest } from "@/lib/onboarding/tests.server";
-import { resourcesDone, toCandidateView } from "@/lib/onboarding/stage";
-import { RESOURCES } from "@/lib/onboarding/content";
+import { learningComplete, requiredTestIds, toCandidateView } from "@/lib/onboarding/stage";
 import type { TestAttempt } from "@/lib/onboarding/types";
 
 /** Serves the questions without the answer key. */
@@ -15,7 +14,8 @@ export async function GET(
   const candidate = await getCandidateByToken(token);
   if (!candidate) return error("This onboarding link is not valid.", 404);
 
-  const test = getTest(testId);
+  // A test outside the candidate's chosen companies is treated as not existing.
+  const test = requiredTestIds(candidate).includes(testId) ? getTest(testId) : undefined;
   if (!test) return error("Not found.", 404);
 
   return json(toClientTest(test));
@@ -30,12 +30,12 @@ export async function POST(
 
   const candidate = await getCandidateByToken(token);
   if (!candidate) return error("This onboarding link is not valid.", 404);
-  if (resourcesDone(candidate) < RESOURCES.length) {
-    return error("Work through both handbooks and both videos first.", 409);
-  }
-
-  const test = getTest(testId);
+  const test = requiredTestIds(candidate).includes(testId) ? getTest(testId) : undefined;
   if (!test) return error("Not found.", 404);
+
+  if (!learningComplete(candidate)) {
+    return error("Work through your handbooks and videos first.", 409);
+  }
 
   const body = (await request.json().catch(() => null)) as { answers?: Record<string, string> } | null;
   const answers = body?.answers;

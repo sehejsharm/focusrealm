@@ -6,6 +6,7 @@ import type { Contract } from "@/lib/onboarding/contract";
 import type { CandidateView, CompanySignature, Signature } from "@/lib/onboarding/types";
 import ContractDocument from "./ContractDocument";
 import { SIGNING_CONSENT } from "@/lib/onboarding/compliance";
+import { assessmentsPassedPhrase } from "@/lib/onboarding/content";
 import { Button, Card, Field, Notice, SectionTitle, formatDateTime, inputClass, inputStyle } from "./ui";
 
 /** Steps four and five: review and sign, then wait for the founders to verify. */
@@ -65,9 +66,9 @@ export default function ContractStage({
         <SectionTitle
           eyebrow="Step 4 of 6"
           title="Internship agreement"
-          lead="Your agreement is drawn up automatically from the details you submitted, and opens as soon as both assessments are passed."
+          lead={`Your agreement is drawn up automatically from the details you submitted, and opens as soon as ${assessmentsPassedPhrase(candidate.companies.length)}.`}
         />
-        <Notice tone="warn">Pass both assessments to unlock your agreement.</Notice>
+        <Notice tone="warn">Your agreement unlocks once {assessmentsPassedPhrase(candidate.companies.length)}.</Notice>
       </Card>
     );
   }

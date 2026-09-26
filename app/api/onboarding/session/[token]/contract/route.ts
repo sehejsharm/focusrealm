@@ -1,7 +1,8 @@
 import { clientIp, error, json } from "@/lib/onboarding/api.server";
 import { getCandidateByToken, updateCandidate } from "@/lib/onboarding/store.server";
 import { buildContract, contractToText } from "@/lib/onboarding/contract";
-import { agreementReady, currentStage, toCandidateView } from "@/lib/onboarding/stage";
+import { agreementReady, currentStage, requiredTestIds, toCandidateView } from "@/lib/onboarding/stage";
+import { assessmentsPassedPhrase } from "@/lib/onboarding/content";
 import type { Signature } from "@/lib/onboarding/types";
 
 /** The agreement, generated from the candidate's own submitted details. */
@@ -16,7 +17,7 @@ export async function GET(
 
   const stage = currentStage(candidate);
   if (stage === "details" || stage === "learning" || stage === "tests") {
-    return error("Your agreement is prepared once both assessments are passed.", 409);
+    return error(`Your agreement is prepared once ${assessmentsPassedPhrase(requiredTestIds(candidate).length)}.`, 409);
   }
 
   if (!agreementReady(candidate)) {
@@ -67,7 +68,7 @@ export async function POST(
   if (!candidate) return error("This onboarding link is not valid.", 404);
   if (candidate.signature) return error("This agreement is already signed.", 409);
   if (currentStage(candidate) !== "contract") {
-    return error("Pass both assessments before signing.", 409);
+    return error(`Your agreement can be signed once ${assessmentsPassedPhrase(requiredTestIds(candidate).length)}.`, 409);
   }
   if (!agreementReady(candidate)) {
     return error("The agreement for your role is not ready to sign yet.", 409);

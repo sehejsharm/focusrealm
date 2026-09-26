@@ -1,9 +1,26 @@
-import { RESOURCES } from "./content";
-import type { Candidate, CandidateView, Stage } from "./types";
+import { ALL_COMPANIES, isCompany, resourcesFor, testIdsFor } from "./content";
+import type { Candidate, CandidateView, Company, Stage } from "./types";
 import { DEFAULT_TERM_MONTHS, STAGE_ORDER, trackOf } from "./types";
 
-/** Test ids, duplicated from tests.server so client code can count passes. */
-export const TEST_IDS = ["test-focus-realm", "test-recharga"] as const;
+/**
+ * The companies this candidate is onboarding into. A record with no choice on
+ * it predates the choice existing, and was onboarded under both — so that is
+ * what it resolves to, and nobody mid-flow has their requirements changed.
+ */
+export function companiesOf(candidate: Pick<Candidate, "companies">): Company[] {
+  const chosen = (candidate.companies ?? []).filter(isCompany);
+  return chosen.length > 0 ? ALL_COMPANIES.filter((c) => chosen.includes(c)) : ALL_COMPANIES;
+}
+
+/** The handbooks and videos this candidate is required to work through. */
+export function requiredResources(candidate: Candidate) {
+  return resourcesFor(companiesOf(candidate));
+}
+
+/** The assessments this candidate is required to pass. */
+export function requiredTestIds(candidate: Candidate): string[] {
+  return testIdsFor(companiesOf(candidate));
+}
 
 export function hasPassed(candidate: Candidate, testId: string): boolean {
   return (candidate.tests[testId] ?? []).some((a) => a.passed);
@@ -14,8 +31,13 @@ export function bestScore(candidate: Candidate, testId: string): number | null {
   return attempts.length ? Math.max(...attempts.map((a) => a.score)) : null;
 }
 
+/** How many of this candidate's own required resources are marked done. */
 export function resourcesDone(candidate: Candidate): number {
-  return RESOURCES.filter((r) => candidate.resources[r.id]).length;
+  return requiredResources(candidate).filter((r) => candidate.resources[r.id]).length;
+}
+
+export function learningComplete(candidate: Candidate): boolean {
+  return requiredResources(candidate).every((r) => candidate.resources[r.id]);
 }
 
 /** When the engagement ends — start date plus the agreed term. */
@@ -40,8 +62,8 @@ export function agreementReady(candidate: Candidate): boolean {
  */
 export function currentStage(candidate: Candidate): Stage {
   if (!candidate.details) return "details";
-  if (resourcesDone(candidate) < RESOURCES.length) return "learning";
-  if (!TEST_IDS.every((id) => hasPassed(candidate, id))) return "tests";
+  if (!learningComplete(candidate)) return "learning";
+  if (!requiredTestIds(candidate).every((id) => hasPassed(candidate, id))) return "tests";
   if (!candidate.signature) return "contract";
   if (!candidate.contractVerifiedAt) return "verification";
   if (!candidate.mailbox) return "email";
@@ -67,6 +89,7 @@ export function toCandidateView(candidate: Candidate): CandidateView {
     termMonths,
     endDate: endDateOf(candidate),
     agreementKind: candidate.agreement?.kind ?? "standard",
+    companies: companiesOf(candidate),
     agreementDocumentName:
       candidate.agreement?.kind === "bespoke"
         ? (candidate.agreement.document?.originalName ?? null)

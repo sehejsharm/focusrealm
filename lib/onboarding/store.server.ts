@@ -1,6 +1,6 @@
 import { randomBytes } from "node:crypto";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import type { AgreementPlan, Candidate, TrackDefinition } from "./types";
+import type { AgreementPlan, Candidate, Company, TrackDefinition } from "./types";
 import { DEFAULT_TERM_MONTHS } from "./types";
 import { createId, createToken } from "./security.server";
 
@@ -97,6 +97,7 @@ export async function createCandidate(input: {
   startDate: string;
   termMonths?: number;
   agreement?: AgreementPlan;
+  companies: Company[];
 }): Promise<Candidate> {
   const candidate: Candidate = {
     id: createId(),
@@ -108,6 +109,7 @@ export async function createCandidate(input: {
     startDate: input.startDate,
     termMonths: input.termMonths ?? DEFAULT_TERM_MONTHS,
     agreement: input.agreement ?? { kind: "standard" },
+    companies: input.companies,
     createdAt: new Date().toISOString(),
     resources: {},
     tests: {},

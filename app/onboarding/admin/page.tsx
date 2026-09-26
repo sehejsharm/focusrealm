@@ -25,6 +25,8 @@ import {
   type Stage,
   type TrackDefinition,
 } from "@/lib/onboarding/types";
+import type { Company } from "@/lib/onboarding/types";
+import { ALL_COMPANIES, COMPANIES, companyLabel } from "@/lib/onboarding/content";
 
 interface Row {
   id: string;
@@ -38,6 +40,7 @@ interface Row {
   termMonths: number;
   agreementKind: AgreementPlan["kind"];
   agreementReady: boolean;
+  companies: Company[];
   stage: Stage;
   fullName: string | null;
   signedAt: string | null;
@@ -171,6 +174,7 @@ export default function AdminConsole() {
                 >
                   <Th>Candidate</Th>
                   <Th>Role</Th>
+                  <Th>Onboarding</Th>
                   <Th>Term</Th>
                   <Th>Starts</Th>
                   <Th>Ends</Th>
@@ -197,6 +201,7 @@ export default function AdminConsole() {
                         </span>
                       </Td>
                       <Td>{row.role.label}</Td>
+                      <Td>{row.companies.map(companyLabel).join(" + ")}</Td>
                       <Td>
                         <span className="tabular-nums">{row.termMonths} mo</span>
                       </Td>
@@ -380,6 +385,7 @@ function NewCandidate({ onCreated }: { onCreated: () => void }) {
   const [track, setTrack] = useState("founders-office");
   const [agreementKind, setAgreementKind] =
     useState<AgreementPlan["kind"]>("standard");
+  const [companies, setCompanies] = useState<Company[]>(ALL_COMPANIES);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [created, setCreated] = useState<{ id: string; link: string } | null>(null);
@@ -405,6 +411,7 @@ function NewCandidate({ onCreated }: { onCreated: () => void }) {
         startDate: form.get("startDate"),
         termMonths: Number(form.get("termMonths")),
         agreementKind: hasAgreementOnFile ? "standard" : agreementKind,
+        companies,
         customRole:
           track === "custom"
             ? {
@@ -518,6 +525,51 @@ function NewCandidate({ onCreated }: { onCreated: () => void }) {
             />
           </Field>
         </div>
+
+        <fieldset
+          className="space-y-3 rounded-xl border p-4"
+          style={{ borderColor: "var(--fr-line)", backgroundColor: "var(--fr-navy-deep)" }}
+        >
+          <legend className="px-1 text-sm font-bold">Onboard into</legend>
+          <p className="text-xs leading-relaxed" style={{ color: "var(--fr-muted)" }}>
+            Each company adds its own handbook, video briefing and assessment. The candidate only
+            sees — and can only open — the material for the companies ticked here.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            {COMPANIES.map((company) => {
+              const checked = companies.includes(company.id);
+              return (
+                <label
+                  key={company.id}
+                  className="flex min-h-12 items-center gap-3 rounded-xl border px-4"
+                  style={{
+                    borderColor: checked ? "var(--fr-gold)" : "var(--fr-line)",
+                    backgroundColor: checked ? "rgba(201,162,39,0.10)" : "transparent",
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={(event) =>
+                      setCompanies((prev) =>
+                        event.target.checked
+                          ? ALL_COMPANIES.filter((c) => c === company.id || prev.includes(c))
+                          : prev.filter((c) => c !== company.id),
+                      )
+                    }
+                    className="size-4 shrink-0 accent-[var(--fr-gold)]"
+                  />
+                  <span className="text-sm font-bold">{company.label}</span>
+                </label>
+              );
+            })}
+          </div>
+          {companies.length === 0 && (
+            <p className="text-xs font-bold" style={{ color: "#f2b8b8" }}>
+              Tick at least one company.
+            </p>
+          )}
+        </fieldset>
 
         {track === "custom" && (
           <div
@@ -639,7 +691,7 @@ function NewCandidate({ onCreated }: { onCreated: () => void }) {
 
         {message && <Notice tone="bad">{message}</Notice>}
 
-        <Button type="submit" disabled={busy}>
+        <Button type="submit" disabled={busy || companies.length === 0}>
           {busy ? "Creating…" : "Create and generate link"}
         </Button>
       </form>

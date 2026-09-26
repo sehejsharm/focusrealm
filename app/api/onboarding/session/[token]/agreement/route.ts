@@ -1,6 +1,7 @@
 import { error } from "@/lib/onboarding/api.server";
 import { getCandidateByToken, readUpload } from "@/lib/onboarding/store.server";
-import { currentStage } from "@/lib/onboarding/stage";
+import { currentStage, requiredTestIds } from "@/lib/onboarding/stage";
+import { assessmentsPassedPhrase } from "@/lib/onboarding/content";
 
 /**
  * The uploaded agreement, for a candidate whose role does not use the standard
@@ -17,7 +18,7 @@ export async function GET(
 
   const stage = currentStage(candidate);
   if (stage === "details" || stage === "learning" || stage === "tests") {
-    return error("Your agreement opens once both assessments are passed.", 409);
+    return error(`Your agreement opens once ${assessmentsPassedPhrase(requiredTestIds(candidate).length)}.`, 409);
   }
 
   const plan = candidate.agreement;

@@ -89,7 +89,7 @@ export default function CandidatePortal() {
               <div>
                 <h2 className="text-lg font-bold">You are fully onboarded.</h2>
                 <p className="mt-1.5 text-sm leading-relaxed" style={{ color: "var(--fr-muted)" }}>
-                  Agreement signed and verified, both assessments passed, mailbox live. Everything
+                  Agreement signed and verified, every assessment passed, mailbox live. Everything
                   below stays here for your reference.
                 </p>
               </div>

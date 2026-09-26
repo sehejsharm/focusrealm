@@ -1,6 +1,7 @@
 import { error, isAdmin, json } from "@/lib/onboarding/api.server";
 import { createCandidate, listCandidates } from "@/lib/onboarding/store.server";
-import { agreementReady, currentStage, endDateOf } from "@/lib/onboarding/stage";
+import { agreementReady, companiesOf, currentStage, endDateOf } from "@/lib/onboarding/stage";
+import { ALL_COMPANIES, isCompany } from "@/lib/onboarding/content";
 import { maskAadhaar } from "@/lib/onboarding/security.server";
 import {
   BUILT_IN_TRACKS,
@@ -30,6 +31,7 @@ export async function GET() {
       endDate: endDateOf(c),
       termMonths: c.termMonths ?? DEFAULT_TERM_MONTHS,
       agreementKind: c.agreement?.kind ?? "standard",
+      companies: companiesOf(c),
       agreementReady: agreementReady(c),
       createdAt: c.createdAt,
       stage: currentStage(c),
@@ -57,6 +59,8 @@ export async function POST(request: Request) {
     termMonths?: number;
     /** "standard" issues the template; "bespoke" waits for an uploaded document. */
     agreementKind?: AgreementPlan["kind"];
+    /** Which companies' handbooks, videos and tests this candidate gets. */
+    companies?: unknown;
   } | null;
 
   const invitedName = body?.invitedName?.trim();
@@ -115,6 +119,13 @@ export async function POST(request: Request) {
     return error("Unknown agreement choice.");
   }
 
+  const requested = Array.isArray(body?.companies) ? body.companies : ALL_COMPANIES;
+  if (!requested.every(isCompany)) return error("Unknown company.");
+  const companies = ALL_COMPANIES.filter((c) => requested.includes(c));
+  if (companies.length === 0) {
+    return error("Choose at least one company for the candidate to onboard into.");
+  }
+
   const candidate = await createCandidate({
     invitedName,
     invitedEmail,
@@ -123,6 +134,7 @@ export async function POST(request: Request) {
     startDate: new Date(startDate).toISOString(),
     termMonths,
     agreement: { kind: agreementKind },
+    companies,
   });
 
   return json({ id: candidate.id, token: candidate.token }, 201);
