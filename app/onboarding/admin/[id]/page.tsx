@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Check, Download, ExternalLink, FileWarning, Mail, Upload, X } from "lucide-react";
+import { ArrowLeft, Check, Download, ExternalLink, FileWarning, Mail, RotateCcw, Upload, UserMinus, X } from "lucide-react";
 import ContractDocument from "@/components/onboarding/ContractDocument";
 import {
   Button,
@@ -40,6 +40,7 @@ interface AdminCandidate extends Omit<Candidate, "mailbox" | "companies"> {
     viewedAt: string | null;
     collected: boolean;
   } | null;
+  retention: { kind: "keep" | "erase"; until: string } | null;
 }
 
 /** One candidate: their documents, and the decisions only a founder can make. */
@@ -89,6 +90,8 @@ export default function AdminCandidatePage() {
   }
 
   const { details } = candidate;
+  // A removed intern's record is read-only until restored.
+  const frozen = Boolean(candidate.removal);
   const consent = details?.consent ?? null;
   const termMonths = candidate.termMonths || DEFAULT_TERM_MONTHS;
   const endDate = (() => {
@@ -103,7 +106,7 @@ export default function AdminCandidatePage() {
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:py-12">
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-        <Wordmark subtitle="Onboarding console" />
+        <Wordmark subtitle="Onboarding console" href="/onboarding/admin" />
         <Link
           href="/onboarding/admin"
           className="inline-flex min-h-10 items-center gap-2 text-sm font-bold"
@@ -124,6 +127,16 @@ export default function AdminCandidatePage() {
           <span style={{ color: "var(--fr-gold-soft)" }}>{STAGE_LABEL[candidate.stage]}</span>
         </p>
       </header>
+
+      {candidate.removal && (
+        <RemovedBanner
+          leftOn={candidate.removal.leftOn}
+          reason={candidate.removal.reason}
+          retention={candidate.retention}
+          mailbox={candidate.mailbox?.address ?? null}
+          onRestore={() => act({ action: "restore" })}
+        />
+      )}
 
       {message && (
         <div className="mb-5">
@@ -177,7 +190,7 @@ export default function AdminCandidatePage() {
                 Open {bespokeDocument.originalName}
                 <ExternalLink className="size-4" aria-hidden />
               </a>
-              {!candidate.signature && (
+              {!candidate.signature && !frozen && (
                 <AgreementUpload id={id} onDone={load} replacing />
               )}
             </div>
@@ -194,7 +207,7 @@ export default function AdminCandidatePage() {
                   agreement is drawn from — before they finish the assessments.
                 </span>
               </Notice>
-              <AgreementUpload id={id} onDone={load} />
+              {!frozen && <AgreementUpload id={id} onDone={load} />}
             </div>
           )}
         </Card>
@@ -328,7 +341,7 @@ export default function AdminCandidatePage() {
                   {candidate.companySignature.designation}, on{" "}
                   {formatDateTime(candidate.companySignature.signedAt)}. Fully executed.
                 </Notice>
-              ) : (
+              ) : frozen ? null : (
                 <CountersignActions
                   alreadyVerified={Boolean(candidate.contractVerifiedAt)}
                   onCountersign={(typedName, designation) =>
@@ -402,6 +415,10 @@ export default function AdminCandidatePage() {
                     : "password not yet collected"}
                 </p>
               </div>
+            ) : frozen ? (
+              <p className="text-sm" style={{ color: "var(--fr-muted)" }}>
+                No mailbox was created before they were removed.
+              </p>
             ) : (
               <ProvisionForm
                 onSubmit={async (address, password) => {
@@ -412,8 +429,134 @@ export default function AdminCandidatePage() {
             )}
           </Card>
         )}
+
+        {!frozen && (
+          <RemoveIntern
+            name={details?.fullName ?? candidate.invitedName}
+            mailbox={candidate.mailbox?.address ?? null}
+            onRemove={(leftOn, reason) => act({ action: "remove", leftOn, reason })}
+          />
+        )}
       </div>
     </div>
+  );
+}
+
+/** Shown at the top of a removed intern's page. */
+function RemovedBanner({
+  leftOn,
+  reason,
+  retention,
+  mailbox,
+  onRestore,
+}: {
+  leftOn: string;
+  reason?: string;
+  retention: { kind: "keep" | "erase"; until: string } | null;
+  mailbox: string | null;
+  onRestore: () => void;
+}) {
+  return (
+    <div className="mb-5 space-y-3">
+      <Notice tone="warn">
+        <span className="block font-bold">Removed — left on {formatDate(leftOn)}.</span>
+        {reason && <span className="mt-1 block">Reason: {reason}</span>}
+        <span className="mt-1 block">
+          Their onboarding link no longer works, and nothing on this record can be changed. The
+          record itself is kept:{" "}
+          {retention?.kind === "keep"
+            ? `their internship went ahead, so the privacy notice commits to keeping it until ${formatDate(retention.until)} (three years after they left), then erasing it.`
+            : retention
+              ? `their internship never began, so the privacy notice commits to erasing it by ${formatDate(retention.until)} (within 90 days).`
+              : "see the privacy notice for how long."}
+        </span>
+        {mailbox && (
+          <span className="mt-1 block font-bold">
+            Disable {mailbox} in SpaceMail — this console cannot do that for you.
+          </span>
+        )}
+      </Notice>
+      <Button variant="ghost" onClick={onRestore}>
+        <RotateCcw className="size-4" aria-hidden />
+        Restore intern
+      </Button>
+    </div>
+  );
+}
+
+/** Ends an engagement early. Records are kept — this is not a delete. */
+function RemoveIntern({
+  name,
+  mailbox,
+  onRemove,
+}: {
+  name: string;
+  mailbox: string | null;
+  onRemove: (leftOn: string, reason: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [leftOn, setLeftOn] = useState(() => new Date().toISOString().slice(0, 10));
+  const [reason, setReason] = useState("");
+
+  return (
+    <Card>
+      <SectionTitle
+        title="Remove intern"
+        lead="If they leave early, or stop before they start. Their onboarding link stops working and they leave the active list. Nothing is deleted, and you can restore them."
+      />
+
+      {!open ? (
+        <Button variant="danger" onClick={() => setOpen(true)}>
+          <UserMinus className="size-4" aria-hidden />
+          Remove intern
+        </Button>
+      ) : (
+        <div className="space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Date they left">
+              <input
+                type="date"
+                value={leftOn}
+                max={new Date().toISOString().slice(0, 10)}
+                onChange={(e) => setLeftOn(e.target.value)}
+                className={inputClass}
+                style={inputStyle}
+              />
+            </Field>
+            <Field label="Reason" hint="Optional. Only founders see this.">
+              <input
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                maxLength={500}
+                placeholder="e.g. Left for a full-time role"
+                className={inputClass}
+                style={inputStyle}
+              />
+            </Field>
+          </div>
+
+          {mailbox && (
+            <Notice tone="warn">
+              They have a company mailbox, {mailbox}. Removing them here does not touch SpaceMail —
+              disable it there too.
+            </Notice>
+          )}
+
+          <div className="flex flex-wrap gap-3">
+            <Button
+              variant="danger"
+              disabled={!leftOn}
+              onClick={() => onRemove(leftOn, reason.trim())}
+            >
+              Remove {name}
+            </Button>
+            <Button variant="ghost" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+          </div>
+        </div>
+      )}
+    </Card>
   );
 }
 

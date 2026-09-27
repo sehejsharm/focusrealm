@@ -1,7 +1,7 @@
 import { clientIp, error, isAdmin, json } from "@/lib/onboarding/api.server";
 import { getCandidate, updateCandidate } from "@/lib/onboarding/store.server";
 import { buildContract } from "@/lib/onboarding/contract";
-import { companiesOf, currentStage } from "@/lib/onboarding/stage";
+import { companiesOf, currentStage, retentionOf } from "@/lib/onboarding/stage";
 import { formatAadhaar } from "@/lib/onboarding/contract";
 import { generatePassword, seal } from "@/lib/onboarding/security.server";
 
@@ -22,6 +22,7 @@ export async function GET(
     ...rest,
     stage: currentStage(candidate),
     companies: companiesOf(candidate),
+    retention: retentionOf(candidate),
     aadhaarFormatted: candidate.details ? formatAadhaar(candidate.details.aadhaarNumber) : null,
     contract: buildContract(candidate),
     // The sealed password is never returned — it is the candidate's to view.
@@ -57,9 +58,52 @@ export async function POST(
     password?: string;
     typedName?: string;
     designation?: string;
+    leftOn?: string;
+    reason?: string;
   } | null;
 
+  // A removed intern's record is frozen: restore them before acting on it.
+  if (candidate.removal && body?.action !== "restore") {
+    return error("This intern has been removed. Restore them before making changes.", 409);
+  }
+
   switch (body?.action) {
+    /*
+     * Removal ends the engagement without deleting anything. The record, the
+     * signed agreement and the Aadhaar copy are all kept, because the privacy
+     * notice commits to holding them for the term plus three years (or to
+     * erasing them within 90 days if the internship never began) — deleting
+     * here would break that. What changes is that the onboarding link stops
+     * working and the intern leaves the active list.
+     */
+    case "remove": {
+      const leftOn = body.leftOn;
+      if (!leftOn || Number.isNaN(Date.parse(leftOn))) {
+        return error("Enter the date they left.");
+      }
+      if (new Date(leftOn).getTime() > Date.now() + 24 * 3600_000) {
+        return error("The date they left cannot be in the future.");
+      }
+      const reason = body.reason?.trim() || undefined;
+      if (reason && reason.length > 500) return error("Keep the reason under 500 characters.");
+
+      const now = new Date().toISOString();
+      const updated = await updateCandidate(id, (c) => ({
+        ...c,
+        removal: { at: now, leftOn: new Date(leftOn).toISOString(), reason, ip: clientIp(request) },
+        // The store keys token lookups off this, which is what shuts the link.
+        archivedAt: now,
+      }));
+      return json({ ok: true, retention: updated ? retentionOf(updated) : null });
+    }
+
+    case "restore": {
+      if (!candidate.removal) return error("This intern is not removed.", 409);
+
+      await updateCandidate(id, (c) => ({ ...c, removal: undefined, archivedAt: undefined }));
+      return json({ ok: true });
+    }
+
     // Focus Realm's side of the agreement. Countersigning is also what marks it
     // verified — a countersigned agreement is what "verified" means. Records
     // verified before countersigning existed can still be signed here, which

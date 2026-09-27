@@ -1,6 +1,6 @@
 import { error, isAdmin, json } from "@/lib/onboarding/api.server";
 import { createCandidate, listCandidates } from "@/lib/onboarding/store.server";
-import { agreementReady, companiesOf, currentStage, endDateOf } from "@/lib/onboarding/stage";
+import { agreementReady, companiesOf, currentStage, endDateOf, retentionOf } from "@/lib/onboarding/stage";
 import { ALL_COMPANIES, isCompany } from "@/lib/onboarding/content";
 import { maskAadhaar } from "@/lib/onboarding/security.server";
 import {
@@ -33,6 +33,8 @@ export async function GET() {
       agreementKind: c.agreement?.kind ?? "standard",
       companies: companiesOf(c),
       agreementReady: agreementReady(c),
+      removal: c.removal ? { leftOn: c.removal.leftOn, reason: c.removal.reason ?? null } : null,
+      retention: retentionOf(c),
       createdAt: c.createdAt,
       stage: currentStage(c),
       fullName: c.details?.fullName ?? null,

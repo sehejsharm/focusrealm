@@ -1,13 +1,28 @@
 "use client";
 
 import type { ReactNode } from "react";
+import Link from "next/link";
 import BrandMark from "../BrandMark";
 
 /** Small brand primitives shared across the onboarding module. */
 
-export function Wordmark({ subtitle }: { subtitle?: string }) {
+/**
+ * The logo, linking home. "Home" depends on who is looking: the console for
+ * founders, a candidate's own portal for them, the landing page otherwise.
+ */
+export function Wordmark({
+  subtitle,
+  href = "/onboarding",
+}: {
+  subtitle?: string;
+  href?: string;
+}) {
   return (
-    <div className="flex items-center gap-3">
+    <Link
+      href={href}
+      aria-label="Focus Realm — home"
+      className="inline-flex items-center gap-3 rounded-lg transition-opacity hover:opacity-85"
+    >
       <BrandMark size={40} />
       <span className="min-w-0">
         <span className="block text-sm leading-tight font-bold tracking-[0.18em] uppercase">
@@ -22,7 +37,7 @@ export function Wordmark({ subtitle }: { subtitle?: string }) {
           </span>
         )}
       </span>
-    </div>
+    </Link>
   );
 }
 

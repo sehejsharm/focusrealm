@@ -126,3 +126,33 @@ export function toCandidateView(candidate: Candidate): CandidateView {
       : null,
   };
 }
+
+/** Retention periods, as promised in the privacy notice (compliance.ts). */
+const KEEP_AFTER_END_YEARS = 3;
+const ERASE_IF_NOT_STARTED_DAYS = 90;
+
+export interface RetentionPlan {
+  /** "keep" once the internship went ahead; "erase" if it never began. */
+  kind: "keep" | "erase";
+  /** Keep until, or erase by, this date. */
+  until: string;
+}
+
+/**
+ * What the notice commits the Company to for a removed intern. An internship
+ * "went ahead" once the agreement was executed — before that, nothing began.
+ */
+export function retentionOf(candidate: Candidate): RetentionPlan | null {
+  if (!candidate.removal) return null;
+
+  const left = new Date(candidate.removal.leftOn);
+  if (candidate.contractVerifiedAt) {
+    const until = new Date(left);
+    until.setUTCFullYear(until.getUTCFullYear() + KEEP_AFTER_END_YEARS);
+    return { kind: "keep", until: until.toISOString() };
+  }
+
+  const until = new Date(left);
+  until.setUTCDate(until.getUTCDate() + ERASE_IF_NOT_STARTED_DAYS);
+  return { kind: "erase", until: until.toISOString() };
+}

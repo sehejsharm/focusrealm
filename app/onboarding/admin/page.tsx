@@ -41,6 +41,8 @@ interface Row {
   agreementKind: AgreementPlan["kind"];
   agreementReady: boolean;
   companies: Company[];
+  removal: { leftOn: string; reason: string | null } | null;
+  retention: { kind: "keep" | "erase"; until: string } | null;
   stage: Stage;
   fullName: string | null;
   signedAt: string | null;
@@ -91,26 +93,30 @@ export default function AdminConsole() {
     load();
   }, [load]);
 
+  // Removed interns leave the active list and every count, but stay listed below.
+  const active = useMemo(() => rows?.filter((r) => !r.removal) ?? null, [rows]);
+  const removed = useMemo(() => rows?.filter((r) => r.removal) ?? [], [rows]);
+
   const stats = useMemo(() => {
-    if (!rows) return null;
+    if (!active) return null;
     return {
-      total: rows.length,
-      onboarding: rows.filter((r) => r.stage !== "complete").length,
-      needsYou: rows.filter(needsFounder).length,
-      agreementsToPrepare: rows.filter((r) => !r.agreementReady).length,
-      endingSoon: rows.filter((r) => {
+      total: active.length,
+      onboarding: active.filter((r) => r.stage !== "complete").length,
+      needsYou: active.filter(needsFounder).length,
+      agreementsToPrepare: active.filter((r) => !r.agreementReady).length,
+      endingSoon: active.filter((r) => {
         const days = daysUntil(r.endDate);
         return days >= 0 && days <= 30;
       }).length,
     };
-  }, [rows]);
+  }, [active]);
 
   if (needsAuth) return <PasscodeGate onDone={load} />;
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:py-10">
       <div className="mb-7 flex flex-wrap items-center justify-between gap-4">
-        <Wordmark subtitle="Onboarding console" />
+        <Wordmark subtitle="Onboarding console" href="/onboarding/admin" />
         <div className="flex gap-2">
           <Button variant="ghost" onClick={load}>
             <RefreshCw className="size-4" aria-hidden />
@@ -156,13 +162,15 @@ export default function AdminConsole() {
           />
         </div>
 
-        {!rows ? (
+        {!active ? (
           <p className="p-6 text-sm" style={{ color: "var(--fr-muted)" }}>
             Loading…
           </p>
-        ) : rows.length === 0 ? (
+        ) : active.length === 0 ? (
           <p className="p-6 text-sm" style={{ color: "var(--fr-muted)" }}>
-            No candidates yet. Create one to generate an onboarding link.
+            {removed.length > 0
+              ? "No active candidates. Removed interns are listed below."
+              : "No candidates yet. Create one to generate an onboarding link."}
           </p>
         ) : (
           <div className="overflow-x-auto">
@@ -183,7 +191,7 @@ export default function AdminConsole() {
                 </tr>
               </thead>
               <tbody>
-                {rows.map((row) => {
+                {active.map((row) => {
                   const remaining = daysUntil(row.endDate);
                   const ended = remaining < 0;
 
@@ -257,6 +265,40 @@ export default function AdminConsole() {
           </div>
         )}
       </Card>
+
+      {removed.length > 0 && (
+        <Card className="mt-5">
+          <SectionTitle
+            title={`Removed (${removed.length})`}
+            lead="Interns who left, or candidates who stopped before starting. Their onboarding links no longer work, but their records are kept as the privacy notice promises. Open one to restore it."
+          />
+          <ul className="space-y-2">
+            {removed.map((row) => (
+              <li
+                key={row.id}
+                className="flex flex-wrap items-center justify-between gap-3 rounded-xl border p-3 text-sm"
+                style={{ borderColor: "var(--fr-line)", backgroundColor: "var(--fr-navy-deep)" }}
+              >
+                <div className="min-w-0">
+                  <Link href={`/onboarding/admin/${row.id}`} className="font-bold hover:underline">
+                    {row.fullName ?? row.invitedName}
+                  </Link>
+                  <span className="block text-xs" style={{ color: "var(--fr-muted)" }}>
+                    {row.role.label} · left {formatDate(row.removal!.leftOn)}
+                    {row.removal!.reason ? ` · ${row.removal!.reason}` : ""}
+                  </span>
+                </div>
+                {row.retention && (
+                  <span className="text-xs tabular-nums" style={{ color: "var(--fr-muted)" }}>
+                    {row.retention.kind === "keep" ? "Keep until " : "Erase by "}
+                    {formatDate(row.retention.until)}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
     </div>
   );
 }
@@ -348,7 +390,7 @@ function PasscodeGate({ onDone }: { onDone: () => void }) {
   return (
     <div className="mx-auto w-full max-w-md px-4 py-16 sm:px-6">
       <div className="mb-8">
-        <Wordmark subtitle="Onboarding console" />
+        <Wordmark subtitle="Onboarding console" href="/onboarding/admin" />
       </div>
       <Card>
         <SectionTitle

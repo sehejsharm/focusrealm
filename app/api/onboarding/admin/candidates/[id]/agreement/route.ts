@@ -26,6 +26,9 @@ export async function POST(
   const { id } = await params;
   const candidate = await getCandidate(id);
   if (!candidate) return error("Not found.", 404);
+  if (candidate.removal) {
+    return error("This intern has been removed. Restore them before making changes.", 409);
+  }
   if (candidate.signature) {
     return error("This candidate has already signed — the agreement cannot be replaced.", 409);
   }

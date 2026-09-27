@@ -66,7 +66,7 @@ export default function CandidatePortal() {
   const at = stageIndex(candidate.stage);
 
   return (
-    <Shell subtitle={`${candidate.role.label} internship`}>
+    <Shell subtitle={`${candidate.role.label} internship`} home={`/onboarding/${token}`}>
       <header className="mb-6">
         <h1 className="text-2xl leading-tight font-bold text-balance sm:text-3xl">
           Welcome, {candidate.details?.fullName ?? candidate.invitedName}.
@@ -124,11 +124,20 @@ export default function CandidatePortal() {
   );
 }
 
-function Shell({ children, subtitle }: { children: React.ReactNode; subtitle?: string }) {
+function Shell({
+  children,
+  subtitle,
+  home,
+}: {
+  children: React.ReactNode;
+  subtitle?: string;
+  /** A candidate's home is their own portal, not the landing page. */
+  home?: string;
+}) {
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:py-12">
       <div className="mb-8">
-        <Wordmark subtitle={subtitle ?? "Intern onboarding"} />
+        <Wordmark subtitle={subtitle ?? "Intern onboarding"} href={home} />
       </div>
       {children}
     </div>

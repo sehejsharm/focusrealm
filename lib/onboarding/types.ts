@@ -140,6 +140,20 @@ export interface CompanySignature {
   ip: string | null;
 }
 
+/**
+ * An intern who left, or a candidate who stopped before starting. The record
+ * is kept, not deleted: the privacy notice promises it is held for the term
+ * plus three years, or erased within 90 days if the internship never began.
+ */
+export interface Removal {
+  /** When a founder recorded it. */
+  at: string;
+  /** The day they left, as a founder entered it. */
+  leftOn: string;
+  reason?: string;
+  ip: string | null;
+}
+
 export interface Mailbox {
   address: string;
   provisionedAt: string;
@@ -175,6 +189,8 @@ export interface Candidate {
   startDate: string;
   createdAt: string;
   archivedAt?: string;
+  /** Set when a founder removes the intern. Also sets archivedAt. */
+  removal?: Removal;
 
   details?: CandidateDetails;
   /** Resource id → ISO timestamp the candidate marked it done. */
