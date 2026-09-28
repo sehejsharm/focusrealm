@@ -61,6 +61,8 @@ export function agreementReady(candidate: Candidate): boolean {
  * stored, so a record can never drift out of sync with its own contents.
  */
 export function currentStage(candidate: Candidate): Stage {
+  // Onboarded before the console existed — there are no steps left to take.
+  if (candidate.existing) return "complete";
   if (!candidate.details) return "details";
   if (!learningComplete(candidate)) return "learning";
   if (!requiredTestIds(candidate).every((id) => hasPassed(candidate, id))) return "tests";
@@ -146,7 +148,8 @@ export function retentionOf(candidate: Candidate): RetentionPlan | null {
   if (!candidate.removal) return null;
 
   const left = new Date(candidate.removal.leftOn);
-  if (candidate.contractVerifiedAt) {
+  // An existing employee was working, so their engagement went ahead too.
+  if (candidate.contractVerifiedAt || candidate.existing) {
     const until = new Date(left);
     until.setUTCFullYear(until.getUTCFullYear() + KEEP_AFTER_END_YEARS);
     return { kind: "keep", until: until.toISOString() };

@@ -34,6 +34,7 @@ export async function GET() {
       companies: companiesOf(c),
       agreementReady: agreementReady(c),
       removal: c.removal ? { leftOn: c.removal.leftOn, reason: c.removal.reason ?? null } : null,
+      existing: Boolean(c.existing),
       retention: retentionOf(c),
       createdAt: c.createdAt,
       stage: currentStage(c),
@@ -63,6 +64,8 @@ export async function POST(request: Request) {
     agreementKind?: AgreementPlan["kind"];
     /** Which companies' handbooks, videos and tests this candidate gets. */
     companies?: unknown;
+    /** Set to add someone already onboarded, instead of inviting them. */
+    existing?: { companyEmail?: string; note?: string };
   } | null;
 
   const invitedName = body?.invitedName?.trim();
@@ -128,6 +131,29 @@ export async function POST(request: Request) {
     return error("Choose at least one company for the candidate to onboard into.");
   }
 
+  /*
+   * An existing employee is recorded as already onboarded. Their details,
+   * assessments and agreement were handled outside the console, so none of
+   * that is fabricated here — least of all a signature.
+   */
+  let existing: { addedAt: string; note?: string } | undefined;
+  let mailbox: { address: string; provisionedAt: string } | undefined;
+
+  if (body?.existing) {
+    const now = new Date().toISOString();
+    const note = body.existing.note?.trim() || undefined;
+    if (note && note.length > 500) return error("Keep the note under 500 characters.");
+    existing = { addedAt: now, note };
+
+    const companyEmail = body.existing.companyEmail?.trim();
+    if (companyEmail) {
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(companyEmail)) {
+        return error("That company email address is not valid.");
+      }
+      mailbox = { address: companyEmail, provisionedAt: now };
+    }
+  }
+
   const candidate = await createCandidate({
     invitedName,
     invitedEmail,
@@ -135,9 +161,12 @@ export async function POST(request: Request) {
     customTrack,
     startDate: new Date(startDate).toISOString(),
     termMonths,
-    agreement: { kind: agreementKind },
+    agreement: { kind: existing ? "standard" : agreementKind },
     companies,
+    existing,
+    mailbox,
   });
 
-  return json({ id: candidate.id, token: candidate.token }, 201);
+  // Existing employees have no onboarding link to hand out.
+  return json({ id: candidate.id, token: existing ? null : candidate.token }, 201);
 }

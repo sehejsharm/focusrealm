@@ -64,7 +64,7 @@ export async function POST(
 
   // A removed intern's record is frozen: restore them before acting on it.
   if (candidate.removal && body?.action !== "restore") {
-    return error("This intern has been removed. Restore them before making changes.", 409);
+    return error("This person has been removed. Restore them before making changes.", 409);
   }
 
   switch (body?.action) {
@@ -98,7 +98,7 @@ export async function POST(
     }
 
     case "restore": {
-      if (!candidate.removal) return error("This intern is not removed.", 409);
+      if (!candidate.removal) return error("This person is not removed.", 409);
 
       await updateCandidate(id, (c) => ({ ...c, removal: undefined, archivedAt: undefined }));
       return json({ ok: true });

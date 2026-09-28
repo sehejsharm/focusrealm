@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { AlertTriangle, Copy, FileWarning, Plus, RefreshCw } from "lucide-react";
+import { AlertTriangle, Copy, FileWarning, Plus, RefreshCw, UserPlus } from "lucide-react";
 import {
   Button,
   Card,
@@ -42,6 +42,8 @@ interface Row {
   agreementReady: boolean;
   companies: Company[];
   removal: { leftOn: string; reason: string | null } | null;
+  /** Added directly as an existing employee rather than invited. */
+  existing: boolean;
   retention: { kind: "keep" | "erase"; until: string } | null;
   stage: Stage;
   fullName: string | null;
@@ -72,7 +74,7 @@ function needsFounder(row: Row): boolean {
 export default function AdminConsole() {
   const [rows, setRows] = useState<Row[] | null>(null);
   const [needsAuth, setNeedsAuth] = useState(false);
-  const [creating, setCreating] = useState(false);
+  const [creating, setCreating] = useState<null | "invite" | "existing">(null);
 
   const load = useCallback(
     () =>
@@ -122,7 +124,14 @@ export default function AdminConsole() {
             <RefreshCw className="size-4" aria-hidden />
             Refresh
           </Button>
-          <Button onClick={() => setCreating((v) => !v)}>
+          <Button
+            variant="ghost"
+            onClick={() => setCreating((v) => (v === "existing" ? null : "existing"))}
+          >
+            <UserPlus className="size-4" aria-hidden />
+            Add existing employee
+          </Button>
+          <Button onClick={() => setCreating((v) => (v === "invite" ? null : "invite"))}>
             <Plus className="size-4" aria-hidden />
             New candidate
           </Button>
@@ -146,8 +155,10 @@ export default function AdminConsole() {
       {creating && (
         <div className="mb-5">
           <NewCandidate
+            key={creating}
+            mode={creating}
             onCreated={() => {
-              setCreating(false);
+              setCreating(null);
               load();
             }}
           />
@@ -240,6 +251,14 @@ export default function AdminConsole() {
                       </Td>
                       <Td>
                         <div className="flex flex-wrap gap-1.5">
+                          {row.existing && (
+                            <span
+                              className="inline-block rounded-md px-2 py-1 text-xs"
+                              style={{ backgroundColor: "var(--fr-navy-soft)", color: "var(--fr-muted)" }}
+                            >
+                              Added directly
+                            </span>
+                          )}
                           {!row.agreementReady && (
                             <Flag tone="gold" Icon={FileWarning}>
                               Agreement needed
@@ -270,7 +289,7 @@ export default function AdminConsole() {
         <Card className="mt-5">
           <SectionTitle
             title={`Removed (${removed.length})`}
-            lead="Interns who left, or candidates who stopped before starting. Their onboarding links no longer work, but their records are kept as the privacy notice promises. Open one to restore it."
+            lead="People who left, or candidates who stopped before starting. Their onboarding links no longer work, but their records are kept as the privacy notice promises. Open one to restore it."
           />
           <ul className="space-y-2">
             {removed.map((row) => (
@@ -423,7 +442,18 @@ function PasscodeGate({ onDone }: { onDone: () => void }) {
 /* Invite                                                                     */
 /* -------------------------------------------------------------------------- */
 
-function NewCandidate({ onCreated }: { onCreated: () => void }) {
+/**
+ * "invite" creates an onboarding link. "existing" records someone already
+ * onboarded outside the console — no link, no agreement to choose.
+ */
+function NewCandidate({
+  mode,
+  onCreated,
+}: {
+  mode: "invite" | "existing";
+  onCreated: () => void;
+}) {
+  const isExisting = mode === "existing";
   const [track, setTrack] = useState("founders-office");
   const [agreementKind, setAgreementKind] =
     useState<AgreementPlan["kind"]>("standard");
@@ -454,6 +484,9 @@ function NewCandidate({ onCreated }: { onCreated: () => void }) {
         termMonths: Number(form.get("termMonths")),
         agreementKind: hasAgreementOnFile ? "standard" : agreementKind,
         companies,
+        existing: isExisting
+          ? { companyEmail: form.get("companyEmail"), note: form.get("note") }
+          : undefined,
         customRole:
           track === "custom"
             ? {
@@ -469,6 +502,10 @@ function NewCandidate({ onCreated }: { onCreated: () => void }) {
 
     if (!response.ok) {
       setMessage(data.error ?? "Could not create.");
+      return;
+    }
+    if (isExisting) {
+      onCreated();
       return;
     }
     setCreated({
@@ -521,13 +558,20 @@ function NewCandidate({ onCreated }: { onCreated: () => void }) {
 
   return (
     <Card>
-      <SectionTitle title="New candidate" lead="Creates their onboarding link." />
+      <SectionTitle
+        title={isExisting ? "Add existing employee" : "New candidate"}
+        lead={
+          isExisting
+            ? "For someone onboarded before this console existed. They go straight onto the roster as onboarded, with no onboarding link. Their agreement and documents stay wherever you keep them now — nothing is signed or recorded on their behalf."
+            : "Creates their onboarding link."
+        }
+      />
       <form onSubmit={submit} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Name">
             <input name="invitedName" required className={inputClass} style={inputStyle} />
           </Field>
-          <Field label="Email">
+          <Field label={isExisting ? "Personal email" : "Email"}>
             <input name="invitedEmail" required type="email" className={inputClass} style={inputStyle} />
           </Field>
           <Field label="Role">
@@ -572,10 +616,13 @@ function NewCandidate({ onCreated }: { onCreated: () => void }) {
           className="space-y-3 rounded-xl border p-4"
           style={{ borderColor: "var(--fr-line)", backgroundColor: "var(--fr-navy-deep)" }}
         >
-          <legend className="px-1 text-sm font-bold">Onboard into</legend>
+          <legend className="px-1 text-sm font-bold">
+            {isExisting ? "Works with" : "Onboard into"}
+          </legend>
           <p className="text-xs leading-relaxed" style={{ color: "var(--fr-muted)" }}>
-            Each company adds its own handbook, video briefing and assessment. The candidate only
-            sees — and can only open — the material for the companies ticked here.
+            {isExisting
+              ? "The companies they work across. Shown on the roster."
+              : "Each company adds its own handbook, video briefing and assessment. The candidate only sees — and can only open — the material for the companies ticked here."}
           </p>
           <div className="flex flex-wrap gap-3">
             {COMPANIES.map((company) => {
@@ -671,7 +718,24 @@ function NewCandidate({ onCreated }: { onCreated: () => void }) {
           every other role the founders have to decide, here, which agreement
           this candidate signs.
         */}
-        {!hasAgreementOnFile && (
+        {isExisting && (
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Company email" hint="Optional. Their Focus Realm address, if they have one.">
+              <input
+                name="companyEmail"
+                type="email"
+                placeholder="firstname@focusrealm.org"
+                className={inputClass}
+                style={inputStyle}
+              />
+            </Field>
+            <Field label="Note" hint="Optional. e.g. where their signed agreement is filed.">
+              <input name="note" maxLength={500} className={inputClass} style={inputStyle} />
+            </Field>
+          </div>
+        )}
+
+        {!hasAgreementOnFile && !isExisting && (
           <fieldset
             className="rounded-xl border p-4"
             style={{ borderColor: "var(--fr-gold)", backgroundColor: "var(--fr-navy-deep)" }}
@@ -734,7 +798,7 @@ function NewCandidate({ onCreated }: { onCreated: () => void }) {
         {message && <Notice tone="bad">{message}</Notice>}
 
         <Button type="submit" disabled={busy || companies.length === 0}>
-          {busy ? "Creating…" : "Create and generate link"}
+          {busy ? (isExisting ? "Adding…" : "Creating…") : isExisting ? "Add to roster" : "Create and generate link"}
         </Button>
       </form>
     </Card>

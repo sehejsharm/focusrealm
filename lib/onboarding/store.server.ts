@@ -1,6 +1,6 @@
 import { randomBytes } from "node:crypto";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import type { AgreementPlan, Candidate, Company, TrackDefinition } from "./types";
+import type { AgreementPlan, Candidate, Company, ExistingMember, Mailbox, TrackDefinition } from "./types";
 import { DEFAULT_TERM_MONTHS } from "./types";
 import { createId, createToken } from "./security.server";
 
@@ -81,7 +81,9 @@ export async function getCandidateByToken(token: string): Promise<Candidate | nu
     .is("archived_at", null)
     .maybeSingle();
 
-  return (data?.record as Candidate) ?? null;
+  const found = (data?.record as Candidate) ?? null;
+  // Existing employees were added directly and never had an onboarding link.
+  return found?.existing ? null : found;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -98,6 +100,10 @@ export async function createCandidate(input: {
   termMonths?: number;
   agreement?: AgreementPlan;
   companies: Company[];
+  /** Present when adding someone onboarded before the console existed. */
+  existing?: ExistingMember;
+  /** Their company address, if they already have one. */
+  mailbox?: Mailbox;
 }): Promise<Candidate> {
   const candidate: Candidate = {
     id: createId(),
@@ -110,6 +116,8 @@ export async function createCandidate(input: {
     termMonths: input.termMonths ?? DEFAULT_TERM_MONTHS,
     agreement: input.agreement ?? { kind: "standard" },
     companies: input.companies,
+    ...(input.existing ? { existing: input.existing } : {}),
+    ...(input.mailbox ? { mailbox: input.mailbox } : {}),
     createdAt: new Date().toISOString(),
     resources: {},
     tests: {},

@@ -145,6 +145,24 @@ export default function AdminCandidatePage() {
       )}
 
       <div className="space-y-5">
+        {candidate.existing ? (
+          <Card>
+            <SectionTitle
+              title="Existing employee"
+              lead={`Added directly on ${formatDate(candidate.existing.addedAt)}, as someone already onboarded before this console existed. There is no onboarding link, and no details, assessments or agreement were collected here — those live wherever you kept them.`}
+            />
+            <dl className="grid gap-4 sm:grid-cols-2">
+              <Detail label="Personal email" value={candidate.invitedEmail} />
+              <Detail label="Company email" value={candidate.mailbox?.address ?? "—"} />
+              <Detail
+                label="Works with"
+                value={candidate.companies.map(companyLabel).join(" and ")}
+              />
+              {candidate.existing.note && <Detail label="Note" value={candidate.existing.note} />}
+            </dl>
+          </Card>
+        ) : (
+          <>
         <Card>
           <SectionTitle title="Onboarding link" />
           <p
@@ -324,6 +342,8 @@ export default function AdminCandidatePage() {
             })}
           </ul>
         </Card>
+          </>
+        )}
 
         {candidate.signature && (
           <>
@@ -462,7 +482,7 @@ function RemovedBanner({
         <span className="block font-bold">Removed — left on {formatDate(leftOn)}.</span>
         {reason && <span className="mt-1 block">Reason: {reason}</span>}
         <span className="mt-1 block">
-          Their onboarding link no longer works, and nothing on this record can be changed. The
+          Any onboarding link no longer works, and nothing on this record can be changed. The
           record itself is kept:{" "}
           {retention?.kind === "keep"
             ? `their internship went ahead, so the privacy notice commits to keeping it until ${formatDate(retention.until)} (three years after they left), then erasing it.`
@@ -478,7 +498,7 @@ function RemovedBanner({
       </Notice>
       <Button variant="ghost" onClick={onRestore}>
         <RotateCcw className="size-4" aria-hidden />
-        Restore intern
+        Restore to the team
       </Button>
     </div>
   );
@@ -501,14 +521,14 @@ function RemoveIntern({
   return (
     <Card>
       <SectionTitle
-        title="Remove intern"
-        lead="If they leave early, or stop before they start. Their onboarding link stops working and they leave the active list. Nothing is deleted, and you can restore them."
+        title="Remove from the team"
+        lead="For an intern or employee who leaves, or a candidate who stops before starting. Any onboarding link stops working and they leave the active list. Nothing is deleted, and you can restore them."
       />
 
       {!open ? (
         <Button variant="danger" onClick={() => setOpen(true)}>
           <UserMinus className="size-4" aria-hidden />
-          Remove intern
+          Remove from the team
         </Button>
       ) : (
         <div className="space-y-4">

@@ -154,6 +154,17 @@ export interface Removal {
   ip: string | null;
 }
 
+/**
+ * Someone onboarded before this console existed, added directly by a founder.
+ * Their paperwork lives outside the console, so nothing here pretends
+ * otherwise: no details, no assessment attempts, no electronic signature.
+ */
+export interface ExistingMember {
+  addedAt: string;
+  /** Free text, e.g. "Agreement signed on paper, filed in Drive". */
+  note?: string;
+}
+
 export interface Mailbox {
   address: string;
   provisionedAt: string;
@@ -191,6 +202,8 @@ export interface Candidate {
   archivedAt?: string;
   /** Set when a founder removes the intern. Also sets archivedAt. */
   removal?: Removal;
+  /** Set when the person was added as an existing employee, not invited. */
+  existing?: ExistingMember;
 
   details?: CandidateDetails;
   /** Resource id → ISO timestamp the candidate marked it done. */
