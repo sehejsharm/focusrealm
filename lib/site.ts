@@ -108,6 +108,9 @@ export const footerNav = [
       { href: "/problems#audit-ambush", label: "Audit ambush" },
       { href: "/about", label: "About us" },
       { href: "/about#not-an-lms", label: "Why this is not an LMS" },
+      { href: "/guides", label: "Hotel SOP guides" },
+      { href: "/hotel-sop-software", label: "Hotel SOP software" },
+      { href: "/digitize-hotel-sops", label: "Digitize hotel SOPs" },
     ],
   },
   {

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { allTopicKeywords, topics } from "@/lib/topics";
 
 import { advisors, faqs, property, team, testimonials } from "@/lib/content";
 import { sehejGalleryPhotos } from "@/lib/gallery";
@@ -93,6 +94,9 @@ export const organizationSchema = {
     "hotel audit evidence",
     "housekeeping quality assurance",
     "hotel staff readiness",
+    // One entry per guide topic, so the entity is associated with each
+    // search intent it has a page for.
+    ...topics.map((topic) => topic.keywords[0]),
   ],
   address: {
     "@type": "PostalAddress",
@@ -104,7 +108,11 @@ export const organizationSchema = {
     .filter((person) => person.role.includes("Co-Founder"))
     .map((person) => ({ "@id": personId(person.slug) })),
   employee: team.map((person) => ({ "@id": personId(person.slug) })),
-  brand: { "@type": "Brand", name: site.shortName, logo: absoluteUrl("/logo.svg") },
+  brand: [
+    { "@type": "Brand", name: site.shortName, logo: absoluteUrl("/logo.svg") },
+    // The product name on the platform screens.
+    { "@type": "Brand", name: "Mise", slogan: site.tagline },
+  ],
   numberOfEmployees: { "@type": "QuantitativeValue", minValue: 3 },
   makesOffer: {
     "@type": "Offer",
@@ -147,7 +155,9 @@ export const softwareSchema = {
   name: site.name,
   applicationCategory: "BusinessApplication",
   applicationSubCategory: "Service Execution Platform",
-  operatingSystem: "Web",
+  alternateName: ["Mise", "Mise by Focus Realm", "Focus Realm hotel software"],
+  keywords: allTopicKeywords.join(", "),
+  operatingSystem: "Any browser, any phone",
   url: siteUrl,
   description: site.description,
   featureList: [

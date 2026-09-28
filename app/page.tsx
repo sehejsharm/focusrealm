@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import Convergence from "@/components/home/Convergence";
 import Faq from "@/components/home/Faq";
+import GuidesStrip from "@/components/home/GuidesStrip";
 import FiveSeconds from "@/components/home/FiveSeconds";
 import Hero from "@/components/home/Hero";
 import Mechanism from "@/components/home/Mechanism";
@@ -31,6 +32,22 @@ export const metadata: Metadata = {
   keywords: [
     "Focus Realm",
     "Focus Realm Hospitality",
+    "Focus Realm hotel software",
+    "Focus Realm hospitality software",
+    "Focus Realm service execution platform",
+    "Focus Realm hotel operations software",
+    "Mise",
+    "Mise by Focus Realm",
+    "Mise hotel SOP software",
+    "hotel SOP management software",
+    "hotel SOP platform",
+    "hotel operations platform",
+    "digital SOP for hotels",
+    "digitize hotel SOPs",
+    "hotel SOP app",
+    "hotel photo evidence app",
+    "hotel audit readiness software",
+    "hotel SOP software India",
     "service execution platform",
     "SOP management system for hotels",
     "hotel SOP software",
@@ -92,6 +109,7 @@ export default function HomePage() {
       <RoleShowcase />
       <Testimonials />
       <TeamStrip />
+      <GuidesStrip />
       <Faq />
     </>
   );

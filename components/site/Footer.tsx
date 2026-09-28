@@ -8,6 +8,16 @@ import { footerNav, legalNav, site } from "@/lib/site";
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  // Visible build stamp, so anyone can confirm which version is live. The
+  // footer is prerendered, so this is the build time, and the commit comes
+  // from Vercel's build environment.
+  const built = new Date().toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "Asia/Kolkata",
+  });
+  const commit = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7);
 
   return (
     <footer className="relative overflow-hidden border-t border-line bg-void">
@@ -114,6 +124,10 @@ export default function Footer() {
         <div className="mt-10 flex flex-col gap-5 border-t border-line pt-7 lg:flex-row lg:items-center lg:justify-between">
           <p className="text-[0.78rem] text-faint">
             © {year} {site.legalName}. A service execution platform — not a learning management system.
+            <span className="mt-1 block font-mono text-[0.72rem] text-faint/80">
+              Site updated {built}
+              {commit ? ` · build ${commit}` : ""}
+            </span>
           </p>
 
           <nav aria-label="Legal" className="flex flex-wrap items-center gap-x-6 gap-y-2">

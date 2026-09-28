@@ -3,6 +3,7 @@ import type { MetadataRoute } from "next";
 import { team } from "@/lib/content";
 import { sehejGalleryPhotos } from "@/lib/gallery";
 import { teamPhoto } from "@/lib/team-photos";
+import { topics } from "@/lib/topics";
 import { absoluteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -53,5 +54,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  return [...core, ...people, ...gallery];
+  // Keyword guides — one page per search intent in the SEO + GEO master list.
+  const guides: MetadataRoute.Sitemap = [
+    { url: absoluteUrl("/guides"), lastModified, changeFrequency: "weekly", priority: 0.8 },
+    ...topics.map((topic) => ({
+      url: absoluteUrl(`/${topic.slug}`),
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    })),
+  ];
+
+  return [...core, ...guides, ...people, ...gallery];
 }

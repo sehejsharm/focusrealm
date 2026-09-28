@@ -1,5 +1,6 @@
 import { faqs, pains, team } from "@/lib/content";
 import { absoluteUrl, site } from "@/lib/site";
+import { topics } from "@/lib/topics";
 
 export const dynamic = "force-static";
 
@@ -39,6 +40,12 @@ ${pains.map((p) => `- ${p.name}: ${p.wound}`).join("\n")}
 - ${absoluteUrl("/team")} — founders
 - ${absoluteUrl("/demo")} — book a 15-minute demo
 - ${absoluteUrl("/contact")} — contact
+- ${absoluteUrl("/guides")} — hotel SOP and operations guides
+- ${absoluteUrl("/llms-full.txt")} — every guide question and answer, in full
+
+## Guides
+
+${topics.map((t) => `- [${t.title}](${absoluteUrl(`/${t.slug}`)}): ${t.answer}`).join("\n")}
 
 ## Questions
 

@@ -15,7 +15,26 @@ export default function robots(): MetadataRoute.Robots {
       // Answer engines increasingly drive discovery for category terms, so
       // they are named explicitly rather than left to the wildcard.
       { userAgent: ["Googlebot", "Bingbot", "Applebot", "DuckDuckBot"], allow: "/" },
-      { userAgent: ["GPTBot", "OAI-SearchBot", "ClaudeBot", "PerplexityBot", "Google-Extended"], allow: "/" },
+      {
+        userAgent: [
+          "GPTBot",
+          "OAI-SearchBot",
+          "ChatGPT-User",
+          "ClaudeBot",
+          "Claude-SearchBot",
+          "Claude-User",
+          "PerplexityBot",
+          "Perplexity-User",
+          "Google-Extended",
+          "Applebot-Extended",
+          "Amazonbot",
+          "meta-externalagent",
+          "CCBot",
+          "cohere-ai",
+          "YouBot",
+        ],
+        allow: "/",
+      },
     ],
     sitemap: absoluteUrl("/sitemap.xml"),
     host: siteUrl,

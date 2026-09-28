@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 
 import { Button } from "@/components/ui/Button";
@@ -135,12 +136,12 @@ export default function ConsentBanner() {
           <p className="mt-2 text-[0.86rem] leading-relaxed text-muted">
             We use Google Analytics to see which pages are useful. No advertising, no cross-site tracking.
             Decline and the site works exactly the same.{" "}
-            <a
+            <Link
               href="/cookies"
               className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white"
             >
               Cookie Policy
-            </a>
+            </Link>
           </p>
         </div>
 
