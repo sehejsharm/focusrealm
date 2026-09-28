@@ -64,8 +64,7 @@ export const RESOURCES: Resource[] = [
     summary:
       "Watch alongside the Focus Realm handbook. Covers the two verticals and the positioning rules in narrated form.",
     meta: "Google Drive",
-    url: VIDEO_FOLDER_URL,
-    linkPending: true,
+    url: "https://drive.google.com/file/d/1E5hAJHwy69YFktA9gtyDekW4j3kop5FJ/view",
   },
   {
     id: "video-recharga",
