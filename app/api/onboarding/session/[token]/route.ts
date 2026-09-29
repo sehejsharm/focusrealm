@@ -1,6 +1,6 @@
 import { json } from "@/lib/onboarding/api.server";
 import { getCandidateByToken } from "@/lib/onboarding/store.server";
-import { toCandidateView } from "@/lib/onboarding/stage";
+import { toCandidateView } from "@/lib/onboarding/view";
 
 export async function GET(
   _request: Request,

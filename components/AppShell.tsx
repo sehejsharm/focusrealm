@@ -170,9 +170,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const { readNotifications } = useStaffState();
   const [drawer, setDrawer] = useState(false);
 
-  // The intern onboarding module is a separate internal tool — it brings its
-  // own chrome on the same brand.
-  if (pathname.startsWith("/onboarding")) return <>{children}</>;
+  // Focus Realm HR is a separate internal tool — it brings its own chrome on
+  // the same brand.
+  if (pathname === "/hr" || pathname.startsWith("/hr/")) return <>{children}</>;
 
   const unread = NOTIFICATIONS.filter(
     (n) => !readNotifications.includes(n.id),

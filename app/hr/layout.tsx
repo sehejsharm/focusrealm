@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 /**
- * Chrome for the intern onboarding module. Navy and gold with Inter, per the
- * current Focus Realm brand system — deliberately unlike the hospitality
- * product demo this repo also serves.
+ * Chrome for Focus Realm HR — onboarding, the employee portal and the founders'
+ * console. Navy and gold with Inter, per the current Focus Realm brand system —
+ * deliberately unlike the hospitality product demo this repo also serves.
  */
 
 const inter = Inter({
@@ -13,12 +13,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Focus Realm · Intern Onboarding",
-  description: "Internal onboarding for new Focus Realm interns.",
+  title: "Focus Realm HR",
+  description: "Onboarding, documents and certificates for Focus Realm interns and employees.",
   robots: { index: false, follow: false },
 };
 
-export default function OnboardingLayout({
+export default function HrLayout({
   children,
 }: {
   children: React.ReactNode;

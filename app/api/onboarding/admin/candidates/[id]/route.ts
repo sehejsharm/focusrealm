@@ -2,8 +2,24 @@ import { clientIp, error, isAdmin, json } from "@/lib/onboarding/api.server";
 import { getCandidate, updateCandidate } from "@/lib/onboarding/store.server";
 import { buildContract } from "@/lib/onboarding/contract";
 import { companiesOf, currentStage, retentionOf } from "@/lib/onboarding/stage";
-import { formatAadhaar } from "@/lib/onboarding/contract";
+import { formatAadhaar, formatLongDate } from "@/lib/onboarding/contract";
 import { generatePassword, seal } from "@/lib/onboarding/security.server";
+import {
+  CERTIFICATE_LABEL,
+  activeCertificate,
+  certificateWindow,
+  draftCertificate,
+  isCertificateKind,
+} from "@/lib/onboarding/certificates";
+import { signInEmails } from "@/lib/onboarding/view";
+import { randomBytes } from "node:crypto";
+
+/** `FR-IC-2026-7K3QX9` — completion; `FR-LR-…` — recommendation letter. */
+function newSerial(kind: "completion" | "recommendation"): string {
+  const alphabet = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+  const code = Array.from(randomBytes(6), (b) => alphabet[b % alphabet.length]).join("");
+  return `FR-${kind === "completion" ? "IC" : "LR"}-${new Date().getUTCFullYear()}-${code}`;
+}
 
 /** Full record, including the Aadhaar number. Admin session required. */
 export async function GET(
@@ -16,10 +32,19 @@ export async function GET(
   const candidate = await getCandidate(id);
   if (!candidate) return error("Not found.", 404);
 
-  const { mailbox, ...rest } = candidate;
+  // The password hash never leaves the server, not even to founders.
+  const { mailbox, login, ...rest } = candidate;
 
   return json({
     ...rest,
+    certificateWindow: certificateWindow(candidate),
+    signIn: {
+      enabled: Boolean(login),
+      setAt: login?.setAt ?? null,
+      lockedUntil:
+        login?.lockedUntil && Date.parse(login.lockedUntil) > Date.now() ? login.lockedUntil : null,
+      emails: signInEmails(candidate),
+    },
     stage: currentStage(candidate),
     companies: companiesOf(candidate),
     retention: retentionOf(candidate),
@@ -60,6 +85,9 @@ export async function POST(
     designation?: string;
     leftOn?: string;
     reason?: string;
+    kind?: string;
+    highlights?: string;
+    contactEmail?: string;
   } | null;
 
   // A removed intern's record is frozen: restore them before acting on it.
@@ -174,6 +202,109 @@ export async function POST(
         password,
         stage: updated ? currentStage(updated) : null,
       });
+    }
+
+    /*
+     * Approves one end-of-internship document for this intern. Each document
+     * is approved on its own, and only inside the last days of the term. The
+     * founder's typed name is the signature; the full text is frozen here, so
+     * the PDF can never drift from what was approved.
+     */
+    case "issue-certificate": {
+      const kind = body.kind;
+      if (!isCertificateKind(kind)) return error("Choose which document to approve.");
+
+      const timing = certificateWindow(candidate);
+      if (timing.status === "not-eligible") return error(timing.reason, 409);
+      if (timing.status === "not-yet") {
+        return error(
+          `This can be prepared from ${formatLongDate(new Date(timing.opensOn))}, in the last ten days of the term.`,
+          409,
+        );
+      }
+      if (activeCertificate(candidate, kind)) {
+        return error(`The ${CERTIFICATE_LABEL[kind].toLowerCase()} is already issued. Withdraw it first to reissue.`, 409);
+      }
+
+      const typedName = body.typedName?.trim();
+      const designation = body.designation?.trim();
+      if (!typedName) return error("Type the approving founder's full name.");
+      if (!designation) return error("Enter the approving founder's designation.");
+      if (typedName.length > 120 || designation.length > 120) return error("That name or designation is too long.");
+
+      const highlights = kind === "recommendation" ? body.highlights?.trim() || undefined : undefined;
+      if (highlights && highlights.length > 1200) {
+        return error("Keep the founder's note under 1,200 characters.");
+      }
+      const contactEmail = kind === "recommendation" ? body.contactEmail?.trim() || undefined : undefined;
+      if (contactEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(contactEmail)) {
+        return error("That contact email is not valid.");
+      }
+
+      const issuedAt = new Date().toISOString();
+      const serial = newSerial(kind);
+
+      const updated = await updateCandidate(id, (c) => {
+        // Re-checked against fresh state, so two founders approving at once
+        // cannot issue the same document twice.
+        if (activeCertificate(c, kind)) return c;
+        const text = draftCertificate(c, kind, {
+          signatory: { name: typedName, designation, contactEmail },
+          highlights,
+          issuedOn: issuedAt,
+          serial,
+        });
+        return {
+          ...c,
+          certificates: [
+            ...(c.certificates ?? []),
+            {
+              kind,
+              serial,
+              issuedAt,
+              approvedBy: { typedName, designation, ip: clientIp(request) },
+              highlights,
+              text,
+            },
+          ],
+        };
+      });
+
+      const issued = updated ? activeCertificate(updated, kind) : null;
+      if (!issued || issued.serial !== serial) {
+        return error("Someone else issued this document a moment ago. Refresh to see it.", 409);
+      }
+      return json({ ok: true, serial });
+    }
+
+    // Takes an issued document back — a mistake in it, say. It stays on the
+    // record as withdrawn and can be reissued; the intern can no longer download it.
+    case "withdraw-certificate": {
+      const kind = body.kind;
+      if (!isCertificateKind(kind)) return error("Choose which document to withdraw.");
+      const current = activeCertificate(candidate, kind);
+      if (!current) return error("There is nothing issued to withdraw.", 409);
+
+      const reason = body.reason?.trim();
+      if (!reason) return error("Say why it is being withdrawn.");
+      if (reason.length > 500) return error("Keep the reason under 500 characters.");
+
+      await updateCandidate(id, (c) => ({
+        ...c,
+        certificates: (c.certificates ?? []).map((cert) =>
+          cert.serial === current.serial && !cert.withdrawn
+            ? { ...cert, withdrawn: { at: new Date().toISOString(), reason, ip: clientIp(request) } }
+            : cert,
+        ),
+      }));
+      return json({ ok: true });
+    }
+
+    // Clears the employee's password, so they set a new one from their link.
+    case "reset-sign-in": {
+      if (!candidate.login) return error("They have not set up sign-in yet.", 409);
+      await updateCandidate(id, (c) => ({ ...c, login: undefined }));
+      return json({ ok: true });
     }
 
     default:

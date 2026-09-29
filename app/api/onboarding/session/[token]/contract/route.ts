@@ -1,7 +1,8 @@
 import { clientIp, error, json } from "@/lib/onboarding/api.server";
 import { getCandidateByToken, updateCandidate } from "@/lib/onboarding/store.server";
 import { buildContract, contractToText } from "@/lib/onboarding/contract";
-import { agreementReady, currentStage, requiredTestIds, toCandidateView } from "@/lib/onboarding/stage";
+import { agreementReady, currentStage, requiredTestIds } from "@/lib/onboarding/stage";
+import { toCandidateView } from "@/lib/onboarding/view";
 import { assessmentsPassedPhrase } from "@/lib/onboarding/content";
 import type { Signature } from "@/lib/onboarding/types";
 
@@ -14,6 +15,8 @@ export async function GET(
 
   const candidate = await getCandidateByToken(token);
   if (!candidate) return error("This onboarding link is not valid.", 404);
+  // Added directly as an existing employee: there is no onboarding to do.
+  if (candidate.existing) return error("There are no onboarding steps on this record.", 409);
 
   const stage = currentStage(candidate);
   if (stage === "details" || stage === "learning" || stage === "tests") {
@@ -66,6 +69,8 @@ export async function POST(
 
   const candidate = await getCandidateByToken(token);
   if (!candidate) return error("This onboarding link is not valid.", 404);
+  // Added directly as an existing employee: there is no onboarding to do.
+  if (candidate.existing) return error("There are no onboarding steps on this record.", 409);
   if (candidate.signature) return error("This agreement is already signed.", 409);
   if (currentStage(candidate) !== "contract") {
     return error(`Your agreement can be signed once ${assessmentsPassedPhrase(requiredTestIds(candidate).length)}.`, 409);

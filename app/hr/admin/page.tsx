@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { AlertTriangle, Copy, FileWarning, Plus, RefreshCw, UserPlus } from "lucide-react";
+import { AlertTriangle, Award, Copy, FileWarning, Plus, RefreshCw, UserPlus } from "lucide-react";
 import {
   Button,
   Card,
@@ -51,6 +51,10 @@ interface Row {
   contractVerifiedAt: string | null;
   emailRequestedAt: string | null;
   mailbox: string | null;
+  /** Completion certificate / recommendation letter drafted and awaiting approval. */
+  certificatesAwaiting: ("completion" | "recommendation")[];
+  certificatesIssued: ("completion" | "recommendation")[];
+  signInEnabled: boolean;
 }
 
 const DAY = 86_400_000;
@@ -63,7 +67,8 @@ function needsFounder(row: Row): boolean {
   return Boolean(
     (row.signedAt && !row.contractVerifiedAt) ||
       (row.emailRequestedAt && !row.mailbox) ||
-      !row.agreementReady,
+      !row.agreementReady ||
+      row.certificatesAwaiting.length > 0,
   );
 }
 
@@ -106,6 +111,7 @@ export default function AdminConsole() {
       onboarding: active.filter((r) => r.stage !== "complete").length,
       needsYou: active.filter(needsFounder).length,
       agreementsToPrepare: active.filter((r) => !r.agreementReady).length,
+      certificates: active.filter((r) => r.certificatesAwaiting.length > 0).length,
       endingSoon: active.filter((r) => {
         const days = daysUntil(r.endDate);
         return days >= 0 && days <= 30;
@@ -118,7 +124,7 @@ export default function AdminConsole() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:py-10">
       <div className="mb-7 flex flex-wrap items-center justify-between gap-4">
-        <Wordmark subtitle="Onboarding console" href="/onboarding/admin" />
+        <Wordmark subtitle="HR console" href="/hr/admin" />
         <div className="flex gap-2">
           <Button variant="ghost" onClick={load}>
             <RefreshCw className="size-4" aria-hidden />
@@ -139,14 +145,19 @@ export default function AdminConsole() {
       </div>
 
       {stats && (
-        <dl className="mb-5 grid grid-cols-2 gap-3 lg:grid-cols-5">
-          <Stat label="Candidates" value={stats.total} />
+        <dl className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <Stat label="People" value={stats.total} />
           <Stat label="Onboarding" value={stats.onboarding} />
           <Stat label="Needs you" value={stats.needsYou} tone={stats.needsYou > 0 ? "gold" : undefined} />
           <Stat
             label="Agreements to prepare"
             value={stats.agreementsToPrepare}
             tone={stats.agreementsToPrepare > 0 ? "gold" : undefined}
+          />
+          <Stat
+            label="Certificates to approve"
+            value={stats.certificates}
+            tone={stats.certificates > 0 ? "gold" : undefined}
           />
           <Stat label="Ending ≤ 30 days" value={stats.endingSoon} />
         </dl>
@@ -168,8 +179,8 @@ export default function AdminConsole() {
       <Card className="!p-0">
         <div className="border-b p-5 fr-rule sm:p-6">
           <SectionTitle
-            title="Candidates"
-            lead="Newest first. Open one to review documents, prepare an agreement, and act."
+            title="People"
+            lead="Interns, candidates and employees, newest first. Open one to review documents, act on onboarding, or approve end-of-internship certificates."
           />
         </div>
 
@@ -180,8 +191,8 @@ export default function AdminConsole() {
         ) : active.length === 0 ? (
           <p className="p-6 text-sm" style={{ color: "var(--fr-muted)" }}>
             {removed.length > 0
-              ? "No active candidates. Removed interns are listed below."
-              : "No candidates yet. Create one to generate an onboarding link."}
+              ? "No one active. Removed people are listed below."
+              : "No one here yet. Invite a candidate, or add an existing employee."}
           </p>
         ) : (
           <div className="overflow-x-auto">
@@ -191,7 +202,7 @@ export default function AdminConsole() {
                   className="text-[11px] tracking-[0.14em] uppercase"
                   style={{ color: "var(--fr-muted)" }}
                 >
-                  <Th>Candidate</Th>
+                  <Th>Person</Th>
                   <Th>Role</Th>
                   <Th>Onboarding</Th>
                   <Th>Term</Th>
@@ -210,7 +221,7 @@ export default function AdminConsole() {
                     <tr key={row.id} className="border-t align-top fr-rule">
                       <Td>
                         <Link
-                          href={`/onboarding/admin/${row.id}`}
+                          href={`/hr/admin/${row.id}`}
                           className="font-bold hover:underline"
                         >
                           {row.fullName ?? row.invitedName}
@@ -274,6 +285,23 @@ export default function AdminConsole() {
                               Create mailbox
                             </Flag>
                           )}
+                          {row.certificatesAwaiting.length > 0 && (
+                            <Flag tone="gold" Icon={Award}>
+                              {row.certificatesAwaiting.length === 2
+                                ? "Approve certificates"
+                                : row.certificatesAwaiting[0] === "completion"
+                                  ? "Approve certificate"
+                                  : "Approve letter"}
+                            </Flag>
+                          )}
+                          {row.certificatesIssued.length > 0 && (
+                            <span
+                              className="inline-block rounded-md px-2 py-1 text-xs"
+                              style={{ backgroundColor: "rgba(52,168,110,0.14)", color: "#a7e8c6" }}
+                            >
+                              {row.certificatesIssued.length === 2 ? "Certificates issued" : "1 of 2 issued"}
+                            </span>
+                          )}
                         </div>
                       </Td>
                     </tr>
@@ -289,7 +317,7 @@ export default function AdminConsole() {
         <Card className="mt-5">
           <SectionTitle
             title={`Removed (${removed.length})`}
-            lead="People who left, or candidates who stopped before starting. Their onboarding links no longer work, but their records are kept as the privacy notice promises. Open one to restore it."
+            lead="People who left, or candidates who stopped before starting. Their links and sign-in no longer work, but their records are kept as the privacy notice promises. Open one to restore it."
           />
           <ul className="space-y-2">
             {removed.map((row) => (
@@ -299,7 +327,7 @@ export default function AdminConsole() {
                 style={{ borderColor: "var(--fr-line)", backgroundColor: "var(--fr-navy-deep)" }}
               >
                 <div className="min-w-0">
-                  <Link href={`/onboarding/admin/${row.id}`} className="font-bold hover:underline">
+                  <Link href={`/hr/admin/${row.id}`} className="font-bold hover:underline">
                     {row.fullName ?? row.invitedName}
                   </Link>
                   <span className="block text-xs" style={{ color: "var(--fr-muted)" }}>
@@ -409,7 +437,7 @@ function PasscodeGate({ onDone }: { onDone: () => void }) {
   return (
     <div className="mx-auto w-full max-w-md px-4 py-16 sm:px-6">
       <div className="mb-8">
-        <Wordmark subtitle="Onboarding console" href="/onboarding/admin" />
+        <Wordmark subtitle="HR console" href="/hr/admin" />
       </div>
       <Card>
         <SectionTitle
@@ -504,13 +532,9 @@ function NewCandidate({
       setMessage(data.error ?? "Could not create.");
       return;
     }
-    if (isExisting) {
-      onCreated();
-      return;
-    }
     setCreated({
       id: data.id as string,
-      link: `${window.location.origin}/onboarding/${data.token}`,
+      link: `${window.location.origin}/hr/${data.token}`,
     });
   }
 
@@ -518,8 +542,12 @@ function NewCandidate({
     return (
       <Card>
         <SectionTitle
-          title="Onboarding link ready"
-          lead="Send this to the candidate. It is the only way into their onboarding, so treat it like a password — anyone holding it can submit details as them."
+          title={isExisting ? "Added — portal link ready" : "Onboarding link ready"}
+          lead={
+            isExisting
+              ? "Send this to them. It opens their employee portal, where they set a password to sign in and download documents you issue. Treat it like a password."
+              : "Send this to the candidate. It is the only way into their onboarding, so treat it like a password — anyone holding it can submit details as them."
+          }
         />
         <p
           className="mb-4 rounded-xl border p-4 font-mono text-sm break-all"
@@ -528,7 +556,7 @@ function NewCandidate({
           {created.link}
         </p>
 
-        {agreementKind === "bespoke" && !hasAgreementOnFile && (
+        {!isExisting && agreementKind === "bespoke" && !hasAgreementOnFile && (
           <div className="mb-4">
             <Notice tone="warn">
               This candidate cannot reach a signature until you upload their agreement.
@@ -562,7 +590,7 @@ function NewCandidate({
         title={isExisting ? "Add existing employee" : "New candidate"}
         lead={
           isExisting
-            ? "For someone onboarded before this console existed. They go straight onto the roster as onboarded, with no onboarding link. Their agreement and documents stay wherever you keep them now — nothing is signed or recorded on their behalf."
+            ? "For someone onboarded before this console existed. They go straight onto the roster as onboarded, skipping onboarding, and get an employee portal link to sign in and collect documents. Their agreement stays wherever you keep it now — nothing is signed or recorded on their behalf."
             : "Creates their onboarding link."
         }
       />

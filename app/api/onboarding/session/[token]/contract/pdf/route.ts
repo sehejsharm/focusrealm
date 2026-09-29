@@ -14,6 +14,7 @@ export async function GET(
 
   const candidate = await getCandidateByToken(token);
   if (!candidate) return error("This onboarding link is not valid.", 404);
+  if (candidate.existing) return error("There is no agreement on file here — ask the founders for your copy.", 409);
 
   const stage = currentStage(candidate);
   if (stage === "details" || stage === "learning" || stage === "tests") {

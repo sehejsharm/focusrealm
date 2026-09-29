@@ -125,3 +125,58 @@ export function isValidAadhaar(digits: string): boolean {
 export function maskAadhaar(digits: string): string {
   return `XXXX XXXX ${digits.slice(-4)}`;
 }
+
+/* -------------------------------------------------------------------------- */
+/* Employee sign-in                                                           */
+/* -------------------------------------------------------------------------- */
+
+export const EMPLOYEE_COOKIE = "fr_hr_employee";
+export const MIN_PASSWORD_LENGTH = 10;
+export const MAX_PASSWORD_LENGTH = 200;
+
+/** Consecutive wrong passwords before sign-in is paused for this record. */
+export const MAX_FAILED_SIGN_INS = 5;
+export const SIGN_IN_LOCK_MINUTES = 15;
+
+const SCRYPT = { N: 16384, r: 8, p: 1, keylen: 32 };
+
+/** `scrypt$N$r$p$salt$hash` — parameters travel with the hash, so they can change later. */
+export function hashPassword(password: string): string {
+  const salt = randomBytes(16);
+  const hash = scryptSync(password, salt, SCRYPT.keylen, { N: SCRYPT.N, r: SCRYPT.r, p: SCRYPT.p });
+  return ["scrypt", SCRYPT.N, SCRYPT.r, SCRYPT.p, salt.toString("base64url"), hash.toString("base64url")].join("$");
+}
+
+export function verifyPassword(password: string, stored: string): boolean {
+  const [scheme, n, r, p, saltPart, hashPart] = stored.split("$");
+  if (scheme !== "scrypt" || !saltPart || !hashPart) return false;
+
+  const expected = Buffer.from(hashPart, "base64url");
+  const actual = scryptSync(password, Buffer.from(saltPart, "base64url"), expected.length, {
+    N: Number(n),
+    r: Number(r),
+    p: Number(p),
+  });
+  return timingSafeEqual(actual, expected);
+}
+
+/** Session value is `id.expiry.signature`, bound to one employee record. */
+export function issueEmployeeSession(id: string, days = 7): string {
+  const expiry = String(Date.now() + days * 86_400_000);
+  const sig = createHmac("sha256", secret()).update(`employee:${id}.${expiry}`).digest("base64url");
+  return `${id}.${expiry}.${sig}`;
+}
+
+/** The employee record id a valid session belongs to, or null. */
+export function verifyEmployeeSession(value: string | undefined): string | null {
+  if (!value) return null;
+
+  const [id, expiry, sig] = value.split(".");
+  if (!id || !expiry || !sig) return null;
+
+  const expected = createHmac("sha256", secret()).update(`employee:${id}.${expiry}`).digest("base64url");
+  if (sig.length !== expected.length) return null;
+  if (!timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
+
+  return Number(expiry) > Date.now() ? id : null;
+}

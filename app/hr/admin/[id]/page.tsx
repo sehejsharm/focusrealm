@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Check, Download, ExternalLink, FileWarning, Mail, RotateCcw, Upload, UserMinus, X } from "lucide-react";
+import { ArrowLeft, Award, Check, Copy, Download, ExternalLink, FileWarning, KeyRound, Mail, RotateCcw, Upload, UserMinus, X } from "lucide-react";
 import ContractDocument from "@/components/onboarding/ContractDocument";
 import {
   Button,
@@ -27,6 +27,15 @@ import {
 } from "@/lib/onboarding/types";
 import type { Company } from "@/lib/onboarding/types";
 import { COMPANIES, companyLabel } from "@/lib/onboarding/content";
+import {
+  CERTIFICATE_KINDS,
+  CERTIFICATE_LABEL,
+  CERTIFICATE_WINDOW_DAYS,
+  activeCertificate,
+  draftCertificate,
+} from "@/lib/onboarding/certificates";
+import { formatLongDate } from "@/lib/onboarding/contract";
+import type { CertificateKind, CertificateText, CertificateWindow } from "@/lib/onboarding/types";
 
 interface AdminCandidate extends Omit<Candidate, "mailbox" | "companies"> {
   stage: Stage;
@@ -41,6 +50,13 @@ interface AdminCandidate extends Omit<Candidate, "mailbox" | "companies"> {
     collected: boolean;
   } | null;
   retention: { kind: "keep" | "erase"; until: string } | null;
+  certificateWindow: CertificateWindow;
+  signIn: {
+    enabled: boolean;
+    setAt: string | null;
+    lockedUntil: string | null;
+    emails: string[];
+  };
 }
 
 /** One candidate: their documents, and the decisions only a founder can make. */
@@ -103,17 +119,32 @@ export default function AdminCandidatePage() {
   const bespokeDocument = plan.kind === "bespoke" ? plan.document : undefined;
   const accessLog = candidate.aadhaarAccess ?? [];
 
+  // At the end of a term the documents are the thing to act on, so they move
+  // up from the bottom of the page, above the full agreement text.
+  const certificatesFirst =
+    candidate.certificateWindow.status === "open" ||
+    CERTIFICATE_KINDS.some((kind) => activeCertificate(candidate, kind));
+  const certificates = (
+    <Certificates
+      id={id}
+      candidate={candidate}
+      frozen={frozen}
+      onIssue={(kind, fields) => act({ action: "issue-certificate", kind, ...fields })}
+      onWithdraw={(kind, reason) => act({ action: "withdraw-certificate", kind, reason })}
+    />
+  );
+
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:py-12">
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-        <Wordmark subtitle="Onboarding console" href="/onboarding/admin" />
+        <Wordmark subtitle="HR console" href="/hr/admin" />
         <Link
-          href="/onboarding/admin"
+          href="/hr/admin"
           className="inline-flex min-h-10 items-center gap-2 text-sm font-bold"
           style={{ color: "var(--fr-muted)" }}
         >
           <ArrowLeft className="size-4" aria-hidden />
-          All candidates
+          Everyone
         </Link>
       </div>
 
@@ -145,11 +176,22 @@ export default function AdminCandidatePage() {
       )}
 
       <div className="space-y-5">
+        {!frozen && (
+          <PortalAccess
+            token={candidate.token}
+            existing={Boolean(candidate.existing)}
+            signIn={candidate.signIn}
+            onReset={() => act({ action: "reset-sign-in" })}
+          />
+        )}
+
+        {certificatesFirst && certificates}
+
         {candidate.existing ? (
           <Card>
             <SectionTitle
               title="Existing employee"
-              lead={`Added directly on ${formatDate(candidate.existing.addedAt)}, as someone already onboarded before this console existed. There is no onboarding link, and no details, assessments or agreement were collected here — those live wherever you kept them.`}
+              lead={`Added directly on ${formatDate(candidate.existing.addedAt)}, as someone already onboarded before this console existed. They skip onboarding — their link opens the employee portal — and no details, assessments or agreement were collected here; those live wherever you kept them.`}
             />
             <dl className="grid gap-4 sm:grid-cols-2">
               <Detail label="Personal email" value={candidate.invitedEmail} />
@@ -163,16 +205,6 @@ export default function AdminCandidatePage() {
           </Card>
         ) : (
           <>
-        <Card>
-          <SectionTitle title="Onboarding link" />
-          <p
-            className="rounded-xl border p-3 font-mono text-xs break-all"
-            style={{ borderColor: "var(--fr-line)", backgroundColor: "var(--fr-navy-deep)" }}
-          >
-            /onboarding/{candidate.token}
-          </p>
-        </Card>
-
         <Card>
           <SectionTitle
             title="Agreement for this role"
@@ -449,6 +481,8 @@ export default function AdminCandidatePage() {
             )}
           </Card>
         )}
+
+        {!certificatesFirst && certificates}
 
         {!frozen && (
           <RemoveIntern
@@ -781,5 +815,455 @@ function AgreementUpload({
         {busy ? "Uploading…" : replacing ? "Replace document" : "Upload agreement"}
       </Button>
     </form>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Portal link and sign-in                                                    */
+/* -------------------------------------------------------------------------- */
+
+function PortalAccess({
+  token,
+  existing,
+  signIn,
+  onReset,
+}: {
+  token: string;
+  existing: boolean;
+  signIn: AdminCandidate["signIn"];
+  onReset: () => void;
+}) {
+  const [copied, setCopied] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const origin = typeof window === "undefined" ? "" : window.location.origin;
+  const link = `${origin}/hr/${token}`;
+
+  return (
+    <Card>
+      <SectionTitle
+        title="Portal link and sign-in"
+        lead={
+          existing
+            ? "Their personal link to the employee portal. Anyone holding it can open their record, so send it only to them."
+            : "Their personal link — onboarding while that is in progress, then their employee portal. Anyone holding it can open their record, so send it only to them."
+        }
+      />
+      <p
+        className="mb-3 rounded-xl border p-3 font-mono text-xs break-all"
+        style={{ borderColor: "var(--fr-line)", backgroundColor: "var(--fr-navy-deep)" }}
+      >
+        {link}
+      </p>
+      <Button
+        variant="ghost"
+        onClick={() => {
+          navigator.clipboard?.writeText(link);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 1500);
+        }}
+      >
+        <Copy className="size-4" aria-hidden />
+        {copied ? "Copied" : "Copy link"}
+      </Button>
+
+      <div className="mt-5 space-y-3 border-t pt-5 fr-rule">
+        <p className="flex items-center gap-2 text-sm font-bold">
+          <KeyRound className="size-4" style={{ color: "var(--fr-gold)" }} aria-hidden />
+          Email sign-in
+        </p>
+        {signIn.enabled ? (
+          <>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--fr-muted)" }}>
+              Set up{signIn.setAt ? ` ${formatDateTime(signIn.setAt)}` : ""}. They sign in at{" "}
+              <span className="font-mono">{origin}/hr</span> with{" "}
+              {signIn.emails.join(" or ")} and their own password.
+            </p>
+            {signIn.lockedUntil && (
+              <Notice tone="warn">
+                Paused after too many wrong passwords, until {formatDateTime(signIn.lockedUntil)}.
+                Resetting clears the pause.
+              </Notice>
+            )}
+            {confirming ? (
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="text-sm">Clear their password? They set a new one from their link.</span>
+                <Button
+                  variant="danger"
+                  onClick={() => {
+                    setConfirming(false);
+                    onReset();
+                  }}
+                >
+                  Reset sign-in
+                </Button>
+                <Button variant="ghost" onClick={() => setConfirming(false)}>
+                  Cancel
+                </Button>
+              </div>
+            ) : (
+              <Button variant="ghost" onClick={() => setConfirming(true)}>
+                Reset sign-in
+              </Button>
+            )}
+          </>
+        ) : (
+          <p className="text-sm leading-relaxed" style={{ color: "var(--fr-muted)" }}>
+            Not set up yet. They choose a password from their link, then sign in at{" "}
+            <span className="font-mono">{origin}/hr</span> with {signIn.emails.join(" or ")}.
+          </p>
+        )}
+      </div>
+    </Card>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* End-of-internship documents                                                */
+/* -------------------------------------------------------------------------- */
+
+type IssueFields = {
+  typedName: string;
+  designation: string;
+  highlights?: string;
+  contactEmail?: string;
+};
+
+function Certificates({
+  id,
+  candidate,
+  frozen,
+  onIssue,
+  onWithdraw,
+}: {
+  id: string;
+  candidate: AdminCandidate;
+  frozen: boolean;
+  onIssue: (kind: CertificateKind, fields: IssueFields) => Promise<unknown>;
+  onWithdraw: (kind: CertificateKind, reason: string) => Promise<unknown>;
+}) {
+  const timing = candidate.certificateWindow;
+  const history = (candidate.certificates ?? []).filter((c) => c.withdrawn);
+  const anyIssued = CERTIFICATE_KINDS.some((kind) => activeCertificate(candidate, kind));
+
+  return (
+    <Card>
+      <SectionTitle
+        title="Completion certificate and recommendation letter"
+        lead={`Drafted automatically from this record in the last ${CERTIFICATE_WINDOW_DAYS} days of the term. Nothing is issued until a founder approves it — each document separately. Once approved, they can download it from their portal.`}
+      />
+
+      {timing.status === "not-eligible" && !anyIssued && <Notice>{timing.reason}</Notice>}
+      {timing.status === "not-yet" && !anyIssued && (
+        <Notice>
+          Drafts open on {formatDate(timing.opensOn)} — {CERTIFICATE_WINDOW_DAYS} days before the
+          term ends. They will be flagged on the dashboard then.
+        </Notice>
+      )}
+
+      {(timing.status === "open" || anyIssued) && (
+        <div className="space-y-5">
+          {CERTIFICATE_KINDS.map((kind) => (
+            <CertificatePanel
+              key={kind}
+              id={id}
+              kind={kind}
+              candidate={candidate}
+              canIssue={timing.status === "open" && !frozen}
+              frozen={frozen}
+              onIssue={(fields) => onIssue(kind, fields)}
+              onWithdraw={(reason) => onWithdraw(kind, reason)}
+            />
+          ))}
+        </div>
+      )}
+
+      {history.length > 0 && (
+        <div className="mt-5 border-t pt-4 fr-rule">
+          <p className="mb-2 text-xs font-bold tracking-wide uppercase" style={{ color: "var(--fr-muted)" }}>
+            Withdrawn
+          </p>
+          <ul className="space-y-1.5 text-xs" style={{ color: "var(--fr-muted)" }}>
+            {history.map((cert) => (
+              <li key={cert.serial}>
+                {CERTIFICATE_LABEL[cert.kind]} {cert.serial}, issued {formatDate(cert.issuedAt)} by{" "}
+                {cert.approvedBy.typedName} — withdrawn {formatDate(cert.withdrawn!.at)}:{" "}
+                {cert.withdrawn!.reason}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </Card>
+  );
+}
+
+function CertificatePanel({
+  id,
+  kind,
+  candidate,
+  canIssue,
+  frozen,
+  onIssue,
+  onWithdraw,
+}: {
+  id: string;
+  kind: CertificateKind;
+  candidate: AdminCandidate;
+  canIssue: boolean;
+  frozen: boolean;
+  onIssue: (fields: IssueFields) => Promise<unknown>;
+  onWithdraw: (reason: string) => Promise<unknown>;
+}) {
+  const issued = activeCertificate(candidate, kind);
+  const name = candidate.details?.fullName ?? candidate.invitedName;
+
+  const [typedName, setTypedName] = useState("");
+  const [designation, setDesignation] = useState("Co-founder");
+  const [highlights, setHighlights] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [approved, setApproved] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [withdrawing, setWithdrawing] = useState(false);
+  const [reason, setReason] = useState("");
+
+  const box = {
+    borderColor: "var(--fr-line)",
+    backgroundColor: "var(--fr-navy-deep)",
+  } as const;
+
+  if (issued) {
+    return (
+      <div className="space-y-3 rounded-xl border p-4" style={box}>
+        <p className="flex items-center gap-2 text-sm font-bold">
+          <Award className="size-4" style={{ color: "var(--fr-gold)" }} aria-hidden />
+          {CERTIFICATE_LABEL[kind]}
+        </p>
+        <Notice tone="good">
+          Approved by {issued.approvedBy.typedName}, {issued.approvedBy.designation}, on{" "}
+          {formatDateTime(issued.issuedAt)} · {issued.serial}. {name} can download it from their
+          portal.
+        </Notice>
+        <div className="flex flex-wrap gap-3">
+          <a
+            href={`/api/onboarding/admin/candidates/${id}/certificates/${kind}/pdf`}
+            className="inline-flex min-h-12 items-center gap-2 rounded-xl px-4 text-sm font-bold"
+            style={{
+              backgroundColor: "var(--fr-navy-soft)",
+              border: "1px solid var(--fr-line)",
+              color: "var(--fr-paper)",
+            }}
+          >
+            <Download className="size-4" aria-hidden />
+            Download PDF
+          </a>
+          {!frozen && !withdrawing && (
+            <Button variant="ghost" onClick={() => setWithdrawing(true)}>
+              Withdraw
+            </Button>
+          )}
+        </div>
+        {withdrawing && (
+          <div className="space-y-3">
+            <Field label="Why is it being withdrawn?" hint="Kept on the record. They can no longer download it; you can issue a corrected one.">
+              <input
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                maxLength={500}
+                className={inputClass}
+                style={inputStyle}
+              />
+            </Field>
+            <div className="flex flex-wrap gap-3">
+              <Button
+                variant="danger"
+                disabled={!reason.trim() || busy}
+                onClick={async () => {
+                  setBusy(true);
+                  await onWithdraw(reason.trim());
+                  setBusy(false);
+                  setWithdrawing(false);
+                  setReason("");
+                }}
+              >
+                Withdraw {kind === "completion" ? "certificate" : "letter"}
+              </Button>
+              <Button variant="ghost" onClick={() => setWithdrawing(false)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  if (!canIssue) {
+    return (
+      <div className="rounded-xl border p-4 text-sm" style={box}>
+        <p className="font-bold">{CERTIFICATE_LABEL[kind]}</p>
+        <p className="mt-1" style={{ color: "var(--fr-muted)" }}>
+          Not issued.
+        </p>
+      </div>
+    );
+  }
+
+  // The live draft, exactly as it would be frozen if approved now.
+  const preview = draftCertificate(candidate as unknown as Candidate, kind, {
+    signatory: {
+      name: typedName.trim() || "Founder's name",
+      designation: designation.trim() || "Designation",
+      contactEmail: contactEmail.trim() || undefined,
+    },
+    highlights,
+    issuedOn: new Date().toISOString(),
+    serial: "assigned on approval",
+  });
+
+  const ready = typedName.trim() && designation.trim() && approved && !busy;
+
+  return (
+    <div className="space-y-4 rounded-xl border p-4" style={box}>
+      <p className="flex items-center gap-2 text-sm font-bold">
+        <Award className="size-4" style={{ color: "var(--fr-gold)" }} aria-hidden />
+        {CERTIFICATE_LABEL[kind]} — ready for approval
+      </p>
+
+      <CertificatePreview text={preview} />
+
+      {kind === "recommendation" && (
+        <div className="grid gap-4">
+          <Field
+            label="A few words of your own"
+            hint="Optional, but it is what makes a recommendation worth reading: something specific they did well. Printed as its own paragraph."
+          >
+            <textarea
+              value={highlights}
+              onChange={(e) => setHighlights(e.target.value)}
+              rows={3}
+              maxLength={1200}
+              className={`${inputClass} resize-y`}
+              style={inputStyle}
+            />
+          </Field>
+          <Field label="Contact email for referees" hint="Optional. Printed so a future employer can reach you.">
+            <input
+              value={contactEmail}
+              onChange={(e) => setContactEmail(e.target.value)}
+              type="email"
+              className={inputClass}
+              style={inputStyle}
+            />
+          </Field>
+        </div>
+      )}
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="Approving founder's full name" hint="Printed as the signature.">
+          <input
+            value={typedName}
+            onChange={(e) => setTypedName(e.target.value)}
+            className={inputClass}
+            style={inputStyle}
+            autoComplete="off"
+          />
+        </Field>
+        <Field label="Designation">
+          <input
+            value={designation}
+            onChange={(e) => setDesignation(e.target.value)}
+            className={inputClass}
+            style={inputStyle}
+          />
+        </Field>
+      </div>
+
+      <label className="flex items-start gap-3 text-sm leading-snug">
+        <input
+          type="checkbox"
+          checked={approved}
+          onChange={(e) => setApproved(e.target.checked)}
+          className="mt-0.5 size-4 shrink-0 accent-[var(--fr-gold)]"
+        />
+        <span>
+          I have read this {kind === "completion" ? "certificate" : "letter"} and approve issuing it
+          to {name} on behalf of Focus Realm.
+        </span>
+      </label>
+
+      <Button
+        disabled={!ready}
+        onClick={async () => {
+          setBusy(true);
+          await onIssue({
+            typedName: typedName.trim(),
+            designation: designation.trim(),
+            highlights: kind === "recommendation" ? highlights.trim() || undefined : undefined,
+            contactEmail: kind === "recommendation" ? contactEmail.trim() || undefined : undefined,
+          });
+          setBusy(false);
+        }}
+      >
+        <Check className="size-4" aria-hidden />
+        {busy ? "Issuing…" : `Approve and issue ${kind === "completion" ? "certificate" : "letter"}`}
+      </Button>
+    </div>
+  );
+}
+
+/** A paper-like rendering of the draft, so founders approve what will be printed. */
+function CertificatePreview({ text }: { text: CertificateText }) {
+  const issued = formatLongDate(new Date(text.issuedOn));
+
+  return (
+    <div
+      className="max-h-96 overflow-y-auto rounded-lg p-5 text-sm leading-relaxed sm:p-6"
+      style={{ backgroundColor: "#fbfaf6", color: "#1f1f1f", fontFamily: "Georgia, 'Times New Roman', serif" }}
+    >
+      {text.kind === "completion" ? (
+        <div className="text-center">
+          <p className="text-[10px] font-bold tracking-[0.3em]" style={{ color: "#b8962f", fontFamily: "var(--font-inter), sans-serif" }}>
+            FOCUS REALM
+          </p>
+          <p className="mt-2 text-xl font-bold" style={{ color: "#122a2e" }}>
+            {text.title}
+          </p>
+          <p className="mt-2 italic" style={{ color: "#6b6b6b" }}>
+            This is to certify that
+          </p>
+          <p className="mt-1 text-2xl font-bold" style={{ color: "#122a2e" }}>
+            {text.recipientName}
+          </p>
+          {text.paragraphs.map((p, i) => (
+            <p key={i} className="mt-2">
+              {p}
+            </p>
+          ))}
+          <p className="mt-4 text-xs" style={{ color: "#6b6b6b" }}>
+            {text.signatory.name}, {text.signatory.designation} · Date of issue {issued} · No.{" "}
+            {text.serial}
+          </p>
+        </div>
+      ) : (
+        <div>
+          <p className="text-xs" style={{ color: "#6b6b6b" }}>
+            {issued} · Ref. {text.serial}
+          </p>
+          <p className="mt-2 text-lg font-bold" style={{ color: "#122a2e" }}>
+            {text.title}
+          </p>
+          {text.salutation && <p className="mt-3">{text.salutation}</p>}
+          {text.paragraphs.map((p, i) => (
+            <p key={i} className="mt-3 whitespace-pre-line">
+              {p}
+            </p>
+          ))}
+          {text.closing && <p className="mt-4">{text.closing}</p>}
+          <p className="mt-2 font-bold">{text.signatory.name}</p>
+          <p>{text.signatory.designation}, Focus Realm</p>
+          {text.signatory.contactEmail && <p style={{ color: "#6b6b6b" }}>{text.signatory.contactEmail}</p>}
+        </div>
+      )}
+    </div>
   );
 }

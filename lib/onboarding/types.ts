@@ -165,6 +165,55 @@ export interface ExistingMember {
   note?: string;
 }
 
+/** The two end-of-internship documents. Each is approved on its own. */
+export type CertificateKind = "completion" | "recommendation";
+
+/**
+ * Everything printed on an issued document, frozen at the moment a founder
+ * approved it — so a later change to the record, or to the wording in code,
+ * never rewrites a certificate someone already holds.
+ */
+export interface CertificateText {
+  kind: CertificateKind;
+  title: string;
+  recipientName: string;
+  roleTitle: string;
+  /** "Focus Realm and Recharga Chargine" */
+  organisations: string;
+  startDate: string;
+  endDate: string;
+  /** Body paragraphs, in order. */
+  paragraphs: string[];
+  /** The letter's salutation and sign-off; the certificate has neither. */
+  salutation?: string;
+  closing?: string;
+  signatory: { name: string; designation: string; contactEmail?: string };
+  issuedOn: string;
+  serial: string;
+}
+
+export interface IssuedCertificate {
+  kind: CertificateKind;
+  serial: string;
+  issuedAt: string;
+  /** The founder who approved it — their typed name is the signature. */
+  approvedBy: { typedName: string; designation: string; ip: string | null };
+  /** The founder's own words, added to the letter. */
+  highlights?: string;
+  text: CertificateText;
+  /** A withdrawn document stays on record but can no longer be downloaded. */
+  withdrawn?: { at: string; reason: string; ip: string | null };
+}
+
+/** Email-and-password sign-in to the employee portal. */
+export interface EmployeeLogin {
+  /** scrypt, with its own salt and parameters — never the password. */
+  passwordHash: string;
+  setAt: string;
+  failedAttempts?: number;
+  lockedUntil?: string;
+}
+
 export interface Mailbox {
   address: string;
   provisionedAt: string;
@@ -218,6 +267,9 @@ export interface Candidate {
   contractRejection?: { note: string; at: string };
   emailRequestedAt?: string;
   mailbox?: Mailbox;
+  /** Every completion certificate and recommendation letter issued, oldest first. */
+  certificates?: IssuedCertificate[];
+  login?: EmployeeLogin;
 }
 
 /** Candidate-safe view — no Aadhaar number, no sealed password. */
@@ -248,7 +300,29 @@ export interface CandidateView {
   contractRejection: { note: string; at: string } | null;
   emailRequestedAt: string | null;
   mailbox: { address: string; viewed: boolean } | null;
+  /** Added directly as an existing employee — there was no onboarding. */
+  existing: boolean;
+  /** When the end-of-internship documents can be prepared. */
+  certificateWindow: CertificateWindow;
+  /** Documents approved and ready to download. Withdrawn ones are left out. */
+  certificates: {
+    kind: CertificateKind;
+    title: string;
+    serial: string;
+    issuedAt: string;
+  }[];
+  signIn: {
+    /** Whether a password has been set. */
+    enabled: boolean;
+    /** Any of these works as the username. */
+    emails: string[];
+  };
 }
+
+export type CertificateWindow =
+  | { status: "open"; opensOn: string }
+  | { status: "not-yet"; opensOn: string }
+  | { status: "not-eligible"; reason: string };
 
 export const BUILT_IN_TRACKS: Record<string, TrackDefinition> = {
   "founders-office": {

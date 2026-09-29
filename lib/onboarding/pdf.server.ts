@@ -24,7 +24,7 @@ const RULE = rgb(0.75, 0.75, 0.75);
  * mid-render. Typographic characters are folded to their ASCII equivalents and
  * anything still unencodable is dropped rather than failing the download.
  */
-function ascii(text: string): string {
+export function ascii(text: string): string {
   return text
     .replace(/[‘’‚′]/g, "'")
     .replace(/[“”„″]/g, '"')
@@ -52,7 +52,7 @@ function ensureSpace(layout: Layout, needed: number): void {
 }
 
 /** Greedy wrap against real glyph widths. */
-function wrap(text: string, font: PDFFont, size: number, width: number): string[] {
+export function wrap(text: string, font: PDFFont, size: number, width: number): string[] {
   const lines: string[] = [];
   let line = "";
 

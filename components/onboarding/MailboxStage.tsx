@@ -20,11 +20,14 @@ export default function MailboxStage({
   candidate,
   onSaved,
   locked,
+  inPortal = false,
 }: {
   token: string;
   candidate: CandidateView;
   onSaved: (next: CandidateView) => void;
   locked: boolean;
+  /** Shown on the employee portal, where it is no longer a numbered step. */
+  inPortal?: boolean;
 }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -64,7 +67,7 @@ export default function MailboxStage({
     return (
       <Card>
         <SectionTitle
-          eyebrow="Step 6 of 6"
+          eyebrow={inPortal ? undefined : "Step 6 of 6"}
           title="Your Focus Realm email"
           lead="Once your signed agreement is verified, you can request a company mailbox here."
         />
@@ -79,7 +82,7 @@ export default function MailboxStage({
     return (
       <Card>
         <SectionTitle
-          eyebrow="Step 6 of 6"
+          eyebrow={inPortal ? undefined : "Step 6 of 6"}
           title="Your mailbox is ready"
           lead={
             candidate.mailbox.viewed
@@ -110,7 +113,7 @@ export default function MailboxStage({
   return (
     <Card>
       <SectionTitle
-        eyebrow="Step 6 of 6"
+        eyebrow={inPortal ? undefined : "Step 6 of 6"}
         title="Request your Focus Realm email"
         lead="Your agreement is verified. Request a mailbox and the founders will create it on SpaceMail — you will be able to collect the credentials here."
       />

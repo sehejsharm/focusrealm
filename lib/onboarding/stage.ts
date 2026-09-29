@@ -1,6 +1,6 @@
 import { ALL_COMPANIES, isCompany, resourcesFor, testIdsFor } from "./content";
-import type { Candidate, CandidateView, Company, Stage } from "./types";
-import { DEFAULT_TERM_MONTHS, STAGE_ORDER, trackOf } from "./types";
+import type { Candidate, Company, Stage } from "./types";
+import { DEFAULT_TERM_MONTHS, STAGE_ORDER } from "./types";
 
 /**
  * The companies this candidate is onboarding into. A record with no choice on
@@ -78,55 +78,6 @@ export function stageIndex(stage: Stage): number {
 
 export function isStageDone(candidate: Candidate, stage: Stage): boolean {
   return stageIndex(currentStage(candidate)) > stageIndex(stage);
-}
-
-/** Strips Aadhaar number and sealed credentials for the candidate's own view. */
-export function toCandidateView(candidate: Candidate): CandidateView {
-  const { details } = candidate;
-  const termMonths = candidate.termMonths || DEFAULT_TERM_MONTHS;
-
-  return {
-    track: candidate.track,
-    role: trackOf(candidate),
-    termMonths,
-    endDate: endDateOf(candidate),
-    agreementKind: candidate.agreement?.kind ?? "standard",
-    companies: companiesOf(candidate),
-    agreementDocumentName:
-      candidate.agreement?.kind === "bespoke"
-        ? (candidate.agreement.document?.originalName ?? null)
-        : null,
-    invitedName: candidate.invitedName,
-    startDate: candidate.startDate,
-    stage: currentStage(candidate),
-    details: details
-      ? {
-          fullName: details.fullName,
-          parentName: details.parentName,
-          address: details.address,
-          personalEmail: details.personalEmail,
-          phone: details.phone,
-          aadhaarFile: details.aadhaarFile,
-          submittedAt: details.submittedAt,
-          consent: details.consent,
-          aadhaarLast4: details.aadhaarNumber.slice(-4),
-        }
-      : null,
-    consent: candidate.details?.consent ?? null,
-    resources: candidate.resources,
-    tests: candidate.tests,
-    signedAt: candidate.signature?.signedAt ?? null,
-    companySignature: candidate.companySignature ?? null,
-    contractVerifiedAt: candidate.contractVerifiedAt ?? null,
-    contractRejection: candidate.contractRejection ?? null,
-    emailRequestedAt: candidate.emailRequestedAt ?? null,
-    mailbox: candidate.mailbox
-      ? {
-          address: candidate.mailbox.address,
-          viewed: Boolean(candidate.mailbox.viewedAt),
-        }
-      : null,
-  };
 }
 
 /** Retention periods, as promised in the privacy notice (compliance.ts). */

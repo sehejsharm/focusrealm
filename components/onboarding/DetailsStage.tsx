@@ -64,7 +64,7 @@ export default function DetailsStage({
               notice version {candidate.consent.noticeVersion}. You can withdraw your
               consent, or ask for your data to be corrected or erased, at any time by
               writing to {DATA_FIDUCIARY.grievanceEmail} — see the{" "}
-              <Link href="/onboarding/privacy" className="underline">
+              <Link href="/hr/privacy" className="underline">
                 privacy notice
               </Link>
               .
@@ -127,7 +127,7 @@ export default function DetailsStage({
         <p className="mt-3 text-xs leading-relaxed" style={{ color: "var(--fr-muted)" }}>
           {RETENTION.summary} You can withdraw your consent, or ask to see, correct or
           erase your data, at any time by writing to {DATA_FIDUCIARY.grievanceEmail}.{" "}
-          <Link href="/onboarding/privacy" className="underline" style={{ color: "var(--fr-gold-soft)" }}>
+          <Link href="/hr/privacy" className="underline" style={{ color: "var(--fr-gold-soft)" }}>
             Read the full privacy notice
           </Link>
           .

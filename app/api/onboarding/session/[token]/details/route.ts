@@ -1,7 +1,7 @@
 import { clientIp, error, json, requiredString } from "@/lib/onboarding/api.server";
 import { getCandidateByToken, saveUpload, updateCandidate } from "@/lib/onboarding/store.server";
 import { isValidAadhaar, normaliseAadhaar } from "@/lib/onboarding/security.server";
-import { toCandidateView } from "@/lib/onboarding/stage";
+import { toCandidateView } from "@/lib/onboarding/view";
 import { PRIVACY_NOTICE_VERSION, missingConsents } from "@/lib/onboarding/compliance";
 import type { CandidateDetails, ConsentRecord } from "@/lib/onboarding/types";
 
@@ -15,6 +15,8 @@ export async function POST(
   const { token } = await params;
   const candidate = await getCandidateByToken(token);
   if (!candidate) return error("This onboarding link is not valid.", 404);
+  // Added directly as an existing employee: there is no onboarding to do.
+  if (candidate.existing) return error("There are no onboarding steps on this record.", 409);
   if (candidate.details) return error("Your details have already been submitted.", 409);
 
   const form = await request.formData();

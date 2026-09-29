@@ -12,7 +12,7 @@ import BrandMark from "../BrandMark";
  */
 export function Wordmark({
   subtitle,
-  href = "/onboarding",
+  href = "/hr",
 }: {
   subtitle?: string;
   href?: string;

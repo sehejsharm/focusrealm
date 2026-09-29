@@ -1,7 +1,7 @@
 import { error, json } from "@/lib/onboarding/api.server";
 import { getCandidateByToken, updateCandidate } from "@/lib/onboarding/store.server";
 import { unseal } from "@/lib/onboarding/security.server";
-import { toCandidateView } from "@/lib/onboarding/stage";
+import { toCandidateView } from "@/lib/onboarding/view";
 import { MAIL_SETTINGS, OUTLOOK_STEPS } from "@/lib/onboarding/content";
 
 /** The candidate asks for a company mailbox, once their contract is verified. */

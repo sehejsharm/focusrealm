@@ -1,7 +1,8 @@
 import { error, json } from "@/lib/onboarding/api.server";
 import { getCandidateByToken, updateCandidate } from "@/lib/onboarding/store.server";
 import { getTest, scoreTest, toClientTest } from "@/lib/onboarding/tests.server";
-import { learningComplete, requiredTestIds, toCandidateView } from "@/lib/onboarding/stage";
+import { learningComplete, requiredTestIds } from "@/lib/onboarding/stage";
+import { toCandidateView } from "@/lib/onboarding/view";
 import type { TestAttempt } from "@/lib/onboarding/types";
 
 /** Serves the questions without the answer key. */
@@ -13,6 +14,8 @@ export async function GET(
 
   const candidate = await getCandidateByToken(token);
   if (!candidate) return error("This onboarding link is not valid.", 404);
+  // Added directly as an existing employee: there is no onboarding to do.
+  if (candidate.existing) return error("There are no onboarding steps on this record.", 409);
 
   // A test outside the candidate's chosen companies is treated as not existing.
   const test = requiredTestIds(candidate).includes(testId) ? getTest(testId) : undefined;
@@ -30,6 +33,8 @@ export async function POST(
 
   const candidate = await getCandidateByToken(token);
   if (!candidate) return error("This onboarding link is not valid.", 404);
+  // Added directly as an existing employee: there is no onboarding to do.
+  if (candidate.existing) return error("There are no onboarding steps on this record.", 409);
   const test = requiredTestIds(candidate).includes(testId) ? getTest(testId) : undefined;
   if (!test) return error("Not found.", 404);
 

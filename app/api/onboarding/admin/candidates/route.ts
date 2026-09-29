@@ -4,6 +4,12 @@ import { agreementReady, companiesOf, currentStage, endDateOf, retentionOf } fro
 import { ALL_COMPANIES, isCompany } from "@/lib/onboarding/content";
 import { maskAadhaar } from "@/lib/onboarding/security.server";
 import {
+  CERTIFICATE_KINDS,
+  activeCertificate,
+  certificateWindow,
+  certificatesAwaitingApproval,
+} from "@/lib/onboarding/certificates";
+import {
   BUILT_IN_TRACKS,
   DEFAULT_TERM_MONTHS,
   MAX_TERM_MONTHS,
@@ -45,6 +51,11 @@ export async function GET() {
       emailRequestedAt: c.emailRequestedAt ?? null,
       mailbox: c.mailbox?.address ?? null,
       tests: c.tests,
+      certificateWindow: certificateWindow(c),
+      /** Documents drafted and waiting for a founder's approval. */
+      certificatesAwaiting: certificatesAwaitingApproval(c),
+      certificatesIssued: CERTIFICATE_KINDS.filter((kind) => activeCertificate(c, kind)),
+      signInEnabled: Boolean(c.login),
     })),
   );
 }
@@ -167,6 +178,6 @@ export async function POST(request: Request) {
     mailbox,
   });
 
-  // Existing employees have no onboarding link to hand out.
-  return json({ id: candidate.id, token: existing ? null : candidate.token }, 201);
+  // Existing employees' link opens the employee portal rather than onboarding.
+  return json({ id: candidate.id, token: candidate.token }, 201);
 }
