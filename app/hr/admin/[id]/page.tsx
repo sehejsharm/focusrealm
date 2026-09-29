@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Award, Check, Copy, Download, ExternalLink, FileWarning, KeyRound, Mail, RotateCcw, Upload, UserMinus, X } from "lucide-react";
+import { ArrowLeft, Award, Check, Copy, Download, ExternalLink, FileWarning, LogOut, Mail, RotateCcw, Upload, UserMinus, X } from "lucide-react";
 import ContractDocument from "@/components/onboarding/ContractDocument";
 import {
   Button,
@@ -36,6 +36,7 @@ import {
 } from "@/lib/onboarding/certificates";
 import { formatLongDate } from "@/lib/onboarding/contract";
 import type { CertificateKind, CertificateText, CertificateWindow } from "@/lib/onboarding/types";
+import { EXIT_QUESTIONS, OFFBOARDING_LINK_DAYS_BEFORE_END, type OffboardingState } from "@/lib/onboarding/offboarding";
 
 interface AdminCandidate extends Omit<Candidate, "mailbox" | "companies"> {
   stage: Stage;
@@ -51,12 +52,9 @@ interface AdminCandidate extends Omit<Candidate, "mailbox" | "companies"> {
   } | null;
   retention: { kind: "keep" | "erase"; until: string } | null;
   certificateWindow: CertificateWindow;
-  signIn: {
-    enabled: boolean;
-    setAt: string | null;
-    lockedUntil: string | null;
-    emails: string[];
-  };
+  offboardingState: OffboardingState;
+  /** Path of the offboarding link, once it can be sent. */
+  offboardingLink: string | null;
 }
 
 /** One candidate: their documents, and the decisions only a founder can make. */
@@ -122,16 +120,27 @@ export default function AdminCandidatePage() {
   // At the end of a term the documents are the thing to act on, so they move
   // up from the bottom of the page, above the full agreement text.
   const certificatesFirst =
+    Boolean(candidate.offboardingLink) ||
     candidate.certificateWindow.status === "open" ||
     CERTIFICATE_KINDS.some((kind) => activeCertificate(candidate, kind));
   const certificates = (
+    <>
+    <Offboarding
+      name={details?.fullName ?? candidate.invitedName}
+      state={candidate.offboardingState}
+      link={candidate.offboardingLink}
+      submission={candidate.offboarding ?? null}
+    />
     <Certificates
       id={id}
       candidate={candidate}
       frozen={frozen}
       onIssue={(kind, fields) => act({ action: "issue-certificate", kind, ...fields })}
       onWithdraw={(kind, reason) => act({ action: "withdraw-certificate", kind, reason })}
+      onDecline={(kind) => act({ action: "decline-certificate", kind })}
+      onUndoDecline={(kind) => act({ action: "undo-decline", kind })}
     />
+    </>
   );
 
   return (
@@ -180,8 +189,6 @@ export default function AdminCandidatePage() {
           <PortalAccess
             token={candidate.token}
             existing={Boolean(candidate.existing)}
-            signIn={candidate.signIn}
-            onReset={() => act({ action: "reset-sign-in" })}
           />
         )}
 
@@ -819,35 +826,32 @@ function AgreementUpload({
 }
 
 /* -------------------------------------------------------------------------- */
-/* Portal link and sign-in                                                    */
+/* Portal link                                                                */
 /* -------------------------------------------------------------------------- */
 
-function PortalAccess({
-  token,
-  existing,
-  signIn,
-  onReset,
-}: {
-  token: string;
-  existing: boolean;
-  signIn: AdminCandidate["signIn"];
-  onReset: () => void;
-}) {
-  const [copied, setCopied] = useState(false);
-  const [confirming, setConfirming] = useState(false);
+function PortalAccess({ token, existing }: { token: string; existing: boolean }) {
   const origin = typeof window === "undefined" ? "" : window.location.origin;
-  const link = `${origin}/hr/${token}`;
 
   return (
     <Card>
       <SectionTitle
-        title="Portal link and sign-in"
+        title={existing ? "Portal link" : "Onboarding and portal link"}
         lead={
           existing
-            ? "Their personal link to the employee portal. Anyone holding it can open their record, so send it only to them."
-            : "Their personal link — onboarding while that is in progress, then their employee portal. Anyone holding it can open their record, so send it only to them."
+            ? "Their personal link to the employee portal. There are no passwords — anyone holding it can open their record, so send it only to them."
+            : "Their personal link — onboarding while that is in progress, then their employee portal. There are no passwords — anyone holding it can open their record, so send it only to them."
         }
       />
+      <CopyableLink link={`${origin}/hr/${token}`} />
+    </Card>
+  );
+}
+
+function CopyableLink({ link }: { link: string }) {
+  const [copied, setCopied] = useState(false);
+
+  return (
+    <>
       <p
         className="mb-3 rounded-xl border p-3 font-mono text-xs break-all"
         style={{ borderColor: "var(--fr-line)", backgroundColor: "var(--fr-navy-deep)" }}
@@ -865,54 +869,91 @@ function PortalAccess({
         <Copy className="size-4" aria-hidden />
         {copied ? "Copied" : "Copy link"}
       </Button>
+    </>
+  );
+}
 
-      <div className="mt-5 space-y-3 border-t pt-5 fr-rule">
-        <p className="flex items-center gap-2 text-sm font-bold">
-          <KeyRound className="size-4" style={{ color: "var(--fr-gold)" }} aria-hidden />
-          Email sign-in
-        </p>
-        {signIn.enabled ? (
-          <>
-            <p className="text-sm leading-relaxed" style={{ color: "var(--fr-muted)" }}>
-              Set up{signIn.setAt ? ` ${formatDateTime(signIn.setAt)}` : ""}. They sign in at{" "}
-              <span className="font-mono">{origin}/hr</span> with{" "}
-              {signIn.emails.join(" or ")} and their own password.
-            </p>
-            {signIn.lockedUntil && (
-              <Notice tone="warn">
-                Paused after too many wrong passwords, until {formatDateTime(signIn.lockedUntil)}.
-                Resetting clears the pause.
-              </Notice>
-            )}
-            {confirming ? (
-              <div className="flex flex-wrap items-center gap-3">
-                <span className="text-sm">Clear their password? They set a new one from their link.</span>
-                <Button
-                  variant="danger"
-                  onClick={() => {
-                    setConfirming(false);
-                    onReset();
-                  }}
-                >
-                  Reset sign-in
-                </Button>
-                <Button variant="ghost" onClick={() => setConfirming(false)}>
-                  Cancel
-                </Button>
+/* -------------------------------------------------------------------------- */
+/* Offboarding                                                                */
+/* -------------------------------------------------------------------------- */
+
+function Offboarding({
+  name,
+  state,
+  link,
+  submission,
+}: {
+  name: string;
+  state: OffboardingState;
+  link: string | null;
+  submission: { submittedAt: string; answers: Record<string, string> } | null;
+}) {
+  const origin = typeof window === "undefined" ? "" : window.location.origin;
+  const opensOn = "opensAt" in state ? formatDate(state.opensAt) : "";
+
+  return (
+    <Card>
+      <SectionTitle
+        title="Offboarding"
+        lead={`${OFFBOARDING_LINK_DAYS_BEFORE_END} days before the last day, a personal offboarding link appears here to send to ${name}. It opens the day after their last day: a few exit questions, then the documents you approved below.`}
+      />
+
+      {state.status === "not-eligible" && <Notice>{state.reason}</Notice>}
+
+      {state.status === "not-yet" && (
+        <Notice>
+          The link appears on {formatDate(state.linkFrom)}, and {name} can use it from{" "}
+          {formatDate(state.opensAt)}.
+        </Notice>
+      )}
+
+      {link && state.status !== "done" && (
+        <div className="space-y-3">
+          <Notice tone={state.status === "open" ? "good" : "warn"}>
+            <span className="inline-flex items-center gap-2 font-bold">
+              <LogOut className="size-4" aria-hidden />
+              {state.status === "open" ? "Open now — waiting for them" : "Ready to send"}
+            </span>
+            <span className="mt-1 block">
+              {state.status === "open"
+                ? `${name} can offboard now. They have not answered the exit questions yet.`
+                : `Send it now. It opens for ${name} on ${opensOn}, the day after their last day; before that it just says when to come back.`}
+            </span>
+          </Notice>
+          <CopyableLink link={`${origin}${link}`} />
+        </div>
+      )}
+
+      {submission && (
+        <div className="space-y-4">
+          <Notice tone="good">Offboarded {formatDateTime(submission.submittedAt)}.</Notice>
+          <dl className="space-y-4">
+            {EXIT_QUESTIONS.map((question) => (
+              <div key={question.id}>
+                <dt className="text-xs font-bold tracking-wide uppercase" style={{ color: "var(--fr-muted)" }}>
+                  {question.label}
+                </dt>
+                <dd className="mt-1 text-sm leading-relaxed whitespace-pre-line break-words">
+                  {submission.answers[question.id]
+                    ? question.kind === "scale"
+                      ? `${submission.answers[question.id]} / 5`
+                      : submission.answers[question.id]
+                    : "—"}
+                </dd>
               </div>
-            ) : (
-              <Button variant="ghost" onClick={() => setConfirming(true)}>
-                Reset sign-in
-              </Button>
-            )}
-          </>
-        ) : (
-          <p className="text-sm leading-relaxed" style={{ color: "var(--fr-muted)" }}>
-            Not set up yet. They choose a password from their link, then sign in at{" "}
-            <span className="font-mono">{origin}/hr</span> with {signIn.emails.join(" or ")}.
-          </p>
-        )}
-      </div>
+            ))}
+          </dl>
+          {link && (
+            <div>
+              <p className="mb-2 text-xs" style={{ color: "var(--fr-muted)" }}>
+                Their link keeps working, so they can download their documents again — including
+                any you approve from here on.
+              </p>
+              <CopyableLink link={`${origin}${link}`} />
+            </div>
+          )}
+        </div>
+      )}
     </Card>
   );
 }
@@ -934,12 +975,16 @@ function Certificates({
   frozen,
   onIssue,
   onWithdraw,
+  onDecline,
+  onUndoDecline,
 }: {
   id: string;
   candidate: AdminCandidate;
   frozen: boolean;
   onIssue: (kind: CertificateKind, fields: IssueFields) => Promise<unknown>;
   onWithdraw: (kind: CertificateKind, reason: string) => Promise<unknown>;
+  onDecline: (kind: CertificateKind) => Promise<unknown>;
+  onUndoDecline: (kind: CertificateKind) => Promise<unknown>;
 }) {
   const timing = candidate.certificateWindow;
   const history = (candidate.certificates ?? []).filter((c) => c.withdrawn);
@@ -949,7 +994,7 @@ function Certificates({
     <Card>
       <SectionTitle
         title="Completion certificate and recommendation letter"
-        lead={`Drafted automatically from this record in the last ${CERTIFICATE_WINDOW_DAYS} days of the term. Nothing is issued until a founder approves it — each document separately. Once approved, they can download it from their portal.`}
+        lead={`Drafted automatically from this record in the last ${CERTIFICATE_WINDOW_DAYS} days of the term. Nothing is issued until a founder approves it — each document separately — and you can decide not to issue one. The intern downloads what you approve at the end of offboarding.`}
       />
 
       {timing.status === "not-eligible" && !anyIssued && <Notice>{timing.reason}</Notice>}
@@ -972,6 +1017,8 @@ function Certificates({
               frozen={frozen}
               onIssue={(fields) => onIssue(kind, fields)}
               onWithdraw={(reason) => onWithdraw(kind, reason)}
+              onDecline={() => onDecline(kind)}
+              onUndoDecline={() => onUndoDecline(kind)}
             />
           ))}
         </div>
@@ -1005,6 +1052,8 @@ function CertificatePanel({
   frozen,
   onIssue,
   onWithdraw,
+  onDecline,
+  onUndoDecline,
 }: {
   id: string;
   kind: CertificateKind;
@@ -1013,6 +1062,8 @@ function CertificatePanel({
   frozen: boolean;
   onIssue: (fields: IssueFields) => Promise<unknown>;
   onWithdraw: (reason: string) => Promise<unknown>;
+  onDecline: () => Promise<unknown>;
+  onUndoDecline: () => Promise<unknown>;
 }) {
   const issued = activeCertificate(candidate, kind);
   const name = candidate.details?.fullName ?? candidate.invitedName;
@@ -1040,8 +1091,8 @@ function CertificatePanel({
         </p>
         <Notice tone="good">
           Approved by {issued.approvedBy.typedName}, {issued.approvedBy.designation}, on{" "}
-          {formatDateTime(issued.issuedAt)} · {issued.serial}. {name} can download it from their
-          portal.
+          {formatDateTime(issued.issuedAt)} · {issued.serial}. {name} downloads it at the end of
+          offboarding.
         </Notice>
         <div className="flex flex-wrap gap-3">
           <a
@@ -1092,6 +1143,27 @@ function CertificatePanel({
               </Button>
             </div>
           </div>
+        )}
+      </div>
+    );
+  }
+
+  if ((candidate.declinedCertificates ?? []).includes(kind)) {
+    return (
+      <div className="space-y-3 rounded-xl border p-4 text-sm" style={box}>
+        <p className="font-bold">{CERTIFICATE_LABEL[kind]}</p>
+        <p style={{ color: "var(--fr-muted)" }}>
+          Not issuing — {name} will not see this document at offboarding.
+        </p>
+        {!frozen && (
+          <Button variant="ghost" disabled={busy} onClick={async () => {
+            setBusy(true);
+            await onUndoDecline();
+            setBusy(false);
+          }}>
+            <RotateCcw className="size-4" aria-hidden />
+            Undo
+          </Button>
         )}
       </div>
     );
@@ -1206,6 +1278,19 @@ function CertificatePanel({
       >
         <Check className="size-4" aria-hidden />
         {busy ? "Issuing…" : `Approve and issue ${kind === "completion" ? "certificate" : "letter"}`}
+      </Button>
+      <Button
+        variant="ghost"
+        className="ml-3"
+        disabled={busy}
+        onClick={async () => {
+          setBusy(true);
+          await onDecline();
+          setBusy(false);
+        }}
+      >
+        <X className="size-4" aria-hidden />
+        Not issuing this
       </Button>
     </div>
   );

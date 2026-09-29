@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, LogIn } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import {
   Button,
   Card,
-  Field,
   Notice,
   SectionTitle,
   Wordmark,
@@ -25,26 +24,12 @@ const STEPS = [
 ];
 
 /**
- * Front door of Focus Realm HR: employees sign in here, and new interns open
- * the invitation link they were sent.
+ * Front door of Focus Realm HR. There are no accounts or passwords: everyone
+ * gets in through a personal link — an invitation to start, an offboarding
+ * link to finish.
  */
 export default function HrHome() {
   const router = useRouter();
-
-  // Already signed in on this device — go straight to their portal.
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/api/onboarding/employee/session")
-      .then(async (response) => {
-        if (cancelled || !response.ok) return;
-        const data = (await response.json()) as { portal: string | null };
-        if (data.portal) router.replace(data.portal);
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, [router]);
 
   return (
     <div className="mx-auto w-full max-w-2xl px-4 py-10 sm:px-6 lg:py-16">
@@ -52,9 +37,14 @@ export default function HrHome() {
         <Wordmark subtitle="HR portal" />
       </div>
 
-      <SignIn onSignedIn={(portal) => router.push(portal)} />
-
       <Invitation onOpen={(token) => router.push(`/hr/${token}`)} />
+
+      <Card className="mb-5">
+        <SectionTitle
+          title="Finishing your internship?"
+          lead="The founders send you a personal offboarding link towards the end of your term. It opens the day after your last day: answer a few short questions about your time here, then download your completion certificate and letter of recommendation."
+        />
+      </Card>
 
       <p className="mb-4 text-center text-xs leading-relaxed" style={{ color: "var(--fr-muted)" }}>
         Before you submit anything, read the{" "}
@@ -71,79 +61,6 @@ export default function HrHome() {
         </Link>
       </p>
     </div>
-  );
-}
-
-function SignIn({ onSignedIn }: { onSignedIn: (portal: string) => void }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-
-  async function submit(event: React.FormEvent) {
-    event.preventDefault();
-    setBusy(true);
-    setMessage(null);
-
-    const response = await fetch("/api/onboarding/employee/session", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    }).catch(() => null);
-    const data = response ? await response.json().catch(() => ({})) : {};
-    setBusy(false);
-
-    if (!response?.ok) {
-      setMessage(data.error ?? "Could not sign you in.");
-      return;
-    }
-    onSignedIn(data.portal as string);
-  }
-
-  return (
-    <Card className="mb-5">
-      <SectionTitle
-        eyebrow="Focus Realm HR"
-        title="Sign in"
-        lead="For interns and employees. Your internship details, agreement, company email settings, and your completion certificate and recommendation letter once they are issued."
-      />
-      <form onSubmit={submit} className="space-y-4">
-        <Field label="Email" hint="Your Focus Realm address, or the personal email you gave us.">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoComplete="username"
-            required
-            className={inputClass}
-            style={inputStyle}
-          />
-        </Field>
-        <Field label="Password">
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-            required
-            className={inputClass}
-            style={inputStyle}
-          />
-        </Field>
-
-        {message && <Notice tone="bad">{message}</Notice>}
-
-        <Button type="submit" disabled={busy || !email || !password}>
-          <LogIn className="size-4" aria-hidden />
-          {busy ? "Signing in…" : "Sign in"}
-        </Button>
-
-        <p className="text-xs leading-relaxed" style={{ color: "var(--fr-muted)" }}>
-          No password yet? Open the personal link you were sent and choose one under &ldquo;Set up
-          sign-in&rdquo;. Forgotten it? Ask the founders to reset your sign-in.
-        </p>
-      </form>
-    </Card>
   );
 }
 
@@ -164,6 +81,7 @@ function Invitation({ onOpen }: { onOpen: (token: string) => void }) {
   return (
     <Card className="mb-5">
       <SectionTitle
+        eyebrow="Focus Realm HR"
         title="New intern? Start your onboarding"
         lead="Everything between being offered a place and your first working day, in one link. It takes most people an afternoon."
       />

@@ -9,6 +9,7 @@ import {
   certificateWindow,
   certificatesAwaitingApproval,
 } from "@/lib/onboarding/certificates";
+import { offboardingState } from "@/lib/onboarding/offboarding";
 import {
   BUILT_IN_TRACKS,
   DEFAULT_TERM_MONTHS,
@@ -55,7 +56,8 @@ export async function GET() {
       /** Documents drafted and waiting for a founder's approval. */
       certificatesAwaiting: certificatesAwaitingApproval(c),
       certificatesIssued: CERTIFICATE_KINDS.filter((kind) => activeCertificate(c, kind)),
-      signInEnabled: Boolean(c.login),
+      offboarding: offboardingState(c).status,
+      offboardedAt: c.offboarding?.submittedAt ?? null,
     })),
   );
 }
@@ -178,6 +180,6 @@ export async function POST(request: Request) {
     mailbox,
   });
 
-  // Existing employees' link opens the employee portal rather than onboarding.
+  // An existing employee's link opens their employee portal rather than onboarding.
   return json({ id: candidate.id, token: candidate.token }, 201);
 }

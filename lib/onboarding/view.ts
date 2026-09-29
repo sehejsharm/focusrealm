@@ -1,15 +1,6 @@
-import { activeCertificate, certificateWindow, CERTIFICATE_KINDS } from "./certificates";
 import { companiesOf, currentStage, endDateOf } from "./stage";
 import type { Candidate, CandidateView } from "./types";
 import { DEFAULT_TERM_MONTHS, trackOf } from "./types";
-
-/** Every address an employee can sign in with, lower-cased and de-duplicated. */
-export function signInEmails(candidate: Candidate): string[] {
-  const all = [candidate.mailbox?.address, candidate.invitedEmail, candidate.details?.personalEmail]
-    .filter((e): e is string => Boolean(e))
-    .map((e) => e.trim().toLowerCase());
-  return [...new Set(all)];
-}
 
 /** Strips Aadhaar number and sealed credentials for the candidate's own view. */
 export function toCandidateView(candidate: Candidate): CandidateView {
@@ -60,16 +51,5 @@ export function toCandidateView(candidate: Candidate): CandidateView {
         }
       : null,
     existing: Boolean(candidate.existing),
-    certificateWindow: certificateWindow(candidate),
-    certificates: CERTIFICATE_KINDS.flatMap((kind) => {
-      const issued = activeCertificate(candidate, kind);
-      return issued
-        ? [{ kind, title: issued.text.title, serial: issued.serial, issuedAt: issued.issuedAt }]
-        : [];
-    }),
-    signIn: {
-      enabled: Boolean(candidate.login),
-      emails: signInEmails(candidate),
-    },
   };
 }

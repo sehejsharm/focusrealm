@@ -3,15 +3,16 @@ import { getCandidate, updateCandidate } from "@/lib/onboarding/store.server";
 import { buildContract } from "@/lib/onboarding/contract";
 import { companiesOf, currentStage, retentionOf } from "@/lib/onboarding/stage";
 import { formatAadhaar, formatLongDate } from "@/lib/onboarding/contract";
-import { generatePassword, seal } from "@/lib/onboarding/security.server";
+import { generatePassword, offboardingCode, seal } from "@/lib/onboarding/security.server";
 import {
   CERTIFICATE_LABEL,
   activeCertificate,
   certificateWindow,
   draftCertificate,
   isCertificateKind,
+  isDeclined,
 } from "@/lib/onboarding/certificates";
-import { signInEmails } from "@/lib/onboarding/view";
+import { offboardingLinkAvailable, offboardingState } from "@/lib/onboarding/offboarding";
 import { randomBytes } from "node:crypto";
 
 /** `FR-IC-2026-7K3QX9` — completion; `FR-LR-…` — recommendation letter. */
@@ -32,19 +33,17 @@ export async function GET(
   const candidate = await getCandidate(id);
   if (!candidate) return error("Not found.", 404);
 
-  // The password hash never leaves the server, not even to founders.
-  const { mailbox, login, ...rest } = candidate;
+  const { mailbox, ...rest } = candidate;
+  const offboarding = offboardingState(candidate);
 
   return json({
     ...rest,
     certificateWindow: certificateWindow(candidate),
-    signIn: {
-      enabled: Boolean(login),
-      setAt: login?.setAt ?? null,
-      lockedUntil:
-        login?.lockedUntil && Date.parse(login.lockedUntil) > Date.now() ? login.lockedUntil : null,
-      emails: signInEmails(candidate),
-    },
+    offboardingState: offboarding,
+    // Shown from two days before the last day, ready to send.
+    offboardingLink: offboardingLinkAvailable(offboarding)
+      ? `/hr/offboarding/${offboardingCode(candidate.id)}`
+      : null,
     stage: currentStage(candidate),
     companies: companiesOf(candidate),
     retention: retentionOf(candidate),
@@ -225,6 +224,9 @@ export async function POST(
       if (activeCertificate(candidate, kind)) {
         return error(`The ${CERTIFICATE_LABEL[kind].toLowerCase()} is already issued. Withdraw it first to reissue.`, 409);
       }
+      if (isDeclined(candidate, kind)) {
+        return error(`This intern is marked as not receiving a ${CERTIFICATE_LABEL[kind].toLowerCase()}. Undo that first.`, 409);
+      }
 
       const typedName = body.typedName?.trim();
       const designation = body.designation?.trim();
@@ -300,10 +302,28 @@ export async function POST(
       return json({ ok: true });
     }
 
-    // Clears the employee's password, so they set a new one from their link.
-    case "reset-sign-in": {
-      if (!candidate.login) return error("They have not set up sign-in yet.", 409);
-      await updateCandidate(id, (c) => ({ ...c, login: undefined }));
+    // A founder's decision that this intern will not receive this document.
+    // It then never appears on their offboarding page.
+    case "decline-certificate": {
+      const kind = body.kind;
+      if (!isCertificateKind(kind)) return error("Choose which document.");
+      if (activeCertificate(candidate, kind)) {
+        return error("This document is already issued. Withdraw it first.", 409);
+      }
+      await updateCandidate(id, (c) => ({
+        ...c,
+        declinedCertificates: [...new Set([...(c.declinedCertificates ?? []), kind])],
+      }));
+      return json({ ok: true });
+    }
+
+    case "undo-decline": {
+      const kind = body.kind;
+      if (!isCertificateKind(kind)) return error("Choose which document.");
+      await updateCandidate(id, (c) => ({
+        ...c,
+        declinedCertificates: (c.declinedCertificates ?? []).filter((k) => k !== kind),
+      }));
       return json({ ok: true });
     }
 

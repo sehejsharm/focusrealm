@@ -180,8 +180,15 @@ export function Notice({
   );
 }
 
+/**
+ * Dates are shown in Indian time wherever the viewer is, so "opens on 1 Oct"
+ * means the same day to a founder abroad as to an intern in Pune.
+ */
+const TIME_ZONE = "Asia/Kolkata";
+
 export function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-IN", {
+    timeZone: TIME_ZONE,
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -190,6 +197,7 @@ export function formatDate(iso: string): string {
 
 export function formatDateTime(iso: string): string {
   return new Date(iso).toLocaleString("en-IN", {
+    timeZone: TIME_ZONE,
     day: "numeric",
     month: "short",
     year: "numeric",

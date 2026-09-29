@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { AlertTriangle, Award, Copy, FileWarning, Plus, RefreshCw, UserPlus } from "lucide-react";
+import { AlertTriangle, Award, Copy, LogOut, FileWarning, Plus, RefreshCw, UserPlus } from "lucide-react";
 import {
   Button,
   Card,
@@ -54,7 +54,9 @@ interface Row {
   /** Completion certificate / recommendation letter drafted and awaiting approval. */
   certificatesAwaiting: ("completion" | "recommendation")[];
   certificatesIssued: ("completion" | "recommendation")[];
-  signInEnabled: boolean;
+  /** Where they are in leaving — see lib/onboarding/offboarding.ts. */
+  offboarding: "not-eligible" | "not-yet" | "link-ready" | "open" | "done";
+  offboardedAt: string | null;
 }
 
 const DAY = 86_400_000;
@@ -180,7 +182,7 @@ export default function AdminConsole() {
         <div className="border-b p-5 fr-rule sm:p-6">
           <SectionTitle
             title="People"
-            lead="Interns, candidates and employees, newest first. Open one to review documents, act on onboarding, or approve end-of-internship certificates."
+            lead="Interns, candidates and employees, newest first. Open one to review documents, act on onboarding, approve end-of-internship certificates, or send an offboarding link."
           />
         </div>
 
@@ -293,6 +295,19 @@ export default function AdminConsole() {
                                   ? "Approve certificate"
                                   : "Approve letter"}
                             </Flag>
+                          )}
+                          {(row.offboarding === "link-ready" || row.offboarding === "open") && (
+                            <Flag tone="gold" Icon={LogOut}>
+                              {row.offboarding === "open" ? "Offboarding open" : "Send offboarding link"}
+                            </Flag>
+                          )}
+                          {row.offboarding === "done" && (
+                            <span
+                              className="inline-block rounded-md px-2 py-1 text-xs"
+                              style={{ backgroundColor: "rgba(52,168,110,0.14)", color: "#a7e8c6" }}
+                            >
+                              Offboarded
+                            </span>
                           )}
                           {row.certificatesIssued.length > 0 && (
                             <span
@@ -545,7 +560,7 @@ function NewCandidate({
           title={isExisting ? "Added — portal link ready" : "Onboarding link ready"}
           lead={
             isExisting
-              ? "Send this to them. It opens their employee portal, where they set a password to sign in and download documents you issue. Treat it like a password."
+              ? "Send this to them. It opens their employee portal — there are no passwords, so treat the link like one. At the end of their term you send a separate offboarding link for their documents."
               : "Send this to the candidate. It is the only way into their onboarding, so treat it like a password — anyone holding it can submit details as them."
           }
         />
@@ -590,7 +605,7 @@ function NewCandidate({
         title={isExisting ? "Add existing employee" : "New candidate"}
         lead={
           isExisting
-            ? "For someone onboarded before this console existed. They go straight onto the roster as onboarded, skipping onboarding, and get an employee portal link to sign in and collect documents. Their agreement stays wherever you keep it now — nothing is signed or recorded on their behalf."
+            ? "For someone onboarded before this console existed. They go straight onto the roster as onboarded, skipping onboarding, and get an employee portal link; they collect their certificates through an offboarding link at the end of their term. Their agreement stays wherever you keep it now — nothing is signed or recorded on their behalf."
             : "Creates their onboarding link."
         }
       />

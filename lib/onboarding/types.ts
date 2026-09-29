@@ -205,13 +205,12 @@ export interface IssuedCertificate {
   withdrawn?: { at: string; reason: string; ip: string | null };
 }
 
-/** Email-and-password sign-in to the employee portal. */
-export interface EmployeeLogin {
-  /** scrypt, with its own salt and parameters — never the password. */
-  passwordHash: string;
-  setAt: string;
-  failedAttempts?: number;
-  lockedUntil?: string;
+/** What an intern told us on their way out. Answers are keyed by question id. */
+export interface OffboardingSubmission {
+  submittedAt: string;
+  answers: Record<string, string>;
+  ip: string | null;
+  userAgent: string | null;
 }
 
 export interface Mailbox {
@@ -269,7 +268,13 @@ export interface Candidate {
   mailbox?: Mailbox;
   /** Every completion certificate and recommendation letter issued, oldest first. */
   certificates?: IssuedCertificate[];
-  login?: EmployeeLogin;
+  /**
+   * Documents a founder has decided not to issue this intern. Anything not
+   * listed is expected to be approved and handed over at offboarding.
+   */
+  declinedCertificates?: CertificateKind[];
+  /** Set once the intern has completed offboarding through their link. */
+  offboarding?: OffboardingSubmission;
 }
 
 /** Candidate-safe view — no Aadhaar number, no sealed password. */
@@ -302,21 +307,6 @@ export interface CandidateView {
   mailbox: { address: string; viewed: boolean } | null;
   /** Added directly as an existing employee — there was no onboarding. */
   existing: boolean;
-  /** When the end-of-internship documents can be prepared. */
-  certificateWindow: CertificateWindow;
-  /** Documents approved and ready to download. Withdrawn ones are left out. */
-  certificates: {
-    kind: CertificateKind;
-    title: string;
-    serial: string;
-    issuedAt: string;
-  }[];
-  signIn: {
-    /** Whether a password has been set. */
-    enabled: boolean;
-    /** Any of these works as the username. */
-    emails: string[];
-  };
 }
 
 export type CertificateWindow =

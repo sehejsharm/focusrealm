@@ -16,8 +16,10 @@ import { DEFAULT_TERM_MONTHS, trackOf } from "./types";
  *
  * Both are drafted automatically from the record once the intern is in the
  * last days of their term, but neither exists until a founder approves it —
- * each document, for each intern, on its own. Approval freezes the exact text
- * (see `CertificateText`), which is what the PDF is always rendered from.
+ * each document, for each intern, on its own — and a founder can decide not
+ * to issue one at all. Approval freezes the exact text (see
+ * `CertificateText`), which is what the PDF is always rendered from. The
+ * intern collects them at the end of offboarding (see offboarding.ts).
  *
  * Safe to import from the browser: the console renders its live preview with
  * the same `draftCertificate` the server freezes on approval.
@@ -86,10 +88,20 @@ export function activeCertificate(
   return null;
 }
 
+/** Whether a founder has decided this intern will not receive this document. */
+export function isDeclined(candidate: Pick<Candidate, "declinedCertificates">, kind: CertificateKind): boolean {
+  return (candidate.declinedCertificates ?? []).includes(kind);
+}
+
+/** The documents this intern is to receive — both, unless a founder said otherwise. */
+export function plannedCertificates(candidate: Pick<Candidate, "declinedCertificates">): CertificateKind[] {
+  return CERTIFICATE_KINDS.filter((kind) => !isDeclined(candidate, kind));
+}
+
 /** Documents a founder still has to approve, now that the window is open. */
 export function certificatesAwaitingApproval(candidate: Candidate, now = new Date()): CertificateKind[] {
   if (certificateWindow(candidate, now).status !== "open") return [];
-  return CERTIFICATE_KINDS.filter((kind) => !activeCertificate(candidate, kind));
+  return plannedCertificates(candidate).filter((kind) => !activeCertificate(candidate, kind));
 }
 
 export function recipientName(candidate: Candidate): string {

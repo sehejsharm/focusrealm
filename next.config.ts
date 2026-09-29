@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
     "/api/onboarding/session/[token]/resource/[resourceId]": [
       "./content/onboarding/**/*",
     ],
-    "/api/onboarding/session/[token]/certificates/[kind]/pdf": [
+    "/api/onboarding/offboarding/[code]/certificates/[kind]/pdf": [
       "./content/onboarding/brand/**/*",
     ],
     "/api/onboarding/admin/candidates/[id]/certificates/[kind]/pdf": [

@@ -85,25 +85,6 @@ export async function getCandidateByToken(token: string): Promise<Candidate | nu
   return (data?.record as Candidate) ?? null;
 }
 
-/**
- * Active records any of whose addresses match — the company mailbox, the
- * address they were invited on, or the personal one they gave us. Used only
- * to sign in, so removed people are never returned.
- */
-export async function findActiveByEmail(email: string): Promise<Candidate[]> {
-  const wanted = email.trim().toLowerCase();
-  const { data, error } = await db().from(TABLE).select("record").is("archived_at", null);
-  if (error) throw new Error(`Could not look up that address: ${error.message}`);
-
-  return (data ?? [])
-    .map((row) => row.record as Candidate)
-    .filter((c) =>
-      [c.mailbox?.address, c.invitedEmail, c.details?.personalEmail].some(
-        (address) => address?.trim().toLowerCase() === wanted,
-      ),
-    );
-}
-
 /* -------------------------------------------------------------------------- */
 /* Writes                                                                     */
 /* -------------------------------------------------------------------------- */

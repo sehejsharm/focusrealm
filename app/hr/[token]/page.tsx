@@ -2,17 +2,15 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { Award, CalendarDays, ChevronDown, Download, FileText, LogOut, PartyPopper } from "lucide-react";
+import { useParams } from "next/navigation";
+import { Award, CalendarDays, ChevronDown, Download, FileText, PartyPopper } from "lucide-react";
 import ContractStage from "@/components/onboarding/ContractStage";
 import DetailsStage from "@/components/onboarding/DetailsStage";
 import LearningStage from "@/components/onboarding/LearningStage";
 import MailboxStage from "@/components/onboarding/MailboxStage";
-import SignInCard from "@/components/onboarding/SignInCard";
 import StageRail from "@/components/onboarding/StageRail";
 import TestsStage from "@/components/onboarding/TestsStage";
-import { Button, Card, Notice, SectionTitle, Wordmark, formatDate } from "@/components/onboarding/ui";
-import { CERTIFICATE_KINDS, CERTIFICATE_LABEL, CERTIFICATE_WINDOW_DAYS } from "@/lib/onboarding/certificates";
+import { Card, Notice, SectionTitle, Wordmark, formatDate } from "@/components/onboarding/ui";
 import { companyLabel } from "@/lib/onboarding/content";
 import { stageIndex } from "@/lib/onboarding/stage";
 import { type CandidateView } from "@/lib/onboarding/types";
@@ -69,7 +67,7 @@ export default function EmployeePortal() {
         <Card>
           <SectionTitle
             title="This link is not valid"
-            lead="It may have been mistyped, or withdrawn. Check the link you were sent, sign in with your email if you have set a password, or reply to the email it came from."
+            lead="It may have been mistyped, or withdrawn. Check the link you were sent, or reply to the email it came from."
           />
           <Link href="/hr" className="text-sm font-bold underline" style={{ color: "var(--fr-gold-soft)" }}>
             Go to sign-in
@@ -123,7 +121,6 @@ function Onboarding({
         <TestsStage token={token} candidate={candidate} onSaved={onSaved} locked={at < 2} />
         <ContractStage token={token} candidate={candidate} onSaved={onSaved} locked={at < 3} />
         <MailboxStage token={token} candidate={candidate} onSaved={onSaved} locked={at < 5} />
-        {candidate.details && <SignInCard token={token} candidate={candidate} onSaved={onSaved} />}
       </div>
 
       <Footer />
@@ -144,7 +141,6 @@ function EmployeeHome({
   candidate: CandidateView;
   onSaved: (next: CandidateView) => void;
 }) {
-  const router = useRouter();
   const name = candidate.details?.fullName ?? candidate.invitedName;
   const first = name.trim().split(/\s+/)[0];
   const remaining = daysFromNow(candidate.endDate);
@@ -152,28 +148,15 @@ function EmployeeHome({
   const hasAgreement = !candidate.existing && candidate.agreementKind === "standard" && candidate.signedAt;
   const showMailbox = Boolean(candidate.mailbox) || !candidate.existing;
 
-  async function signOut() {
-    await fetch("/api/onboarding/employee/session", { method: "DELETE" }).catch(() => {});
-    router.push("/hr");
-  }
-
   return (
     <Shell subtitle="Employee portal" home={`/hr/${token}`}>
-      <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl leading-tight font-bold text-balance sm:text-3xl">
-            Welcome back, {first}.
-          </h1>
-          <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--fr-muted)" }}>
-            {candidate.role.roleTitle} · {candidate.companies.map(companyLabel).join(" and ")}
-          </p>
-        </div>
-        {candidate.signIn.enabled && (
-          <Button variant="ghost" onClick={signOut}>
-            <LogOut className="size-4" aria-hidden />
-            Sign out
-          </Button>
-        )}
+      <header className="mb-6">
+        <h1 className="text-2xl leading-tight font-bold text-balance sm:text-3xl">
+          Welcome back, {first}.
+        </h1>
+        <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--fr-muted)" }}>
+          {candidate.role.roleTitle} · {candidate.companies.map(companyLabel).join(" and ")}
+        </p>
       </header>
 
       <div className="space-y-5">
@@ -213,26 +196,13 @@ function EmployeeHome({
                 href={`/api/onboarding/session/${token}/contract/pdf`}
               />
             )}
-            {CERTIFICATE_KINDS.map((kind) => {
-              const issued = candidate.certificates.find((c) => c.kind === kind);
-              return (
-                <DocumentRow
-                  key={kind}
-                  Icon={Award}
-                  title={CERTIFICATE_LABEL[kind]}
-                  status={
-                    issued
-                      ? `Issued ${formatDate(issued.issuedAt)} · ${issued.serial}`
-                      : certificateStatus(candidate)
-                  }
-                  href={issued ? `/api/onboarding/session/${token}/certificates/${kind}/pdf` : undefined}
-                />
-              );
-            })}
+            <DocumentRow
+              Icon={Award}
+              title="Completion certificate and letter of recommendation"
+              status="Handed over at offboarding. The founders send you an offboarding link near the end of your term; it opens the day after your last day."
+            />
           </ul>
         </Card>
-
-        <SignInCard token={token} candidate={candidate} onSaved={onSaved} />
 
         {showMailbox && <MailboxStage token={token} candidate={candidate} onSaved={onSaved} locked={false} inPortal />}
 
@@ -258,16 +228,6 @@ function EmployeeHome({
       <Footer />
     </Shell>
   );
-}
-
-/** What an employee is told about a document that is not issued yet. */
-function certificateStatus(candidate: CandidateView): string {
-  const timing = candidate.certificateWindow;
-  if (timing.status === "not-yet") {
-    return `Prepared in the last ${CERTIFICATE_WINDOW_DAYS} days of your term, from ${formatDate(timing.opensOn)}, once the founders approve it.`;
-  }
-  if (timing.status === "open") return "Being prepared — it appears here once the founders approve it.";
-  return "Not available.";
 }
 
 function DocumentRow({
