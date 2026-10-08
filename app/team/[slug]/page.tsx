@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // The first sentence is written to be the search snippet.
   // Under 155 so it is not truncated, and it opens with the sentence a
   // "who is <name>" query should be answered with.
-  const description = `${person.name} is the ${person.role} of ${site.name}, the service execution platform for hotel operations.`;
+  const description = `${person.name} is the ${person.role} of ${site.name}, the software company behind Mise and the Focus Realm education platform.`;
   const ogDescription = `${description} ${person.headline}`;
   const first = person.name.split(" ")[0];
 
@@ -200,8 +200,8 @@ export default async function PersonPage({ params }: Props) {
               {/* Lead sentence doubles as the answer to "who is X" */}
               <Reveal delay={80}>
                 <p className="mt-6 text-[clamp(1.2rem,2.4vw,1.6rem)] leading-[1.34] font-medium text-white">
-                  {person.name} is the {person.role} of {site.name}, the service execution platform for hotel
-                  operations.
+                  {person.name} is the {person.role} of {site.name}, the software company behind Mise and the
+                  Focus Realm education platform.
                 </p>
               </Reveal>
 
@@ -251,29 +251,26 @@ export default async function PersonPage({ params }: Props) {
                     On the company
                   </p>
                   <p className="mt-4 text-[0.95rem] leading-relaxed text-muted">
-                    {site.name} is a mobile-first service execution platform for hotel operations. The operating
-                    standard lives inside a timed task on a staff member&rsquo;s phone; completing that task
-                    captures photo and supervisor evidence; and that evidence compounds into an audit-ready
-                    service record.
+                    {site.description}
                   </p>
                   <div className="mt-6 flex flex-wrap gap-3">
-                    <Link
-                      href="/platform"
+                    <a
+                      href="https://misehotel.com"
                       className="text-[0.85rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white"
                     >
-                      See the platform
-                    </Link>
+                      Mise
+                    </a>
+                    <a
+                      href="https://focus-realm.com"
+                      className="text-[0.85rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white"
+                    >
+                      Focus Realm Education
+                    </a>
                     <Link
                       href="/about"
                       className="text-[0.85rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white"
                     >
                       About Focus Realm
-                    </Link>
-                    <Link
-                      href="/problems"
-                      className="text-[0.85rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white"
-                    >
-                      The six pains
                     </Link>
                   </div>
                 </div>

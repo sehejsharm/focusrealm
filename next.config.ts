@@ -34,7 +34,57 @@ const securityHeaders = [
   },
 ];
 
+/**
+ * The hotel product moved to misehotel.com. Every hotel page this site used
+ * to serve is permanently redirected to its counterpart there, page to page
+ * rather than all to the homepage, so the search equity each one earned
+ * transfers to the matching Mise page instead of evaporating.
+ */
+const MISE = "https://misehotel.com";
+const miseRedirects: [string, string][] = [
+  ["/platform", "/platform"],
+  ["/problems", "/problems"],
+  ["/demo", "/demo"],
+  ["/guides", "/solutions"],
+  ["/what-is-focus-realm", "/"],
+  ["/mise", "/"],
+  ["/hotel-sop-software", "/standards-to-execution"],
+  ["/service-execution-platform", "/glossary/service-execution-platform"],
+  ["/hotel-operations-software", "/platform"],
+  ["/hotel-task-management-software", "/how-it-works"],
+  ["/hotel-timed-task-software", "/glossary/timed-task"],
+  ["/digitize-hotel-sops", "/standards-to-execution"],
+  ["/replace-hotel-sop-binders", "/compare/mise-vs-excel"],
+  ["/replace-whatsapp-hotel-operations", "/compare/mise-vs-whatsapp"],
+  ["/hotel-sop-app", "/how-it-works"],
+  ["/hotel-sop-automation", "/how-it-works"],
+  ["/hotel-shift-management", "/glossary/shift-handover"],
+  ["/hotel-photo-evidence-app", "/glossary/photo-gate"],
+  ["/hotel-audit-software", "/audit-readiness"],
+  ["/hotel-compliance-software", "/audit-readiness"],
+  ["/hotel-sop-compliance", "/problems/ghost-sop"],
+  ["/hotel-housekeeping-sop-software", "/solutions/housekeeping"],
+  ["/hotel-department-sop-software", "/solutions"],
+  ["/hotel-supervisor-workload", "/problems/supervisor-bottleneck"],
+  ["/hotel-service-consistency", "/problems/invisible-performance-gap"],
+  ["/standalone-hotel-sop-software", "/solutions/boutique-hotels"],
+  ["/multi-property-hotel-sop-software", "/solutions/hotel-chains"],
+  ["/hotel-sop-software-india", "/hotel-service-execution-india"],
+  ["/hotel-sop-software-for-managers", "/for"],
+  ["/hotel-sop-software-vs-lms", "/compare/mise-vs-hotel-lms"],
+  ["/best-hotel-sop-software", "/compare"],
+];
+
 const nextConfig: NextConfig = {
+  async redirects() {
+    return miseRedirects.map(([source, path]) => ({
+      source,
+      destination: `${MISE}${path}`,
+      // 301 rather than Next's default 308: both pass equity, but 301 is what
+      // every SEO tool and Search Console report expects to see.
+      statusCode: 301 as const,
+    }));
+  },
   // Removes `X-Powered-By: Next.js` — free information about the stack.
   poweredByHeader: false,
   async headers() {

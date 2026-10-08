@@ -461,17 +461,17 @@ export const team: Person[] = [
   {
     slug: "sehej-sharma",
     name: "Sehej Sharma",
-    role: "Co-Founder & Chief Executive Officer",
-    shortRole: "Co-Founder & CEO",
+    role: "Founder & Chief Executive Officer",
+    shortRole: "Founder & CEO",
     initials: "SS",
-    headline: "The trailblazer who decided the standard belongs inside the shift.",
+    headline: "The trailblazer who builds software around the work, not the other way round.",
     bio: [
-      "Sehej Sharma is the Co-Founder and Chief Executive Officer of Focus Realm Hospitality, the service execution platform for hotel operations. He sets the company's direction, owns its positioning, and leads it from the front of the room — in front of general managers, HR directors and heads of learning who have heard every training pitch there is.",
-      "He is the author of the thesis the entire platform is built on: a standard that does not live inside the timed task is not a standard, it is a document. That idea was not a refinement of an existing category — it was a rejection of one. Under his direction Focus Realm retired its training-platform framing completely and rebuilt around service execution and evidence, a call that cost the company an easier story and bought it a defensible one.",
+      "Sehej Sharma is the Founder and Chief Executive Officer of Focus Realm, a software company building learning and operations platforms. He sets the company's direction across both of its product lines — Mise, the service execution platform for hotels, and the Focus Realm education platform for schools, colleges and universities — and leads it from the front of the room, in front of general managers, principals and boards who have heard every software pitch there is.",
+      "He is the author of the thesis Mise is built on: a standard that does not live inside the timed task is not a standard, it is a document. That idea was not a refinement of an existing category — it was a rejection of one. Under his direction the hotel product retired its training-platform framing completely and rebuilt around service execution and evidence, and Focus Realm split into two product lines, each built for the job it actually does.",
       "That is the pattern in how he leads. He is execution-first: an opinion that has not been shipped, sold or survived contact with a real floor does not count. He would rather take a decision on Monday and be corrected by Thursday than hold a committee until the quarter closes. It makes him a fast, deliberate risk-taker — the kind who moves a whole company off a comfortable category because the uncomfortable one is true.",
       "He is also, unusually for a founder at this stage, disciplined about language. He polices the vocabulary of the company personally, because he understands that positioning is not marketing decoration — it is the constraint that decides what gets built. Every word on this site passed through that filter.",
-      "He works property by property, floor by floor, with the operators who carry the consequence: the general manager whose rating is capped by inconsistency, the HR director watching institutional knowledge walk out the door, the L&D head whose sessions have attendance sheets and no execution signal. The six pains Focus Realm sells against were not workshopped. He collected them one conversation at a time.",
-      "The ambition is not a better tool for hotels. It is the operating layer that hotel service standards run on — a category Focus Realm intends to define and then own.",
+      "He works with the people who carry the consequence: the general manager whose rating is capped by inconsistency, the HR director watching institutional knowledge walk out the door, the principal whose software is switched on and unused. The problems Focus Realm builds against were not workshopped. He collected them one conversation at a time.",
+      "The ambition is not a better tool. It is software that institutions actually adopt — the operating layer hotel service standards run on, and a learning platform schools and universities use every day.",
     ],
     traits: [
       {
@@ -491,7 +491,7 @@ export const team: Person[] = [
         body: "Holds the ten-year picture — standards as infrastructure — and the Tuesday-morning decision in the same head.",
       },
     ],
-    focus: ["Category & positioning", "Product thesis", "Go-to-market", "Hospitality partnerships", "Founder-led sales"],
+    focus: ["Company direction", "Category & positioning", "Go-to-market", "Hospitality & education partnerships", "Founder-led sales"],
     quote:
       "Standards stop being a document nobody reads the moment they become the unit of work a staff member is doing right now.",
     photosPath: "/about-sehej-sharma",
@@ -508,9 +508,9 @@ export const team: Person[] = [
     schema: {
       // Shared with his Recharga Chargine profile so both resolve to one person.
       id: "https://rechargachargine.com/team/sehej-sharma#person",
-      jobTitle: "Co-Founder & CEO",
+      jobTitle: "Founder & CEO",
       description:
-        "Co-Founder & CEO of Focus Realm and Founder & CEO of Recharga Chargine. Based in Jaipur, India.",
+        "Founder & CEO of Focus Realm and Founder & CEO of Recharga Chargine. Based in Jaipur, India.",
       images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Sehej%20Sharma.png"],
     },
   },
@@ -522,8 +522,8 @@ export const team: Person[] = [
     initials: "AE",
     headline: "The operator who makes a standard survive week three.",
     bio: [
-      "Ali Electricwala is the Co-Founder and Chief Operating Officer of Focus Realm Hospitality. He owns how the platform actually lands inside a working hotel — pilot design, rollout, and the operating discipline that keeps a standard alive after the launch enthusiasm wears off.",
-      "His work starts where most operations software stops: the floor. Shift patterns, supervisor load, the realities of a large property running on staff-owned phones and mobile data. Every pilot Focus Realm runs is scoped so that a property sees evidence accumulating inside the first thirty days — not a rollout plan, actual timestamped proof.",
+      "Ali Electricwala is the Co-Founder and Chief Operating Officer of Focus Realm. He owns how the company's products actually land with the people who use them — pilot design, rollout, and the operating discipline that keeps a product in daily use after the launch enthusiasm wears off, in hotels and in education institutions alike.",
+      "In hospitality, his work starts where most operations software stops: the floor. Shift patterns, supervisor load, the realities of a large property running on staff-owned phones and mobile data. Every Mise pilot is scoped so that a property sees evidence accumulating inside the first thirty days — not a rollout plan, actual timestamped proof.",
       "He leads commercial operations and customer success, and he is the route by which the floor's reality gets back into the roadmap. When a standard is being worked around rather than worked, he is usually the first person in the company to know.",
     ],
     traits: [
@@ -540,7 +540,7 @@ export const team: Person[] = [
         body: "Stays close enough to the property to hear a standard failing before a report does.",
       },
     ],
-    focus: ["Pilot design & rollout", "Customer success", "Commercial operations", "Property onboarding"],
+    focus: ["Pilot design & rollout", "Customer success", "Commercial operations", "Onboarding across both product lines"],
     quote: "A standard that survives week three is an operating decision, not a document decision.",
   },
   {
@@ -551,9 +551,9 @@ export const team: Person[] = [
     initials: "AM",
     headline: "The architect who removes things until the task is all that is left.",
     bio: [
-      "Aditya Mishra is the Co-Founder and Chief Technology Officer of Focus Realm Hospitality. He drives the platform's subtraction-first design principle: every screen earns its place, and anything that does not help a staff member finish the task in front of them gets removed before it ships.",
-      "He architected Focus Realm as three deliberately separate role interfaces — a mobile-first staff experience built for a 340px viewport, a desktop-primary manager surface, and a desktop-only authoring workspace — rather than one responsive layout that would have been cheaper to build and worse in all three postures.",
-      "The platform runs on Google Cloud and Firebase: web-based, on standard browsers over mobile data, with no high-end hardware and no PMS integration required at this stage. That is a deliberate constraint, not a gap. The product has to work on the phone a room attendant already owns, in daylight, on hotel wifi — and if it does not work there, it does not work.",
+      "Aditya Mishra is the Co-Founder and Chief Technology Officer of Focus Realm. He leads engineering across both product lines and drives the company's subtraction-first design principle: every screen earns its place, and anything that does not help the person using it finish the job in front of them gets removed before it ships.",
+      "He architected Mise as three deliberately separate role interfaces — a mobile-first staff experience built for a 340px viewport, a desktop-primary manager surface, and a desktop-only authoring workspace — rather than one responsive layout that would have been cheaper to build and worse in all three postures.",
+      "Mise runs on Google Cloud and Firebase: web-based, on standard browsers over mobile data, with no high-end hardware and no PMS integration required at this stage. That is a deliberate constraint, not a gap. The product has to work on the phone a room attendant already owns, in daylight, on hotel wifi — and if it does not work there, it does not work.",
     ],
     traits: [
       {

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import Aurora from "@/components/fx/Aurora";
 import Reveal, { MaskedLines } from "@/components/fx/Reveal";
@@ -8,64 +7,72 @@ import TrustedBy from "@/components/home/TrustedBy";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import { Container, Eyebrow, Rule } from "@/components/ui/Section";
 import { allPeopleSchema, jsonLdGraph, organizationSchema, webPageSchema } from "@/lib/seo";
+import { site } from "@/lib/site";
 
-const title = "Focus Realm | Technology for Education and Hospitality";
-const description =
-  "Focus Realm builds technology for two sectors: learning and training programmes in education, and Mise, the service execution platform for hotels.";
+const title = "Focus Realm | Software for Education and Hospitality";
 
 export const metadata: Metadata = {
   title: { absolute: title },
-  description,
+  description: site.shortDescription,
   alternates: { canonical: "/" },
-  openGraph: { title, description, url: "/", type: "website" },
-  twitter: { card: "summary_large_image", title, description },
+  openGraph: { title, description: site.shortDescription, url: "/", type: "website" },
+  twitter: { card: "summary_large_image", title, description: site.shortDescription },
 };
 
 /**
- * The parent-company page. Focus Realm works in two sectors and runs each as
- * its own product, so this page introduces the company and hands the visitor
- * to the right one. It describes products, not sites, and it keeps the two
- * apart on purpose: the hospitality product is explicitly not a learning
- * platform, so the education offer is never presented as part of it.
+ * The parent-company page. Focus Realm is a software company with two product
+ * lines, each with its own site, so this page introduces the company and hands
+ * the visitor to the right product. It describes products, not websites.
+ *
+ * The two lines stay separate on purpose: Mise is explicitly not a learning
+ * platform, so the education product is never presented as part of it.
  */
-const sectors = [
+const products = [
   {
     id: "education",
     index: "01",
     sector: "Education",
     name: "Focus Realm Education",
-    line: "Learning and capability programmes for schools, trainers and teams.",
-    products: [
+    line: "An AI-driven, gamified learning platform for schools, colleges and universities, built to work with interactive classroom boards.",
+    layers: [
       {
-        title: "Learning platform",
-        body: "Courses, staff training and compliance tracking, with the reporting an institution or training team needs.",
+        title: "Core academic hub",
+        body: "Courses and content, assignments and grading, attendance and notices — the essentials, without the clutter.",
       },
       {
-        title: "AI training programmes",
-        body: "Outcome-driven programmes that take teams from first exposure to real, day-to-day use of AI.",
+        title: "Optional modules",
+        body: "AI analytics that flag students who need help, gamification, a parent portal, faculty development tracking and timetabling.",
+      },
+      {
+        title: "Employability layer",
+        body: "Industry-recognised certification courses, and a skills dashboard that becomes a student's digital résumé.",
       },
     ],
-    who: "Schools, corporate trainers, startups and technology teams.",
-    cta: { label: "Explore Focus Realm Education", href: "https://focus-realm.com", external: true },
+    who: "schools, colleges and universities",
+    cta: { label: "Explore Focus Realm Education", href: "https://focus-realm.com" },
   },
   {
     id: "hospitality",
     index: "02",
     sector: "Hospitality",
     name: "Mise",
-    line: "The service execution platform for hotels.",
-    products: [
+    line: "The service execution platform for hotels. Hotel SOPs run as timed tasks on staff phones, and the work produces its own evidence.",
+    layers: [
       {
         title: "Timed tasks on staff phones",
-        body: "Hotel SOPs run step by step, against the clock, on the phones staff already carry.",
+        body: "Each standard runs step by step, against the clock, on the phones staff already carry.",
       },
       {
-        title: "Evidence and an audit-ready record",
-        body: "Photo evidence and supervisor sign-off captured in the work, compounding into a service record per property.",
+        title: "Evidence in the work",
+        body: "Photo evidence and supervisor sign-off are captured as the task is done, not reconstructed afterwards.",
+      },
+      {
+        title: "An audit-ready record",
+        body: "Every task compounds into a service record per person and property, ready when the auditor arrives.",
       },
     ],
-    who: "Hotels, hotel groups and distributed properties.",
-    cta: { label: "Explore Mise", href: "https://misehotel.com", external: true },
+    who: "hotels, hotel groups and distributed properties",
+    cta: { label: "Explore Mise", href: "https://misehotel.com" },
   },
 ] as const;
 
@@ -76,7 +83,7 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: jsonLdGraph(
-            webPageSchema({ path: "/", name: "Focus Realm — education and hospitality", description }),
+            webPageSchema({ path: "/", name: title, description: site.shortDescription }),
             organizationSchema,
             ...allPeopleSchema(),
           ),
@@ -88,25 +95,25 @@ export default function HomePage() {
         <Aurora variant="hero" />
         <Container>
           <Reveal immediate>
-            <Eyebrow>Focus Realm</Eyebrow>
+            <Eyebrow>Focus Realm · Software company</Eyebrow>
           </Reveal>
           <h1 className="mt-6 max-w-4xl text-[clamp(2.6rem,6vw,4.8rem)] leading-[1] font-semibold tracking-[-0.04em] text-white">
             <MaskedLines
-              lines={[<>One company.</>, <span key="b" className="text-gradient">Two sectors.</span>]}
+              lines={[<>Software for the work</>, <span key="b" className="text-gradient">that has to go right.</span>]}
               stagger={80}
               immediate
             />
           </h1>
           <Reveal delay={300} immediate>
             <p className="mt-7 max-w-2xl text-[1.08rem] leading-relaxed text-muted sm:text-[1.15rem]">
-              Focus Realm builds the systems that make a standard stick — in the classroom and the
-              training room, and on the hotel floor.
+              Focus Realm builds learning and operations platforms. Two product lines today: Mise for
+              hotels, and an AI-driven learning platform for schools, colleges and universities.
             </p>
           </Reveal>
           <Reveal delay={400} immediate>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href="#sectors" size="lg">
-                Our two sectors
+              <ButtonLink href="#products" size="lg">
+                Our products
                 <ArrowRight />
               </ButtonLink>
               <ButtonLink href="/contact" variant="outline" size="lg">
@@ -117,64 +124,54 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* Sectors */}
-      <section id="sectors" className="relative scroll-mt-24 overflow-hidden py-14 sm:py-24">
+      {/* Products */}
+      <section id="products" className="relative scroll-mt-24 overflow-hidden py-14 sm:py-24">
         <Container>
           <div className="max-w-xl">
             <Reveal>
-              <Eyebrow>Where we work</Eyebrow>
+              <Eyebrow>Products</Eyebrow>
             </Reveal>
             <Reveal delay={60}>
               <h2 className="mt-5 text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] font-semibold text-white">
-                Education and hospitality.
+                Two product lines. Two sectors.
               </h2>
             </Reveal>
           </div>
 
           <div className="mt-12 grid auto-rows-fr gap-5 lg:grid-cols-2 lg:gap-6">
-            {sectors.map((s, i) => (
-              <Reveal key={s.id} delay={i * 90} className="h-full">
-                <article id={s.id} className="panel flex h-full scroll-mt-28 flex-col p-7 sm:p-9">
+            {products.map((p, i) => (
+              <Reveal key={p.id} delay={i * 90} className="h-full">
+                <article id={p.id} className="panel flex h-full scroll-mt-28 flex-col p-7 sm:p-9">
                   <p className="font-mono text-[0.74rem] tracking-[0.16em] text-brand-cyan uppercase">
-                    Sector {s.index} · {s.sector}
+                    {p.index} · {p.sector}
                   </p>
                   <h3 className="mt-5 text-[clamp(1.6rem,3vw,2.2rem)] leading-tight font-semibold text-white">
-                    {s.name}
+                    {p.name}
                   </h3>
-                  <p className="mt-2 text-[1rem] leading-relaxed text-muted">{s.line}</p>
+                  <p className="mt-3 text-[0.98rem] leading-relaxed text-muted">{p.line}</p>
 
                   <ul className="mt-7 space-y-5">
-                    {s.products.map((p) => (
-                      <li key={p.title} className="border-l border-line pl-5">
-                        <p className="text-[0.95rem] font-medium text-white">{p.title}</p>
-                        <p className="mt-1.5 text-[0.88rem] leading-relaxed text-faint">{p.body}</p>
+                    {p.layers.map((layer) => (
+                      <li key={layer.title} className="border-l border-line pl-5">
+                        <p className="text-[0.95rem] font-medium text-white">{layer.title}</p>
+                        <p className="mt-1.5 text-[0.88rem] leading-relaxed text-faint">{layer.body}</p>
                       </li>
                     ))}
                   </ul>
 
                   <p className="mt-7 text-[0.86rem] text-faint">
-                    <span className="text-paper">For </span>
-                    {s.who.charAt(0).toLowerCase() + s.who.slice(1)}
+                    <span className="text-paper">Built for </span>
+                    {p.who}.
                   </p>
 
                   <div className="mt-auto pt-8">
-                    {s.cta.external ? (
-                      <a
-                        href={s.cta.href}
-                        className="inline-flex items-center gap-2 text-[0.95rem] font-medium text-brand-cyan underline decoration-brand/40 underline-offset-4 hover:decoration-brand-bright"
-                      >
-                        {s.cta.label}
-                        <ArrowRight />
-                      </a>
-                    ) : (
-                      <Link
-                        href={s.cta.href}
-                        className="inline-flex items-center gap-2 text-[0.95rem] font-medium text-brand-cyan underline decoration-brand/40 underline-offset-4 hover:decoration-brand-bright"
-                      >
-                        {s.cta.label}
-                        <ArrowRight />
-                      </Link>
-                    )}
+                    <a
+                      href={p.cta.href}
+                      className="inline-flex items-center gap-2 text-[0.95rem] font-medium text-brand-cyan underline decoration-brand/40 underline-offset-4 hover:decoration-brand-bright"
+                    >
+                      {p.cta.label}
+                      <ArrowRight />
+                    </a>
                   </div>
                 </article>
               </Reveal>
@@ -185,25 +182,26 @@ export default function HomePage() {
 
       <Rule />
 
-      {/* What connects them */}
+      {/* How we build */}
       <section className="relative overflow-hidden py-14 sm:py-24">
         <Container>
           <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
             <Reveal>
-              <Eyebrow>Why two sectors</Eyebrow>
+              <Eyebrow>How we build</Eyebrow>
               <h2 className="mt-5 text-[clamp(1.8rem,3.6vw,2.6rem)] leading-[1.06] font-semibold text-white">
-                Knowing the standard and meeting it are different problems.
+                Strategic minimalism.
               </h2>
             </Reveal>
             <Reveal delay={80}>
               <div className="space-y-5 text-[1rem] leading-relaxed text-muted lg:pt-10">
                 <p>
-                  In education, the work is helping people learn what good looks like. In hospitality,
-                  it is making sure good happens on every shift, and proving it did.
+                  Most institutional software fails at adoption, not at features. It arrives with
+                  everything switched on, and the people who have to use it every day stop opening it.
                 </p>
                 <p>
-                  We treat them as separate problems with separate products — built by the same team, to
-                  the same rule: <span className="text-paper">remove it unless it helps the person doing the work.</span>
+                  We build the opposite way, in both sectors: only what the school or the property
+                  actually uses, shaped around the person doing the work.{" "}
+                  <span className="text-paper">If it doesn&rsquo;t help them, it comes out.</span>
                 </p>
               </div>
             </Reveal>

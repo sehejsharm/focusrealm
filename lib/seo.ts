@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { allTopicKeywords, topics } from "@/lib/topics";
 
 import { advisors, faqs, property, team, testimonials } from "@/lib/content";
 import { sehejGalleryPhotos } from "@/lib/gallery";
@@ -55,6 +54,7 @@ export function pageMetadata({
 const organizationId = `${siteUrl}/#organization`;
 const websiteId = `${siteUrl}/#website`;
 const softwareId = `${siteUrl}/#software`;
+const educationId = `${siteUrl}/#education`;
 
 /**
  * The `@id` every node uses to refer to a founder. Defaults to the profile
@@ -71,7 +71,7 @@ export const organizationSchema = {
   "@type": "Organization",
   "@id": organizationId,
   name: site.name,
-  alternateName: ["Focus Realm", "FocusRealm", "Focus Realm Hospitality Pvt Ltd"],
+  alternateName: ["FocusRealm"],
   legalName: site.legalName,
   url: siteUrl,
   slogan: site.tagline,
@@ -87,16 +87,13 @@ export const organizationSchema = {
   },
   image: absoluteUrl("/opengraph-image"),
   knowsAbout: [
-    "hotel service standards",
-    "SOP management for hotels",
+    "learning management systems",
+    "education technology",
+    "AI in education",
+    "gamified learning",
+    "hotel service execution",
     "hotel standard operating procedures",
     "hospitality operations software",
-    "hotel audit evidence",
-    "housekeeping quality assurance",
-    "hotel staff readiness",
-    // One entry per guide topic, so the entity is associated with each
-    // search intent it has a page for.
-    ...topics.map((topic) => topic.keywords[0]),
   ],
   address: {
     "@type": "PostalAddress",
@@ -105,26 +102,26 @@ export const organizationSchema = {
     addressCountry: "IN",
   },
   founder: team
-    .filter((person) => person.role.includes("Co-Founder"))
+    .filter((person) => person.role.includes("Founder"))
     .map((person) => ({ "@id": personId(person.slug) })),
   employee: team.map((person) => ({ "@id": personId(person.slug) })),
   brand: [
     { "@type": "Brand", name: site.shortName, logo: absoluteUrl("/logo.svg") },
-    // The product name on the platform screens.
-    { "@type": "Brand", name: "Mise", slogan: site.tagline },
+    { "@type": "Brand", name: "Mise", url: "https://misehotel.com" },
+    { "@type": "Brand", name: "Focus Realm Education", url: "https://focus-realm.com" },
   ],
   numberOfEmployees: { "@type": "QuantitativeValue", minValue: 3 },
-  makesOffer: {
-    "@type": "Offer",
-    itemOffered: { "@id": softwareId },
-    description: "Single-property pilot of the Focus Realm service execution platform.",
-  },
+  // The two product lines. Each is described in full on its own site.
+  makesOffer: [
+    { "@type": "Offer", itemOffered: { "@id": softwareId } },
+    { "@type": "Offer", itemOffered: { "@id": educationId } },
+  ],
   contactPoint: [
     {
       "@type": "ContactPoint",
       contactType: "sales",
       email: site.email,
-      url: absoluteUrl("/demo"),
+      url: absoluteUrl("/contact"),
       availableLanguage: ["English"],
       areaServed: "Worldwide",
     },
@@ -149,34 +146,31 @@ export const websiteSchema = {
   inLanguage: "en",
 } as const;
 
+/** Hospitality product line. Its own site carries the full description. */
 export const softwareSchema = {
   "@type": "SoftwareApplication",
   "@id": softwareId,
-  name: site.name,
+  name: "Mise",
   applicationCategory: "BusinessApplication",
   applicationSubCategory: "Service Execution Platform",
-  alternateName: ["Mise", "Mise by Focus Realm", "Focus Realm hotel software"],
-  keywords: allTopicKeywords.join(", "),
   operatingSystem: "Any browser, any phone",
-  url: siteUrl,
-  description: site.description,
-  featureList: [
-    "Operating standards delivered inside timed tasks",
-    "Mandatory photo evidence per step",
-    "Supervisor sign-off attached to every task",
-    "Audit-ready service record per person and property",
-    "Three role interfaces: staff mobile, manager desktop, author desktop",
-    "Live readiness and service health for the property",
-  ],
+  url: "https://misehotel.com",
+  description:
+    "Mise is the service execution platform for hotels: SOPs run as timed tasks on staff phones, with photo evidence, supervisor sign-off and an audit-ready service record.",
   publisher: { "@id": organizationId },
-  offers: {
-    "@type": "Offer",
-    availability: "https://schema.org/InStock",
-    priceCurrency: "USD",
-    price: "0",
-    description: "Single-property pilot. Contact Focus Realm for pilot scoping.",
-    url: absoluteUrl("/demo"),
-  },
+} as const;
+
+/** Education product line. */
+export const educationSchema = {
+  "@type": "SoftwareApplication",
+  "@id": educationId,
+  name: "Focus Realm Education",
+  applicationCategory: "EducationalApplication",
+  operatingSystem: "Web",
+  url: "https://focus-realm.com",
+  description:
+    "An AI-driven, gamified learning platform for schools, colleges and universities, built to work with interactive classroom boards.",
+  publisher: { "@id": organizationId },
 } as const;
 
 /**

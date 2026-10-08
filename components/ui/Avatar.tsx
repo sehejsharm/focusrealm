@@ -47,7 +47,7 @@ export default function Avatar({
       >
         <Image
           src={src}
-          alt={alt ?? `${person.name} — ${person.shortRole}, Focus Realm Hospitality`}
+          alt={alt ?? `${person.name} — ${person.shortRole}, Focus Realm`}
           fill
           sizes={sizes}
           priority={priority}

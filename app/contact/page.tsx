@@ -10,16 +10,16 @@ import { team } from "@/lib/content";
 import { breadcrumbSchema, jsonLdGraph, organizationSchema, webPageSchema } from "@/lib/seo";
 import { site } from "@/lib/site";
 
-const title = "Contact Focus Realm Hospitality";
+const title = "Contact Focus Realm";
 const description =
-  "Talk to the founders of Focus Realm Hospitality about hotel SOP execution, pilots, partnerships or press. One inbox, answered within a working day.";
+  "Talk to the founders of Focus Realm about Mise for hotels, the education platform, partnerships or press. One inbox, answered within a working day.";
 const ogDescription =
-  "Talk to the founding team at Focus Realm Hospitality about hotel SOP execution, pilots, partnerships or press. Early conversations go directly to Sehej Sharma, Ali Electricwala and Aditya Mishra.";
+  "Talk to the founding team at Focus Realm about Mise for hotels, the education platform for schools and universities, partnerships or press. Early conversations go directly to Sehej Sharma, Ali Electricwala and Aditya Mishra.";
 
 export const metadata: Metadata = {
   title,
   description,
-  keywords: ["contact Focus Realm", "Focus Realm Hospitality contact", "hotel SOP software enquiry"],
+  keywords: ["contact Focus Realm", "Focus Realm contact", "Mise enquiry", "Focus Realm education enquiry"],
   alternates: { canonical: "/contact" },
   openGraph: { title: `${title} · ${site.shortName}`, description: ogDescription, url: "/contact", type: "website" },
   twitter: { card: "summary_large_image", description: ogDescription },
@@ -28,12 +28,12 @@ export const metadata: Metadata = {
 const fields: FieldSpec[] = [
   { kind: "text", name: "name", label: "Your name", placeholder: "Full name", required: true, half: true, autoComplete: "name" },
   { kind: "text", name: "email", label: "Email", type: "email", placeholder: "you@company.com", required: true, half: true, autoComplete: "email" },
-  { kind: "text", name: "company", label: "Company", placeholder: "Property, group or organisation", half: true, autoComplete: "organization" },
+  { kind: "text", name: "company", label: "Company", placeholder: "School, university, property or organisation", half: true, autoComplete: "organization" },
   {
     kind: "select",
     name: "topic",
     label: "What is this about",
-    options: ["A pilot at our property", "Multi-property group", "Partnership", "Careers", "Press or research", "Something else"],
+    options: ["Mise, for a hotel", "Education, for a school or university", "Partnership", "Careers", "Press or research", "Something else"],
     half: true,
   },
   { kind: "textarea", name: "message", label: "Message", placeholder: "Tell us what you are trying to fix.", required: true },
@@ -94,7 +94,7 @@ export default function ContactPage() {
             <Reveal>
               <LeadForm
                 fields={fields}
-                subject="Enquiry — Focus Realm Hospitality"
+                subject="Enquiry — Focus Realm"
                 formId="contact"
                 to={site.email}
                 submitLabel="Send message"
@@ -156,8 +156,8 @@ export default function ContactPage() {
                   <p className="font-mono text-[0.74rem] tracking-[0.14em] text-faint uppercase">Based in</p>
                   <p className="mt-3 text-[0.95rem] text-paper">Remote-first · India</p>
                   <p className="mt-2 text-[0.85rem] leading-relaxed text-faint">
-                    Priority markets are travel, hospitality and hotels across India, the wider Asia region and
-                    the Middle East — but we take calls from wherever the shift is.
+                    We work with hotels and with schools, colleges and universities across India, the wider Asia
+                    region and the Middle East — and take calls from anywhere.
                   </p>
                 </div>
               </Reveal>
@@ -173,22 +173,22 @@ export default function ContactPage() {
           <div className="grid gap-8 sm:grid-cols-3">
             {[
               {
-                title: "If you are comparing us to an LMS",
-                body: "Say so. The difference is execution and evidence, and we would rather draw it clearly than let you find out in month three.",
-                href: "/about#not-an-lms",
-                cta: "Why this is not an LMS",
+                title: "If you run a hotel",
+                body: "Mise is our hospitality product. Its own site has the platform, the problems it closes, and a 15-minute demo.",
+                href: "https://misehotel.com",
+                cta: "Explore Mise",
               },
               {
-                title: "If you want to see it first",
-                body: "The prototype is open. Twenty-seven routes across all three interfaces, running against the demo property.",
-                href: "/platform",
-                cta: "See the platform",
+                title: "If you run a school or university",
+                body: "Our education platform is built for schools, colleges and universities, and to work with interactive classroom boards.",
+                href: "https://focus-realm.com",
+                cta: "Explore Focus Realm Education",
               },
               {
-                title: "If you already know the pain",
-                body: "Skip the discovery call. Book the walkthrough and bring the standard nobody follows.",
-                href: "/demo",
-                cta: "Book a 15-min demo",
+                title: "If it is something else",
+                body: "Partnerships, press, careers — use the form. It reaches the founders directly.",
+                href: "/about",
+                cta: "About Focus Realm",
               },
             ].map((item, index) => (
               <Reveal key={item.title} delay={index * 90}>

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Focus Realm Hospitality — the operating system for hotel service standards";
+export const alt = "Focus Realm — software for education and hospitality";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -69,9 +69,9 @@ export default function OpengraphImage() {
             <span style={{ color: "#dbbc5f" }}>R</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 26, fontWeight: 600 }}>Focus Realm Hospitality</div>
+            <div style={{ fontSize: 26, fontWeight: 600 }}>Focus Realm</div>
             <div style={{ fontSize: 15, letterSpacing: 3, color: "#a8c4c0", textTransform: "uppercase" }}>
-              Service execution platform
+              Software company
             </div>
           </div>
         </div>
@@ -79,7 +79,7 @@ export default function OpengraphImage() {
         {/* Headline */}
         <div style={{ display: "flex", flexDirection: "column", maxWidth: 940 }}>
           <div style={{ fontSize: 68, fontWeight: 700, lineHeight: 1.04, letterSpacing: -2.4 }}>
-            The operating system for
+            Software for the work
           </div>
           <div
             style={{
@@ -90,17 +90,17 @@ export default function OpengraphImage() {
               color: "#dbbc5f",
             }}
           >
-            hotel service standards.
+            that has to go right.
           </div>
           <div style={{ marginTop: 26, fontSize: 25, color: "#a8c4c0", lineHeight: 1.4, maxWidth: 860 }}>
-            The standard lives inside the timed task. The task produces the evidence. The evidence becomes an
-            audit-ready service record.
+            Learning and operations platforms. Two product lines: Mise for hotels, and an AI-driven learning
+            platform for schools, colleges and universities.
           </div>
         </div>
 
         {/* Chain */}
         <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 17, letterSpacing: 2 }}>
-          {["STANDARD", "TIMED TASK", "PHOTO EVIDENCE", "SERVICE RECORD"].map((step, index) => (
+          {["EDUCATION", "HOSPITALITY · MISE"].map((step, index) => (
             <div key={step} style={{ display: "flex", alignItems: "center", gap: 14 }}>
               <div
                 style={{
@@ -108,8 +108,8 @@ export default function OpengraphImage() {
                   padding: "10px 18px",
                   borderRadius: 999,
                   border: "1px solid rgba(148,212,193,0.28)",
-                  background: index === 3 ? "rgba(51,146,123,0.22)" : "rgba(255,255,255,0.04)",
-                  color: index === 3 ? "#ffffff" : "#b9e6d8",
+                  background: index === 1 ? "rgba(51,146,123,0.22)" : "rgba(255,255,255,0.04)",
+                  color: index === 1 ? "#ffffff" : "#b9e6d8",
                 }}
               >
                 {step}

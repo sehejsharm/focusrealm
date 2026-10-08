@@ -8,7 +8,7 @@ import { nav } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Page not found",
-  description: "That route does not exist on Focus Realm Hospitality. Head back to the platform, the six pains, or book a 15-minute demo.",
+  description: "That page does not exist on Focus Realm. Head back to the homepage, or explore Mise and the education platform.",
   robots: { index: false, follow: true },
 };
 
@@ -23,18 +23,18 @@ export default function NotFound() {
       <Reveal>
         <Eyebrow>Error 404</Eyebrow>
         <h1 className="mt-6 max-w-2xl text-[clamp(2.2rem,6vw,3.6rem)] leading-[1.05] font-semibold tracking-tight text-white text-balance">
-          This route isn&rsquo;t on the floor plan.
+          This page doesn&rsquo;t exist.
         </h1>
         <p className="mt-5 max-w-md text-[0.98rem] leading-relaxed text-muted">
-          The page you asked for either moved or never existed. Nothing is broken
-          — you just took a corridor we haven&rsquo;t built yet.
+          It may have moved — our hotel product now lives at misehotel.com and our education
+          platform at focus-realm.com. Everything else is below.
         </p>
       </Reveal>
 
       <Reveal delay={90}>
         <div className="mt-10 flex flex-wrap items-center gap-4">
-          <ButtonLink href="/demo" size="lg">
-            Book a 15-min demo
+          <ButtonLink href="/contact" size="lg">
+            Talk to us
           </ButtonLink>
           <ButtonLink href="/" variant="outline" size="lg">
             Back to home

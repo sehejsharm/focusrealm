@@ -42,17 +42,17 @@ export const isUnindexableHost =
   /\.vercel\.app$/.test(new URL(siteUrl).hostname);
 
 export const site = {
-  name: "Focus Realm Hospitality",
+  name: "Focus Realm",
   shortName: "Focus Realm",
-  legalName: "Focus Realm Hospitality",
-  tagline: "Every shift, five-star.",
-  category: "Service Execution Platform",
-  categoryLine: "The operating system for hotel service standards.",
+  legalName: "Focus Realm",
+  tagline: "Software for the work that has to go right.",
+  category: "Software company",
+  categoryLine: "A software company building learning and operations platforms.",
   description:
-    "Focus Realm Hospitality is a mobile-first service execution platform for hotel operations. The standard lives inside the timed task, completing the task captures photo and supervisor evidence, and that evidence compounds into an audit-ready service record.",
+    "Focus Realm is a software company building bespoke learning and operations platforms. It runs two product lines: Mise, the service execution platform for hotels, and the Focus Realm education platform for schools, colleges and universities.",
   /** Kept under 155 characters — this is the default meta description. */
   shortDescription:
-    "Turn hotel SOPs into timed tasks on staff phones. Photo evidence, supervisor sign-offs and audit-ready service records. Not an LMS. No PMS required.",
+    "Focus Realm is a software company with two product lines: Mise for hotel operations, and an AI-driven learning platform for schools and universities.",
   /**
    * One public address, one domain. Everything on the site — footer, contact
    * routes, demo form, JSON-LD contactPoint, the policy pages — reads from
@@ -73,7 +73,7 @@ export const site = {
  * `registeredAddress` is only rendered when it is non-empty.
  */
 export const legal = {
-  entity: "Focus Realm Hospitality",
+  entity: "Focus Realm",
   jurisdiction: "India",
   courts: "Jaipur, Rajasthan, India",
   registeredAddress: "",

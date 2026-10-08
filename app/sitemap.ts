@@ -3,7 +3,6 @@ import type { MetadataRoute } from "next";
 import { team } from "@/lib/content";
 import { sehejGalleryPhotos } from "@/lib/gallery";
 import { teamPhoto } from "@/lib/team-photos";
-import { topics } from "@/lib/topics";
 import { absoluteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -11,9 +10,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const routes = [
     { path: "/", changeFrequency: "weekly", priority: 1 },
-    { path: "/platform", changeFrequency: "weekly", priority: 0.9 },
-    { path: "/problems", changeFrequency: "monthly", priority: 0.9 },
-    { path: "/demo", changeFrequency: "monthly", priority: 0.9 },
     { path: "/about", changeFrequency: "monthly", priority: 0.8 },
     { path: "/team", changeFrequency: "monthly", priority: 0.8 },
     { path: "/contact", changeFrequency: "monthly", priority: 0.7 },
@@ -54,16 +50,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  // Keyword guides — one page per search intent in the SEO + GEO master list.
-  const guides: MetadataRoute.Sitemap = [
-    { url: absoluteUrl("/guides"), lastModified, changeFrequency: "weekly", priority: 0.8 },
-    ...topics.map((topic) => ({
-      url: absoluteUrl(`/${topic.slug}`),
-      lastModified,
-      changeFrequency: "monthly" as const,
-      priority: 0.8,
-    })),
-  ];
-
-  return [...core, ...guides, ...people, ...gallery];
+  return [...core, ...people, ...gallery];
 }

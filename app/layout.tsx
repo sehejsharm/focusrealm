@@ -7,8 +7,7 @@ import ConsentBanner from "@/components/site/ConsentBanner";
 import RouteTransition from "@/components/fx/RouteTransition";
 import Footer from "@/components/site/Footer";
 import Header from "@/components/site/Header";
-import StickyCta from "@/components/site/StickyCta";
-import { jsonLdGraph, organizationSchema, softwareSchema, websiteSchema } from "@/lib/seo";
+import { educationSchema, jsonLdGraph, organizationSchema, softwareSchema, websiteSchema } from "@/lib/seo";
 import { isUnindexableHost, site, siteUrl } from "@/lib/site";
 
 import "./globals.css";
@@ -19,29 +18,25 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${site.name} — Hotel SOP Execution Platform`,
+    default: `${site.name} — Software for Education and Hospitality`,
     // Short suffix on purpose: page titles have ~60 chars before Google
-    // truncates, and the full company name ate 26 of them.
+    // truncates.
     template: `%s · ${site.shortName}`,
   },
   description: site.shortDescription,
   applicationName: site.name,
-  category: "Hospitality operations software",
+  category: "Software company",
   keywords: [
     "Focus Realm",
-    "Focus Realm Hospitality",
-    "service execution platform",
-    "SOP management system for hotels",
-    "hotel SOP software",
-    "SOP development system",
-    "hotel standard operating procedures software",
-    "hospitality operations platform",
-    "hotel staff app",
-    "housekeeping SOP app",
-    "hotel audit evidence software",
-    "hotel service standards software",
-    "hotel quality assurance software",
-    "hotel operations compliance tracking",
+    "Focus Realm software company",
+    "Focus Realm education",
+    "Focus Realm Mise",
+    "Mise hotel software",
+    "AI LMS for schools",
+    "LMS for universities",
+    "hotel service execution platform",
+    "education technology India",
+    "hospitality technology India",
   ],
   authors: [{ name: site.name, url: siteUrl }],
   creator: site.name,
@@ -51,7 +46,7 @@ export const metadata: Metadata = {
     type: "website",
     url: siteUrl,
     siteName: site.name,
-    title: `${site.name} — the operating system for hotel service standards`,
+    title: `${site.name} — software for education and hospitality`,
     description: site.shortDescription,
     locale: "en_US",
     images: [
@@ -59,13 +54,13 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: `${site.name} — the operating system for hotel service standards`,
+        alt: `${site.name} — software for education and hospitality`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} — Service Execution Platform for Hotels`,
+    title: `${site.name} — Software for Education and Hospitality`,
     description: site.shortDescription,
   },
   // Previews and *.vercel.app hosts are excluded from the index so a
@@ -111,7 +106,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: jsonLdGraph(organizationSchema, websiteSchema, softwareSchema),
+            __html: jsonLdGraph(organizationSchema, websiteSchema, softwareSchema, educationSchema),
           }}
         />
         <CursorField />
@@ -120,7 +115,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <RouteTransition>{children}</RouteTransition>
         </main>
         <Footer />
-        <StickyCta />
         <AnalyticsScripts />
         <ConsentBanner />
       </body>

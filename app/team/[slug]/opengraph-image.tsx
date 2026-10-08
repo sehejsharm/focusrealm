@@ -14,7 +14,7 @@ export function generateStaticParams() {
   return team.map((person) => ({ slug: person.slug }));
 }
 
-export const alt = `Focus Realm Hospitality founding team profile`;
+export const alt = `Focus Realm founding team profile`;
 
 /**
  * The founder's portrait as a data URI, or undefined to fall back to the
@@ -142,7 +142,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               {person?.name ?? site.name}
             </div>
             <div style={{ marginTop: 14, fontSize: 30, color: "#dbbc5f", lineHeight: 1.2 }}>
-              {person?.role ?? "Service execution platform for hotel operations"}
+              {person?.role ?? "Software for education and hospitality"}
             </div>
           </div>
         </div>

@@ -121,7 +121,7 @@ export async function POST(request: Request) {
 
   const submittedAt = new Date().toISOString();
   const reference = `FR-${Date.now().toString(36).toUpperCase()}`;
-  const subject = body.subject ?? "Website enquiry — Focus Realm Hospitality";
+  const subject = body.subject ?? "Website enquiry — Focus Realm";
 
   const rows = Object.entries(fields)
     .filter(([, value]) => value.trim())
@@ -146,7 +146,7 @@ export async function POST(request: Request) {
   const autoresponderHtml = `
     <div style="background:#f6f7f1;padding:28px">
       <div style="max-width:560px;margin:0 auto;background:#fff;border:1px solid #dfe6e2;border-radius:14px;padding:32px">
-        <p style="margin:0 0 6px;font:12px/1.4 -apple-system,Segoe UI,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#33927b">Focus Realm Hospitality</p>
+        <p style="margin:0 0 6px;font:12px/1.4 -apple-system,Segoe UI,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#33927b">Focus Realm</p>
         <h1 style="margin:0 0 16px;font:600 24px/1.25 -apple-system,Segoe UI,sans-serif;color:#0e2322">Thanks ${escapeHtml(name.split(" ")[0])} — we have this.</h1>
         <p style="margin:0 0 14px;font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#25403c">
           A founder reads every one of these, usually within one working day. We will come back with two or

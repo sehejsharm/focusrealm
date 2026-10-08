@@ -15,10 +15,10 @@ import { site, siteUrl } from "@/lib/site";
 // The layout template appends "· Focus Realm", so the title must not repeat it.
 const title = "Founding team & leadership";
 const description =
-  "Focus Realm Hospitality was founded by Sehej Sharma (CEO), Ali Electricwala (COO) and Aditya Mishra (CTO). Meet the founders behind the platform.";
+  "Focus Realm was founded by Sehej Sharma (CEO), with co-founders Ali Electricwala (COO) and Aditya Mishra (CTO). Meet the team behind Mise and the education platform.";
 const ogDescription =
-  "Focus Realm Hospitality was founded by Sehej Sharma (Co-Founder & CEO), Ali Electricwala (Co-Founder & COO) and Aditya Mishra (Co-Founder & CTO). Meet the founders building the service execution platform for hotel operations.";
-const pageName = "The founders of Focus Realm Hospitality";
+  "Focus Realm was founded by Sehej Sharma (Founder & CEO), with Ali Electricwala (Co-Founder & COO) and Aditya Mishra (Co-Founder & CTO). The team building Mise for hotels and an AI-driven learning platform for schools and universities.";
+const pageName = "The founders of Focus Realm";
 
 export const metadata: Metadata = {
   title,
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     "Sehej Sharma Focus Realm",
     "Ali Electricwala",
     "Aditya Mishra",
-    "Focus Realm Hospitality founders",
+    "Focus Realm founders",
     "Focus Realm CEO",
     "Focus Realm advisors",
     "Focus Realm board of advisors",
@@ -85,7 +85,7 @@ export default function TeamPage() {
             One <span className="text-gradient">discipline.</span>
           </>,
         ]}
-        lede="Focus Realm Hospitality is built by a founding team that has spent its time in the same argument: what can we remove and still have the standard execute? Everything on this platform survived that question."
+        lede="Focus Realm is built by a founding team that has spent its time in the same argument: what can we remove and still have the product do its job? Everything we ship, in both sectors, survived that question."
       />
 
       {/* Profiles */}
@@ -216,12 +216,12 @@ export default function TeamPage() {
                 </p>
               </div>
               <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
-                <ButtonLink href="/demo">
-                  Book a 15-min demo
+                <ButtonLink href="/contact">
+                  Talk to us
                   <ArrowRight />
                 </ButtonLink>
-                <ButtonLink href="/contact" variant="outline">
-                  Contact us
+                <ButtonLink href="/about" variant="outline">
+                  About Focus Realm
                 </ButtonLink>
               </div>
             </div>

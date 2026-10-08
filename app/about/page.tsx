@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 
 import Reveal from "@/components/fx/Reveal";
 import SpotlightCard from "@/components/fx/SpotlightCard";
-import ArchitectureDiagram from "@/components/viz/ArchitectureDiagram";
-import NotAnLms from "@/components/home/NotAnLms";
 import TeamStrip from "@/components/home/TeamStrip";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import PageHero from "@/components/ui/PageHero";
@@ -11,47 +9,56 @@ import { Container, Rule, SectionHeading } from "@/components/ui/Section";
 import { breadcrumbSchema, jsonLdGraph, organizationSchema, webPageSchema } from "@/lib/seo";
 import { site } from "@/lib/site";
 
-const title = "About Focus Realm Hospitality";
+const title = "About Focus Realm";
 const description =
-  "Why Focus Realm Hospitality exists: a standard that does not live inside the timed task is not a standard, it is a document. Our category and principles.";
-const ogDescription =
-  "Focus Realm Hospitality builds the service execution platform for hotel operations — founded on one thesis: a standard that does not live inside the timed task is not a standard, it is a document. Our category, our principles and the team behind them.";
+  "Focus Realm is a software company building learning and operations platforms: Mise for hotels, and an AI-driven learning platform for schools and universities.";
 
 export const metadata: Metadata = {
   title,
   description,
-  keywords: [
-    "about Focus Realm Hospitality",
-    "Focus Realm company",
-    "service execution platform company",
-    "hospitality technology startup",
-    "hotel operations software company",
-  ],
+  keywords: ["about Focus Realm", "Focus Realm software company", "Focus Realm Mise", "Focus Realm education"],
   alternates: { canonical: "/about" },
-  openGraph: { title: `${title} · ${site.shortName}`, description: ogDescription, url: "/about", type: "website" },
-  twitter: { card: "summary_large_image", description: ogDescription },
+  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/about", type: "website" },
+  twitter: { card: "summary_large_image", description },
 };
+
+const lines = [
+  {
+    sector: "Hospitality",
+    name: "Mise",
+    body: "The service execution platform for hotels. Standards run as timed tasks on staff phones, and every task leaves evidence and a service record behind.",
+    href: "https://misehotel.com",
+    cta: "Explore Mise",
+  },
+  {
+    sector: "Education",
+    name: "Focus Realm Education",
+    body: "An AI-driven, gamified learning platform for schools, colleges and universities — a clean core, optional modules, and a layer built for employability.",
+    href: "https://focus-realm.com",
+    cta: "Explore Focus Realm Education",
+  },
+];
 
 const principles = [
   {
     number: "01",
-    title: "Subtraction first",
-    body: "Every screen justifies itself against the task in front of the person using it, or it comes out.",
+    title: "Strategic minimalism",
+    body: "Only what the institution or the property actually uses. Every feature justifies itself against the person using it, or it comes out.",
   },
   {
     number: "02",
-    title: "Three interfaces, not one responsive compromise",
-    body: "Three different jobs, three postures. One responsive layout would have been mediocre at all three.",
+    title: "Built for the real room",
+    body: "A staff phone on mobile data, a classroom board in a busy lesson. We design for the hardest conditions, so everything above them comes free.",
   },
   {
     number: "03",
-    title: "Evidence is a gate, not a report",
-    body: "If proof is optional it does not exist. The step will not close without the photo.",
+    title: "One product per job",
+    body: "Running a hotel shift and teaching a class are different problems, so they get different products. Neither borrows the other's shape.",
   },
   {
     number: "04",
-    title: "Independence by design",
-    body: "No PMS, no hardware, no systems project. A property can start next week.",
+    title: "Adoption over features",
+    body: "Software that is switched on and unused has failed, however much it can do. We measure ourselves by what people open every day.",
   },
 ];
 
@@ -62,10 +69,7 @@ export default function AboutPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: jsonLdGraph(
-            {
-              ...webPageSchema({ path: "/about", name: title, description }),
-              "@type": "AboutPage",
-            },
+            { ...webPageSchema({ path: "/about", name: title, description }), "@type": "AboutPage" },
             breadcrumbSchema([{ name: "About", path: "/about" }]),
             organizationSchema,
           ),
@@ -73,53 +77,49 @@ export default function AboutPage() {
       />
 
       <PageHero
-        eyebrow="Our thesis"
+        eyebrow="About"
         breadcrumb={[{ label: "About" }]}
-        titleLines={[
-          <>We put the standard</>,
-          <>
-            inside the <span className="text-gradient">shift.</span>
-          </>,
-        ]}
-        lede="The distance between the standard a property has written down and the work that happens at 08:36 on a Sunday."
+        titleLines={[<>A software company</>, <span key="b" className="text-gradient">for two sectors.</span>]}
+        lede={site.description}
       />
 
-      {/* The thesis, in three sentences */}
-      <section className="relative overflow-hidden pb-10">
+      {/* The two product lines */}
+      <section className="relative overflow-hidden pb-14 sm:pb-24">
         <Container>
-          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-            <Reveal>
-              <p className="text-[clamp(1.3rem,2.6vw,1.9rem)] leading-[1.28] font-medium text-white">
-                The SOP lives inside the timed task. Completing the task generates photo and supervisor
-                evidence. That evidence compounds into an audit-ready service record.
-              </p>
-              <p className="mt-6 text-[0.95rem] leading-relaxed text-faint">
-                Everything we have built, and everything we have refused to build, follows from those three
-                sentences.
-              </p>
-            </Reveal>
-
-            <Reveal delay={80}>
-              <ArchitectureDiagram />
-            </Reveal>
+          <div className="grid auto-rows-fr gap-5 md:grid-cols-2">
+            {lines.map((line, index) => (
+              <Reveal key={line.name} delay={index * 90} className="h-full">
+                <div className="panel flex h-full flex-col p-7 sm:p-8">
+                  <p className="font-mono text-[0.74rem] tracking-[0.16em] text-brand-cyan uppercase">
+                    {line.sector}
+                  </p>
+                  <h2 className="mt-4 text-[1.5rem] leading-tight font-semibold text-white">{line.name}</h2>
+                  <p className="mt-3 text-[0.95rem] leading-relaxed text-muted">{line.body}</p>
+                  <a
+                    href={line.href}
+                    className="mt-auto inline-flex items-center gap-2 pt-7 text-[0.92rem] font-medium text-brand-cyan underline decoration-brand/40 underline-offset-4 hover:decoration-brand-bright"
+                  >
+                    {line.cta}
+                    <ArrowRight />
+                  </a>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </Container>
       </section>
 
-      <NotAnLms />
-
       <Rule />
 
       {/* Principles */}
-      <section className="relative overflow-hidden py-14 sm:py-32">
+      <section className="relative overflow-hidden py-14 sm:py-28">
         <Container>
           <SectionHeading
             eyebrow="How we build"
             title="Four decisions we keep"
             accent="making on purpose."
-            body="Each one has cost us a feature somebody asked for."
+            body="They apply to both product lines, and each one has cost us a feature somebody asked for."
           />
-
           <div className="mt-14 grid auto-rows-fr gap-5 md:grid-cols-2">
             {principles.map((principle, index) => (
               <Reveal key={principle.number} delay={index * 90} className="h-full">
@@ -136,7 +136,6 @@ export default function AboutPage() {
         </Container>
       </section>
 
-
       <TeamStrip order="canonical" />
 
       <section className="relative overflow-hidden pb-24 sm:pb-32">
@@ -145,19 +144,19 @@ export default function AboutPage() {
             <div className="panel flex flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center sm:p-10">
               <div>
                 <p className="text-[clamp(1.3rem,2.6vw,1.8rem)] leading-snug font-semibold text-white">
-                  See it on your floor.
+                  Tell us what you are trying to fix.
                 </p>
                 <p className="mt-2 max-w-lg text-[0.95rem] text-muted">
-                  Fifteen minutes on your floor, then a pilot scoped to your own standards.
+                  A school, a training team or a hotel — we will point you to the right product.
                 </p>
               </div>
               <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
-                <ButtonLink href="/demo">
-                  Book a 15-min demo
+                <ButtonLink href="/contact">
+                  Talk to us
                   <ArrowRight />
                 </ButtonLink>
-                <ButtonLink href="/contact" variant="outline">
-                  Contact us
+                <ButtonLink href="/team" variant="outline">
+                  Meet the founders
                 </ButtonLink>
               </div>
             </div>

@@ -1,55 +1,39 @@
-import { faqs, pains, team } from "@/lib/content";
+import { team } from "@/lib/content";
 import { absoluteUrl, site } from "@/lib/site";
-import { topics } from "@/lib/topics";
 
 export const dynamic = "force-static";
 
 /**
- * /llms.txt — the emerging convention for answer engines, which increasingly
- * decide what a company "is" before a human reaches the site. It states the
- * category, the mechanism and the founders in the plainest possible terms, so
- * a model summarising Focus Realm has no reason to reach for LMS language.
+ * /llms.txt — the plain-text brief answer engines read before a human reaches
+ * the site. It states what Focus Realm is at the company level and points to
+ * each product's own site, where the full product descriptions live.
  */
 export function GET() {
   const body = `# ${site.name}
 
-> ${site.categoryLine} ${site.shortDescription}
+> ${site.description}
 
-Category: ${site.category} — NOT a learning management system, NOT a training platform.
+${site.name} is a software company. It is the parent of two product lines, each with its own site:
 
-## The mechanism
+## Products
 
-The operating standard lives inside a timed task on a staff member's phone.
-Completing the task captures photo evidence and supervisor sign-off.
-That evidence compounds into an audit-ready service record.
+- Mise — the service execution platform for hotels. Hotel SOPs run as timed tasks on staff phones, with photo evidence, supervisor sign-off and an audit-ready service record. Mise is not a learning management system. https://misehotel.com
+- Focus Realm Education — an AI-driven, gamified learning platform for schools, colleges and universities, built to work with interactive classroom boards. https://focus-realm.com
+
+## How the company builds
+
+Strategic minimalism: only what the institution or property actually uses, shaped around the person doing the work.
 
 ## Founders
 
-${team.map((p) => `- ${p.name} — ${p.role}. ${absoluteUrl(`/team/${p.slug}`)}`).join("\n")}
-
-## What it is for
-
-${pains.map((p) => `- ${p.name}: ${p.wound}`).join("\n")}
+${team.map((p) => `- ${p.name} — ${p.role}, ${site.name}. ${absoluteUrl(`/team/${p.slug}`)}`).join("\n")}
 
 ## Pages
 
-- ${absoluteUrl("/")} — overview
-- ${absoluteUrl("/platform")} — the three role interfaces
-- ${absoluteUrl("/problems")} — the six operational pains
-- ${absoluteUrl("/about")} — thesis and principles
+- ${absoluteUrl("/")} — company overview
+- ${absoluteUrl("/about")} — about Focus Realm
 - ${absoluteUrl("/team")} — founders
-- ${absoluteUrl("/demo")} — book a 15-minute demo
 - ${absoluteUrl("/contact")} — contact
-- ${absoluteUrl("/guides")} — hotel SOP and operations guides
-- ${absoluteUrl("/llms-full.txt")} — every guide question and answer, in full
-
-## Guides
-
-${topics.map((t) => `- [${t.title}](${absoluteUrl(`/${t.slug}`)}): ${t.answer}`).join("\n")}
-
-## Questions
-
-${faqs.map((f) => `### ${f.q}\n${f.a}`).join("\n\n")}
 `;
 
   return new Response(body, {
