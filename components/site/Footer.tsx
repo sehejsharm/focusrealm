@@ -35,23 +35,23 @@ export default function Footer() {
         <Reveal className="panel spotlight overflow-hidden p-8 sm:p-12">
           <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-end">
             <div>
-              <Eyebrow>Start with one property</Eyebrow>
+              <Eyebrow>Work with Focus Realm</Eyebrow>
               <h2 className="mt-5 text-[clamp(1.9rem,3.6vw,2.9rem)] leading-[1.05] font-semibold text-white">
-                Start your hotel operations pilot
-                <span className="text-gradient"> with one property.</span>
+                Two sectors.
+                <span className="text-gradient"> One team.</span>
               </h2>
               <p className="mt-5 max-w-xl text-[1rem] leading-relaxed text-muted">
-                Fifteen minutes on the three role interfaces, run against a live property environment — then a
-                pilot scoped to your floors, your standards and your shift patterns.
+                Whether you run a school, a training team or a hotel, tell us what you are trying to fix and
+                we will point you to the right product.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-stretch">
-              <ButtonLink href="/demo" size="lg">
-                Book a 15-min demo
+              <ButtonLink href="/contact" size="lg">
+                Talk to us
                 <ArrowRight />
               </ButtonLink>
-              <ButtonLink href="/contact" variant="outline" size="lg">
-                Contact the team
+              <ButtonLink href="/team" variant="outline" size="lg">
+                Meet the founders
               </ButtonLink>
             </div>
           </div>
@@ -65,16 +65,13 @@ export default function Footer() {
               <span className="flex flex-col leading-none">
                 <span className="text-[0.95rem] font-semibold text-white">Focus Realm</span>
                 <span className="mt-1 font-mono text-[0.76rem] tracking-[0.16em] text-faint uppercase">
-                  Hospitality
+                  Education · Hospitality
                 </span>
               </span>
             </Link>
             <p className="mt-5 max-w-xs text-[0.88rem] leading-relaxed text-faint">
-              {site.categoryLine} Hotel SOP management, housekeeping task tracking and audit
-              compliance — captured while the work happens, not reconstructed afterwards.
-            </p>
-            <p className="mt-5 font-mono text-[0.78rem] tracking-[0.1em] text-brand-ice/80">
-              {site.tagline.toUpperCase()}
+              Technology for two sectors: learning and capability programmes in education, and Mise, the
+              service execution platform for hotels.
             </p>
           </div>
 
@@ -123,7 +120,7 @@ export default function Footer() {
 
         <div className="mt-10 flex flex-col gap-5 border-t border-line pt-7 lg:flex-row lg:items-center lg:justify-between">
           <p className="text-[0.78rem] text-faint">
-            © {year} {site.legalName}. A service execution platform — not a learning management system.
+            © {year} Focus Realm. Technology for education and hospitality.
             <span className="mt-1 block font-mono text-[0.72rem] text-faint/80">
               Site updated {built}
               {commit ? ` · build ${commit}` : ""}

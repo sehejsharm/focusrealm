@@ -76,7 +76,7 @@ export default function Logo({
       {showWordmark ? (
         <span className="flex flex-col leading-none">
           <span className="text-[0.98rem] font-semibold tracking-[-0.02em] text-white">
-            Focus Realm <span className="text-brand-ice">Hospitality</span>
+            Focus Realm
           </span>
           {showTagline ? (
             <span className="mt-1 font-mono text-[0.76rem] tracking-[0.16em] text-faint uppercase">

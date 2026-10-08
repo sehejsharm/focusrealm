@@ -82,54 +82,35 @@ export const legal = {
 } as const;
 
 export const nav = [
-  { href: "/platform", label: "Platform", description: "Three role interfaces, one service record" },
-  { href: "/problems", label: "Problems", description: "The six pains that compound on the floor" },
-  { href: "/about", label: "About", description: "Why we built a service execution platform" },
+  { href: "https://focus-realm.com", label: "Education", description: "Learning and capability programmes" },
+  { href: "https://misehotel.com", label: "Hospitality", description: "Mise, the service execution platform for hotels" },
+  { href: "/about", label: "About", description: "Why we work in two sectors" },
   { href: "/team", label: "Team", description: "The people behind Focus Realm" },
   { href: "/contact", label: "Contact", description: "Talk to the founding team" },
 ] as const;
 
 export const footerNav = [
   {
-    heading: "Platform",
+    heading: "Sectors",
     links: [
-      { href: "/platform", label: "Overview" },
-      { href: "/platform#staff", label: "Staff · mobile" },
-      { href: "/platform#manager", label: "Manager · desktop" },
-      { href: "/platform#author", label: "Standards · desktop" },
-      { href: "/platform#service-record", label: "The service record" },
-    ],
-  },
-  {
-    heading: "The case",
-    links: [
-      { href: "/problems", label: "The six pains" },
-      { href: "/problems#ghost-sop", label: "Ghost SOP" },
-      { href: "/problems#audit-ambush", label: "Audit ambush" },
-      { href: "/about", label: "About us" },
-      { href: "/about#not-an-lms", label: "Why this is not an LMS" },
-      { href: "/guides", label: "Hotel SOP guides" },
-      { href: "/hotel-sop-software", label: "Hotel SOP software" },
-      { href: "/digitize-hotel-sops", label: "Digitize hotel SOPs" },
+      { href: "https://focus-realm.com", label: "Education", external: true },
+      { href: "https://misehotel.com", label: "Hospitality · Mise", external: true },
     ],
   },
   {
     heading: "Company",
     links: [
+      { href: "/about", label: "About" },
       { href: "/team", label: "Team" },
-      { href: "/team/sehej-sharma", label: "Sehej Sharma" },
-      { href: "/team/ali-electricwala", label: "Ali Electricwala · COO" },
-      { href: "/team/aditya-mishra", label: "Aditya Mishra · CTO" },
       { href: "/contact", label: "Contact" },
     ],
   },
   {
-    heading: "Get started",
+    heading: "Founders",
     links: [
-      { href: "/demo", label: "Book a 15-min demo" },
-      { href: "/demo#what-you-see", label: "What a demo covers" },
-      { href: site.prototypeUrl, label: "Live prototype", external: true },
-      { href: "/sitemap.xml", label: "Sitemap", external: true },
+      { href: "/team/sehej-sharma", label: "Sehej Sharma" },
+      { href: "/team/ali-electricwala", label: "Ali Electricwala" },
+      { href: "/team/aditya-mishra", label: "Aditya Mishra" },
     ],
   },
 ] as const;

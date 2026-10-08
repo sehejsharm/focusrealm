@@ -95,8 +95,8 @@ export default function Header() {
               {/* Wrapper, not a `hidden` class on the button: the button's own
                   `inline-flex` would win the display cascade. */}
               <span className="hidden sm:block">
-                <ButtonLink href="/demo" size="md">
-                  Book a 15-min demo
+                <ButtonLink href="/contact" size="md">
+                  Talk to us
                   <ArrowRight />
                 </ButtonLink>
               </span>
@@ -162,12 +162,12 @@ export default function Header() {
             ))}
           </ul>
           <div className="mt-9 flex flex-col gap-3">
-            <ButtonLink href="/demo" size="lg" className="w-full">
-              Book a 15-min demo
+            <ButtonLink href="/contact" size="lg" className="w-full">
+              Talk to us
               <ArrowRight />
             </ButtonLink>
-            <ButtonLink href="/platform" variant="outline" size="lg" className="w-full">
-              See the platform
+            <ButtonLink href="/#sectors" variant="outline" size="lg" className="w-full">
+              Our two sectors
             </ButtonLink>
           </div>
         </nav>
