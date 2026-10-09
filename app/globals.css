@@ -240,8 +240,6 @@ h3,
 h4 {
   text-wrap: balance;
   letter-spacing: -0.035em;
-  font-weight: 700;
-  color: var(--color-paper);
 }
 
 p {
@@ -291,8 +289,13 @@ p {
  * split across masked lines, so a gradient that started at white would land
  * mid-word and read like a rendering fault.
  */
+/* Headline accent: the logo's Didone in italic, in brand blue. */
 @utility text-gradient {
   color: var(--color-brand);
+  font-family: var(--font-logo), Didot, "Bodoni 72", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
 }
 
 @utility text-dim-gradient {
@@ -602,4 +605,28 @@ p {
 @media (prefers-reduced-motion: reduce) {
   .anim-grow { animation: none; }
   .anim-tick { animation: none; background-color: #2a5bd7; border-color: #2a5bd7; }
+}
+
+/* Editorial accent: the logo's Didone, in italic, for one or two words per
+   headline. It is what keeps the bold sans from reading as a template. */
+.serif {
+  font-family: var(--font-logo), Didot, "Bodoni 72", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+@keyframes countdown {
+  from { stroke-dasharray: 100 100; }
+  to { stroke-dasharray: 0 100; }
+}
+.anim-countdown { animation: countdown 18s linear infinite; }
+
+@keyframes rise-word {
+  from { transform: translate3d(0, 0.6em, 0); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-countdown { animation: none; stroke-dasharray: 62 100; }
 }

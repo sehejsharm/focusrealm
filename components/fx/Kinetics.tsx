@@ -74,7 +74,7 @@ export function Tilt({
             className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-70"
             style={{
               background:
-                "radial-gradient(600px circle at calc(50% + var(--px, 0) * 40%) calc(50% + var(--py, 0) * 40%), color-mix(in oklab, #a8ecd4 12%, transparent), transparent 55%)",
+                "radial-gradient(600px circle at calc(50% + var(--px, 0) * 40%) calc(50% + var(--py, 0) * 40%), color-mix(in oklab, #ffffff 22%, transparent), transparent 55%)",
             }}
           />
         ) : null}

@@ -1,11 +1,12 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import Reveal from "@/components/fx/Reveal";
-import SpotlightCard from "@/components/fx/SpotlightCard";
 import Avatar from "@/components/ui/Avatar";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import { Container, SectionHeading } from "@/components/ui/Section";
 import { team, teamHomeOrder } from "@/lib/content";
+import { teamPhoto } from "@/lib/team-photos";
 import { site } from "@/lib/site";
 
 /**
@@ -57,40 +58,34 @@ export default function TeamStrip({
           </Reveal>
         </div>
 
-        <div className="mt-14 grid auto-rows-fr gap-5 md:grid-cols-3">
+        <div className="mt-14 grid gap-6 sm:grid-cols-3 sm:gap-5">
           {people.map((person, index) => (
-            <Reveal key={person.slug} delay={index * 90} className="h-full">
-              <SpotlightCard as="article" className="panel group h-full overflow-hidden">
-                <Link href={`/team/${person.slug}`} className="block h-full p-5 sm:p-7">
-                  <div className="flex items-center gap-4">
-                    <Avatar person={person} className="size-14" sizes="112px" />
-                    <span
-                      aria-hidden
-                      className="ml-auto text-brand-cyan opacity-0 transition-all duration-500 group-hover:translate-x-1 group-hover:opacity-100"
-                    >
+            <Reveal key={person.slug} delay={index * 110}>
+              <Link href={`/team/${person.slug}`} className="group block">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[1.4rem] bg-ink-3">
+                  {teamPhoto(person.slug) ? (
+                    <Image
+                      src={teamPhoto(person.slug)!}
+                      fill
+                      alt={`${person.name}, ${person.shortRole} of ${site.shortName}`}
+                      sizes="(min-width: 640px) 33vw, 100vw"
+                      className="object-cover grayscale-[35%] transition-[transform,filter] duration-[1200ms] ease-out-expo group-hover:scale-[1.04] group-hover:grayscale-0"
+                    />
+                  ) : (
+                    <Avatar person={person} className="h-full w-full" rounded="rounded-none" sizes="400px" />
+                  )}
+                  <span className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-[#0b1b3f]/75 to-transparent" />
+                  <span className="absolute right-5 bottom-5 left-5 flex items-end justify-between text-white">
+                    <span>
+                      <span className="block text-[1.35rem] leading-tight font-bold">{person.name}</span>
+                      <span className="mt-1 block text-[0.88rem] text-white/85">{person.shortRole}</span>
+                    </span>
+                    <span className="flex size-10 items-center justify-center rounded-full bg-white text-paper transition-transform duration-500 group-hover:-rotate-45">
                       <ArrowRight className="size-4" />
                     </span>
-                  </div>
-
-                  <h3 className="mt-6 text-[1.3rem] leading-tight font-bold text-paper">{person.name}</h3>
-                  <p className="mt-2 font-mono text-[0.76rem] tracking-[0.14em] text-brand-ice uppercase">
-                    {person.shortRole} · {site.shortName}
-                  </p>
-                  <p className="mt-5 text-[0.88rem] leading-relaxed text-muted max-sm:hidden">
-                    &ldquo;{person.quote}&rdquo;
-                  </p>
-                  <ul className="mt-6 flex flex-wrap gap-1.5 max-sm:hidden">
-                    {person.focus.slice(0, 3).map((focus) => (
-                      <li
-                        key={focus}
-                        className="rounded-full border border-line px-2.5 py-1 text-[0.78rem] text-faint"
-                      >
-                        {focus}
-                      </li>
-                    ))}
-                  </ul>
-                </Link>
-              </SpotlightCard>
+                  </span>
+                </div>
+              </Link>
             </Reveal>
           ))}
         </div>

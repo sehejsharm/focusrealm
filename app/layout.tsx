@@ -11,7 +11,7 @@ import { isUnindexableHost, site, siteUrl } from "@/lib/site";
 
 import "./globals.css";
 
-const logoSerif = Bodoni_Moda({ variable: "--font-logo", subsets: ["latin"], weight: ["500"], display: "block" });
+const logoSerif = Bodoni_Moda({ variable: "--font-logo", subsets: ["latin"], weight: ["400", "500"], style: ["normal", "italic"], display: "swap" });
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
