@@ -40,13 +40,13 @@ export default function MiseShowcase() {
       </Parallax>
 
       {/* Live countdown chip */}
-      <div className="anim-bob absolute right-[-2%] bottom-[30%] hidden items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-2xl sm:flex">
+      <div className="absolute right-[-2%] bottom-[30%] hidden items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-2xl sm:flex">
         <svg viewBox="0 0 36 36" className="size-9 -rotate-90">
           <circle cx="18" cy="18" r="15" fill="none" stroke="#e6e9f3" strokeWidth="4" />
           <circle cx="18" cy="18" r="15" fill="none" stroke="#2a5bd7" strokeWidth="4" strokeLinecap="round" pathLength="100" className="anim-countdown" />
         </svg>
         <span>
-          <span className="block text-[12px] font-bold text-paper">Room 208 · reset</span>
+          <span className="block text-[12px] font-semibold text-paper">Room 208 · reset</span>
           <span className="block text-[11px] text-faint">Timed task · photo required</span>
         </span>
       </div>

@@ -208,7 +208,7 @@ export default function LeadForm({
             />
           </svg>
         </span>
-        <h3 className="mt-6 text-[1.4rem] font-bold text-paper">
+        <h3 className="mt-6 text-[1.4rem] font-semibold text-paper">
           {fell ? "Our form is having a moment." : successTitle}
         </h3>
         <p className="mt-3 max-w-md text-[0.95rem] leading-relaxed text-muted">

@@ -53,7 +53,7 @@ export default function PageHero({
           <Eyebrow>{eyebrow}</Eyebrow>
         </Reveal>
 
-        <h1 className="mt-7 max-w-4xl text-[clamp(2.4rem,5.6vw,4.4rem)] leading-[1] font-bold tracking-[-0.04em] text-paper">
+        <h1 className="mt-7 max-w-4xl text-[clamp(2.4rem,5.6vw,4.4rem)] leading-[1] font-semibold tracking-[-0.04em] text-paper">
           <MaskedLines lines={titleLines} stagger={80} immediate />
         </h1>
 

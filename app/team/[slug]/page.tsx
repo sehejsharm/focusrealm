@@ -128,7 +128,7 @@ export default async function PersonPage({ params }: Props) {
                 />
               </Reveal>
               <Reveal delay={80}>
-                <h1 className="mt-7 text-[clamp(2.1rem,4.6vw,3.2rem)] leading-[1.02] font-bold tracking-[-0.03em] text-paper">
+                <h1 className="mt-7 text-[clamp(2.1rem,4.6vw,3.2rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-paper">
                   {person.name}
                 </h1>
               </Reveal>
@@ -227,7 +227,7 @@ export default async function PersonPage({ params }: Props) {
                 {person.traits.map((trait, index) => (
                   <Reveal key={trait.title} delay={340 + index * 70} className="h-full">
                     <SpotlightCard className="panel h-full p-5">
-                      <h3 className="text-[0.95rem] font-bold text-paper">{trait.title}</h3>
+                      <h3 className="text-[0.95rem] font-semibold text-paper">{trait.title}</h3>
                       <p className="mt-2 text-[0.86rem] leading-relaxed text-muted">{trait.body}</p>
                     </SpotlightCard>
                   </Reveal>
@@ -293,7 +293,7 @@ export default async function PersonPage({ params }: Props) {
                     <div className="flex items-center gap-4">
                       <Avatar person={other} className="size-12" rounded="rounded-xl" sizes="96px" />
                       <div>
-                        <p className="text-[1.05rem] font-bold text-paper">{other.name}</p>
+                        <p className="text-[1.05rem] font-semibold text-paper">{other.name}</p>
                         <p className="mt-1 font-mono text-[0.74rem] tracking-[0.14em] text-brand-ice uppercase">
                           {other.shortRole}
                         </p>

@@ -1,52 +1,27 @@
-import Image from "next/image";
-
 import Reveal from "@/components/fx/Reveal";
 import { Container } from "@/components/ui/Section";
 import { clients } from "@/lib/content";
 
-/**
- * Social proof, immediately under the hero. Logos render when files exist in
- * assets/clients/; until then each client shows as a wordmark tile, which
- * still carries the name for crawlers either way.
- */
+/** Customer row directly under the hero: names set as quiet wordmarks. */
 export default function TrustedBy() {
   return (
-    <section aria-labelledby="trusted-by-heading" className="relative border-y border-line py-14 sm:py-16">
+    <section aria-labelledby="trusted-by-heading" className="border-b border-line bg-white py-10 sm:py-12">
       <Container>
-        <Reveal>
-          <p
-            id="trusted-by-heading"
-            className="text-center text-[0.95rem] text-muted"
-          >
-            Trusted by hotels, schools, trainers and fast-moving teams
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-12">
+          <p id="trusted-by-heading" className="shrink-0 text-[0.9rem] text-muted lg:max-w-[200px]">
+            Trusted by organisations across hospitality, education and training
           </p>
-        </Reveal>
-
-        <ul className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-5">
-          {clients.map((client, index) => (
-            <li key={client.name} className="bg-white last:col-span-2 md:last:col-span-1">
-              <Reveal delay={index * 60} className="flex h-full flex-col items-center justify-center gap-3 px-4 py-7">
-                {client.logo ? (
-                  <span className="flex h-10 w-full items-center justify-center">
-                    <Image
-                      src={client.logo}
-                      alt={`${client.name} logo`}
-                      sizes="140px"
-                      className="max-h-10 w-auto opacity-80 transition-opacity duration-500 hover:opacity-100"
-                    />
-                  </span>
-                ) : (
-                  <span className="flex h-10 items-center text-center text-[1.05rem] leading-tight font-semibold text-paper">
-                    {client.name}
-                  </span>
-                )}
-                <span className="text-center text-[0.8rem] text-faint">
-                  {client.segment}
+          <ul className="grid flex-1 grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-3 lg:grid-cols-5">
+            {clients.map((client, index) => (
+              <Reveal as="li" key={client.name} delay={index * 60}>
+                <span className="block text-[1.05rem] leading-tight font-semibold tracking-[-0.01em] text-paper/80">
+                  {client.name}
                 </span>
+                <span className="mt-1 block text-[0.8rem] text-faint">{client.segment}</span>
               </Reveal>
-            </li>
-          ))}
-        </ul>
+            ))}
+          </ul>
+        </div>
       </Container>
     </section>
   );

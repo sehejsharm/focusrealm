@@ -58,7 +58,7 @@ export function SectionHeading({
         </Reveal>
       ) : null}
       <Reveal delay={80}>
-        <h2 className="mt-5 text-[clamp(2rem,4.6vw,3.5rem)] leading-[1.02] font-bold text-paper">
+        <h2 className="mt-5 text-[clamp(2rem,4.6vw,3.5rem)] leading-[1.02] font-semibold text-paper">
           {title}
           {accent ? <span className="text-gradient"> {accent}</span> : null}
         </h2>

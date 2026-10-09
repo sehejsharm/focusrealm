@@ -30,7 +30,7 @@ export default function HeroVisual() {
 
         <div className="p-5">
           <p className="text-[11px] font-medium text-faint">Class 10-B · Physics</p>
-          <p className="mt-0.5 text-[15px] font-bold text-paper">This week</p>
+          <p className="mt-0.5 text-[15px] font-semibold text-paper">This week</p>
 
           <div className="mt-4 grid grid-cols-3 gap-2.5">
             {[
@@ -40,7 +40,7 @@ export default function HeroVisual() {
             ].map(([label, value]) => (
               <div key={label} className="rounded-xl bg-void px-3 py-2.5">
                 <p className="text-[10.5px] text-faint">{label}</p>
-                <p className="mt-0.5 text-[16px] font-bold text-paper">{value}</p>
+                <p className="mt-0.5 text-[16px] font-semibold text-paper">{value}</p>
               </div>
             ))}
           </div>
@@ -66,7 +66,7 @@ export default function HeroVisual() {
       <div className="absolute bottom-0 left-0 hidden w-[44%] sm:block rounded-[1.6rem] border border-line bg-white p-2 shadow-[0_30px_60px_-24px_rgba(30,42,90,0.45)]">
         <div className="rounded-[1.2rem] bg-void p-3.5">
           <div className="flex items-center justify-between">
-            <p className="text-[12px] font-bold text-paper">Mise</p>
+            <p className="text-[12px] font-semibold text-paper">Mise</p>
             <span className="rounded-full bg-white px-2 py-0.5 text-[9.5px] font-semibold text-brand">Morning shift</span>
           </div>
           <ul className="mt-3 space-y-2">

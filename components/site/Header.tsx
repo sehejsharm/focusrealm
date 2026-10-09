@@ -55,8 +55,8 @@ export default function Header() {
         <div
           className={`transition-all duration-500 ease-out-expo ${
             condensed
-              ? "border-b border-line bg-void/72 backdrop-blur-xl backdrop-saturate-150"
-              : "border-b border-transparent"
+              ? "border-b border-line bg-white/92 backdrop-blur-xl backdrop-saturate-150"
+              : "border-b border-line bg-white"
           }`}
         >
           <div className="mx-auto flex h-18 w-full max-w-[1240px] items-center justify-between gap-4 px-5 sm:px-8">
@@ -65,7 +65,7 @@ export default function Header() {
             </Link>
 
             <nav aria-label="Primary" className="hidden items-center lg:flex">
-              <ul className="flex items-center gap-1 rounded-full border border-line bg-white/80 p-1 shadow-sm backdrop-blur-md">
+              <ul className="flex items-center gap-1">
                 {nav.map((item) => {
                   const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
                   return (
@@ -74,14 +74,11 @@ export default function Header() {
                         href={item.href}
                         aria-current={active ? "page" : undefined}
                         className={`relative block rounded-full px-4 py-2 text-[0.85rem] tracking-[-0.01em] transition-colors duration-300 ${
-                          active ? "text-paper" : "text-muted hover:text-brand"
+                          active ? "text-paper" : "text-muted hover:text-paper"
                         }`}
                       >
                         {active ? (
-                          <span
-                            aria-hidden
-                            className="absolute inset-0 rounded-full border border-brand-bright/30 bg-brand/16"
-                          />
+                          <span aria-hidden className="absolute inset-x-4 -bottom-[17px] h-0.5 bg-brand" />
                         ) : null}
                         <span className="relative">{item.label}</span>
                       </Link>
@@ -151,7 +148,7 @@ export default function Header() {
                   className="group flex items-baseline justify-between gap-4 border-b border-line py-5"
                   style={{ animation: `rise-in 0.6s var(--ease-out-expo) ${index * 60}ms both` }}
                 >
-                  <span className="text-[1.7rem] leading-none font-bold tracking-[-0.03em] text-paper">
+                  <span className="text-[1.7rem] leading-none font-semibold tracking-[-0.03em] text-paper">
                     {item.label}
                   </span>
                   <span className="font-mono text-[0.76rem] tracking-[0.14em] text-faint uppercase">

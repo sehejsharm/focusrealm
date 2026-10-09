@@ -66,7 +66,7 @@ export default function EducationShowcase() {
             {/* Poll */}
             <div className="rounded-xl bg-white p-3.5 shadow-[0_1px_2px_rgba(15,18,34,0.06)] sm:p-4">
               <p className="text-[10px] font-semibold tracking-[0.08em] text-brand uppercase">Quick check · 32 answering</p>
-              <p className="mt-1.5 text-[13px] leading-snug font-bold text-paper sm:text-[15px]">
+              <p className="mt-1.5 text-[13px] leading-snug font-semibold text-paper sm:text-[15px]">
                 What keeps the Moon in orbit around the Earth?
               </p>
               <ul className="mt-3 space-y-1.5">
@@ -98,7 +98,7 @@ export default function EducationShowcase() {
 
             {/* Leaderboard */}
             <div className="hidden rounded-xl bg-white p-4 shadow-[0_1px_2px_rgba(15,18,34,0.06)] sm:block">
-              <p className="text-[10px] font-semibold tracking-[0.08em] text-brand uppercase">House points</p>
+              <p className="text-[10px] font-semibold tracking-[0.08em] text-brand uppercase">Participation</p>
               <ul className="mt-3 space-y-2.5">
                 {students.map((s, i) => (
                   <li key={s.name} className="flex items-center gap-2.5">
@@ -116,8 +116,8 @@ export default function EducationShowcase() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-3.5 flex items-center gap-1.5 rounded-lg bg-[#fff6dc] px-2.5 py-1.5 text-[10.5px] font-medium text-[#7a5a00]">
-                ★ Meera: 9-day streak
+              <div className="mt-3.5 flex items-center justify-between rounded-lg bg-[#f2f5fd] px-2.5 py-1.5 text-[10.5px] font-medium text-brand-deep">
+                <span>Class average</span><span className="tabular-nums">78%</span>
               </div>
             </div>
           </div>

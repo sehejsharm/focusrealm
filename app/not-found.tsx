@@ -22,7 +22,7 @@ export default function NotFound() {
     <Container className="flex min-h-[76vh] flex-col justify-center py-24">
       <Reveal>
         <Eyebrow>Error 404</Eyebrow>
-        <h1 className="mt-6 max-w-2xl text-[clamp(2.2rem,6vw,3.6rem)] leading-[1.05] font-bold tracking-tight text-paper text-balance">
+        <h1 className="mt-6 max-w-2xl text-[clamp(2.2rem,6vw,3.6rem)] leading-[1.05] font-semibold tracking-tight text-paper text-balance">
           This page doesn&rsquo;t exist.
         </h1>
         <p className="mt-5 max-w-md text-[0.98rem] leading-relaxed text-muted">

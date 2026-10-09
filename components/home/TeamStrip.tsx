@@ -29,9 +29,9 @@ export default function TeamStrip({
       <Container>
         <div className="flex flex-wrap items-end justify-between gap-8">
           <SectionHeading
-            eyebrow="Founded by"
-            title="A small founding team,"
-            accent="building both products."
+            eyebrow="Leadership"
+            title="Accountable founders,"
+            accent="close to every customer."
             body={
               <>
                 {site.name} was founded by{" "}
@@ -62,14 +62,14 @@ export default function TeamStrip({
           {people.map((person, index) => (
             <Reveal key={person.slug} delay={index * 110}>
               <Link href={`/team/${person.slug}`} className="group block">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[1.4rem] bg-ink-3">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-ink-3">
                   {teamPhoto(person.slug) ? (
                     <Image
                       src={teamPhoto(person.slug)!}
                       fill
                       alt={`${person.name}, ${person.shortRole} of ${site.shortName}`}
                       sizes="(min-width: 640px) 33vw, 100vw"
-                      className="object-cover grayscale-[35%] transition-[transform,filter] duration-[1200ms] ease-out-expo group-hover:scale-[1.04] group-hover:grayscale-0"
+                      className="object-cover grayscale transition-[filter] duration-700 group-hover:grayscale-0"
                     />
                   ) : (
                     <Avatar person={person} className="h-full w-full" rounded="rounded-none" sizes="400px" />
@@ -77,10 +77,10 @@ export default function TeamStrip({
                   <span className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-[#0b1b3f]/75 to-transparent" />
                   <span className="absolute right-5 bottom-5 left-5 flex items-end justify-between text-white">
                     <span>
-                      <span className="block text-[1.35rem] leading-tight font-bold">{person.name}</span>
+                      <span className="block text-[1.35rem] leading-tight font-semibold">{person.name}</span>
                       <span className="mt-1 block text-[0.88rem] text-white/85">{person.shortRole}</span>
                     </span>
-                    <span className="flex size-10 items-center justify-center rounded-full bg-white text-paper transition-transform duration-500 group-hover:-rotate-45">
+                    <span className="flex size-10 items-center justify-center rounded-md bg-white text-paper">
                       <ArrowRight className="size-4" />
                     </span>
                   </span>

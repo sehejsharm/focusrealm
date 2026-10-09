@@ -193,7 +193,7 @@ export default function ContactPage() {
             ].map((item, index) => (
               <Reveal key={item.title} delay={index * 90}>
                 <div>
-                  <h2 className="text-[1.02rem] font-bold text-paper">{item.title}</h2>
+                  <h2 className="text-[1.02rem] font-semibold text-paper">{item.title}</h2>
                   <p className="mt-3 text-[0.9rem] leading-relaxed text-muted">{item.body}</p>
                   <Link
                     href={item.href}

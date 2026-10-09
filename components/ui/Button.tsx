@@ -5,7 +5,7 @@ type Variant = "primary" | "outline" | "ghost";
 type Size = "md" | "lg";
 
 const base =
-  "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-medium tracking-[-0.01em] transition-all duration-500 ease-out-expo will-change-transform";
+  "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-lg font-semibold tracking-[-0.01em] transition-colors duration-300 ease-out-expo will-change-transform";
 
 const sizes: Record<Size, string> = {
   md: "h-11 px-5 text-[0.9rem]",
@@ -18,9 +18,9 @@ const sizes: Record<Size, string> = {
  */
 const variants: Record<Variant, string> = {
   primary:
-    "bg-brand text-white shadow-[0_1px_2px_rgba(15,18,34,0.12)] hover:bg-brand-deep hover:-translate-y-0.5",
+    "bg-brand text-white shadow-[0_1px_2px_rgba(15,18,34,0.12)] hover:bg-brand-deep",
   outline:
-    "border border-line-strong bg-white text-paper hover:border-brand hover:text-brand hover:-translate-y-0.5",
+    "border border-line-strong bg-white text-paper hover:border-paper/40",
   ghost: "text-muted hover:text-brand",
 };
 
@@ -32,7 +32,7 @@ function Inner({ children, variant }: ButtonContentProps) {
       {variant === "primary" ? (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/35 to-transparent transition-transform duration-[900ms] ease-out-expo group-hover:translate-x-full"
+          className="pointer-events-none absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/0 to-transparent transition-transform duration-[900ms] ease-out-expo group-hover:translate-x-full"
         />
       ) : null}
       <span className="relative flex items-center gap-2">{children}</span>

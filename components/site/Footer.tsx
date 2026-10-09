@@ -3,7 +3,7 @@ import Link from "next/link";
 import Reveal from "@/components/fx/Reveal";
 import Logo from "@/components/site/Logo";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
-import { Container, Eyebrow } from "@/components/ui/Section";
+import { Container } from "@/components/ui/Section";
 import { footerNav, legalNav, site } from "@/lib/site";
 
 export default function Footer() {
@@ -24,22 +24,23 @@ export default function Footer() {
 
       <Container className="relative pt-20 pb-10">
         {/* Closing CTA */}
-        <Reveal className="panel overflow-hidden p-8 sm:p-12">
+        <Reveal className="relative isolate overflow-hidden rounded-2xl bg-[#070d1f] p-8 text-white sm:p-12">
+          <div aria-hidden className="grid-lines absolute inset-0 -z-10" />
           <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-end">
             <div>
-              <Eyebrow>Work with Focus Realm</Eyebrow>
-              <h2 className="mt-5 text-[clamp(1.9rem,3.6vw,2.9rem)] leading-[1.05] font-bold text-paper">
-                Two verticals.
-                <span className="text-gradient"> One team.</span>
+              <p className="text-[0.85rem] font-semibold text-[#a9c1ff]">Work with Focus Realm</p>
+              <h2 className="mt-5 text-[clamp(1.9rem,3.6vw,2.9rem)] leading-[1.05] font-semibold tracking-[-0.03em] text-white">
+                Bring us the problem.
+                <span className="text-[#a9c1ff]"> We&rsquo;ll show you the product.</span>
               </h2>
-              <p className="mt-5 max-w-xl text-[1rem] leading-relaxed text-muted">
+              <p className="mt-5 max-w-xl text-[1rem] leading-relaxed text-white/75">
                 Whether you run a school, a training team or a hotel, tell us what you are trying to fix and
                 we will point you to the right product.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
               <ButtonLink href="/contact" size="lg">
-                Talk to us
+                Talk to our team
                 <ArrowRight />
               </ButtonLink>
               <ButtonLink href="/team" variant="outline" size="lg">

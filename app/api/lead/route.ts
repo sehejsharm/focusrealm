@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { legal, site } from "@/lib/site";
+import { legal, site, siteUrl } from "@/lib/site";
 
 export const runtime = "nodejs";
 /** Never cached — every POST is a distinct submission. */
@@ -17,6 +17,34 @@ type LeadPayload = {
 };
 
 const MAX_FIELD_LENGTH = 4000;
+/** Whole-body cap. A legitimate form is a few kilobytes at most. */
+const MAX_BODY_BYTES = 32_000;
+const MAX_FIELDS = 20;
+const FIELD_KEY = /^[a-z][a-zA-Z0-9_-]{0,39}$/;
+
+/** Every response carries a request id and is never cached. */
+function respond(body: Record<string, unknown>, status: number, requestId: string) {
+  return NextResponse.json(body, {
+    status,
+    headers: { "Cache-Control": "no-store", "X-Request-Id": requestId },
+  });
+}
+
+/**
+ * Same-site check. Browsers always send Origin on a cross-site POST, so a
+ * mismatch means another site is posting into this endpoint.
+ */
+function sameSite(request: Request) {
+  const origin = request.headers.get("origin");
+  if (!origin) return true;
+  try {
+    const originHost = new URL(origin).hostname;
+    const host = (request.headers.get("x-forwarded-host") ?? request.headers.get("host") ?? "").split(":")[0];
+    return originHost === host || originHost === new URL(siteUrl).hostname;
+  } catch {
+    return false;
+  }
+}
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 /**
@@ -72,11 +100,25 @@ async function sendEmail(payload: { to: string; subject: string; html: string; r
 }
 
 export async function POST(request: Request) {
+  const requestId = crypto.randomUUID();
+
+  if (!sameSite(request)) {
+    return respond({ ok: false, error: "Cross-site request rejected." }, 403, requestId);
+  }
+  if (!(request.headers.get("content-type") ?? "").includes("application/json")) {
+    return respond({ ok: false, error: "Expected JSON." }, 415, requestId);
+  }
+
   let body: LeadPayload;
   try {
-    body = await request.json();
+    const raw = await request.text();
+    if (raw.length > MAX_BODY_BYTES) {
+      return respond({ ok: false, error: "Request too large." }, 413, requestId);
+    }
+    body = JSON.parse(raw);
+    if (!body || typeof body !== "object" || Array.isArray(body)) throw new Error("not an object");
   } catch {
-    return NextResponse.json({ ok: false, error: "Malformed request." }, { status: 400 });
+    return respond({ ok: false, error: "Malformed request." }, 400, requestId);
   }
 
   const ip =
@@ -87,18 +129,20 @@ export async function POST(request: Request) {
   // Honeypot: a filled hidden field, or a submit under 1.5s, is a bot.
   // Both answer 200 so the bot does not learn it was caught.
   if (body.website || (typeof body.elapsedMs === "number" && body.elapsedMs < 1500)) {
-    return NextResponse.json({ ok: true, id: "accepted" });
+    return respond({ ok: true, id: "accepted" }, 200, requestId);
   }
 
   if (rateLimited(ip)) {
-    return NextResponse.json(
-      { ok: false, error: "Too many submissions. Try again in a minute." },
-      { status: 429 },
-    );
+    return respond({ ok: false, error: "Too many submissions. Try again in a minute." }, 429, requestId);
   }
 
-  const fields = body.fields ?? {};
+  const fields = body.fields && typeof body.fields === "object" ? body.fields : {};
   const errors: Record<string, string> = {};
+
+  const keys = Object.keys(fields);
+  if (keys.length > MAX_FIELDS || keys.some((key) => !FIELD_KEY.test(key))) {
+    return respond({ ok: false, error: "Unexpected fields." }, 400, requestId);
+  }
 
   const name = (fields.name ?? "").trim();
   const email = (fields.email ?? "").trim();
@@ -116,47 +160,47 @@ export async function POST(request: Request) {
   }
 
   if (Object.keys(errors).length > 0) {
-    return NextResponse.json({ ok: false, errors }, { status: 422 });
+    return respond({ ok: false, errors }, 422, requestId);
   }
 
   const submittedAt = new Date().toISOString();
   const reference = `FR-${Date.now().toString(36).toUpperCase()}`;
-  const subject = body.subject ?? "Website enquiry — Focus Realm";
+  const subject = (typeof body.subject === "string" ? body.subject : "Website enquiry — Focus Realm").slice(0, 160);
 
   const rows = Object.entries(fields)
     .filter(([, value]) => value.trim())
     .map(
       ([key, value]) =>
-        `<tr><td style="padding:6px 14px 6px 0;color:#6b7f7c;font:12px/1.5 -apple-system,Segoe UI,sans-serif;text-transform:uppercase;letter-spacing:.08em;vertical-align:top">${escapeHtml(key)}</td><td style="padding:6px 0;color:#0e2322;font:15px/1.55 -apple-system,Segoe UI,sans-serif">${escapeHtml(value).replace(/\n/g, "<br>")}</td></tr>`,
+        `<tr><td style="padding:6px 14px 6px 0;color:#5b6175;font:12px/1.5 -apple-system,Segoe UI,sans-serif;text-transform:uppercase;letter-spacing:.08em;vertical-align:top">${escapeHtml(key)}</td><td style="padding:6px 0;color:#0f1222;font:15px/1.55 -apple-system,Segoe UI,sans-serif">${escapeHtml(value).replace(/\n/g, "<br>")}</td></tr>`,
     )
     .join("");
 
   const internalHtml = `
-    <div style="background:#f6f7f1;padding:28px">
-      <div style="max-width:620px;margin:0 auto;background:#fff;border:1px solid #dfe6e2;border-radius:14px;padding:28px">
-        <p style="margin:0 0 4px;font:12px/1.4 -apple-system,Segoe UI,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#33927b">New lead · ${escapeHtml(reference)}</p>
-        <h1 style="margin:0 0 20px;font:600 22px/1.3 -apple-system,Segoe UI,sans-serif;color:#0e2322">${escapeHtml(subject)}</h1>
+    <div style="background:#f4f5fb;padding:28px">
+      <div style="max-width:620px;margin:0 auto;background:#fff;border:1px solid #e1e4ef;border-radius:14px;padding:28px">
+        <p style="margin:0 0 4px;font:12px/1.4 -apple-system,Segoe UI,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#2a5bd7">New lead · ${escapeHtml(reference)}</p>
+        <h1 style="margin:0 0 20px;font:600 22px/1.3 -apple-system,Segoe UI,sans-serif;color:#0f1222">${escapeHtml(subject)}</h1>
         <table style="border-collapse:collapse;width:100%">${rows}</table>
-        <p style="margin:22px 0 0;font:12px/1.6 -apple-system,Segoe UI,sans-serif;color:#6b7f7c">
+        <p style="margin:22px 0 0;font:12px/1.6 -apple-system,Segoe UI,sans-serif;color:#5b6175">
           ${escapeHtml(submittedAt)} · IP ${escapeHtml(ip)}
         </p>
       </div>
     </div>`;
 
   const autoresponderHtml = `
-    <div style="background:#f6f7f1;padding:28px">
-      <div style="max-width:560px;margin:0 auto;background:#fff;border:1px solid #dfe6e2;border-radius:14px;padding:32px">
-        <p style="margin:0 0 6px;font:12px/1.4 -apple-system,Segoe UI,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#33927b">Focus Realm</p>
-        <h1 style="margin:0 0 16px;font:600 24px/1.25 -apple-system,Segoe UI,sans-serif;color:#0e2322">Thanks ${escapeHtml(name.split(" ")[0])} — we have this.</h1>
-        <p style="margin:0 0 14px;font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#25403c">
-          A founder reads every one of these, usually within one working day. We will come back with two or
-          three times for a 15-minute walkthrough on a real shift — no feature tour.
+    <div style="background:#f4f5fb;padding:28px">
+      <div style="max-width:560px;margin:0 auto;background:#fff;border:1px solid #e1e4ef;border-radius:14px;padding:32px">
+        <p style="margin:0 0 6px;font:12px/1.4 -apple-system,Segoe UI,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#2a5bd7">Focus Realm</p>
+        <h1 style="margin:0 0 16px;font:600 24px/1.25 -apple-system,Segoe UI,sans-serif;color:#0f1222">Thanks ${escapeHtml(name.split(" ")[0])} — we have this.</h1>
+        <p style="margin:0 0 14px;font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#3d4256">
+          A founder reads every enquiry, usually within one working day. We will reply with a few times for a
+          short call and point you to the right product.
         </p>
-        <p style="margin:0 0 14px;font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#25403c">
-          If it is useful before then, the live prototype is open at
-          <a href="${site.prototypeUrl}" style="color:#1f6d5b">${site.prototypeUrl}</a>.
+        <p style="margin:0 0 14px;font:15px/1.6 -apple-system,Segoe UI,sans-serif;color:#3d4256">
+          In the meantime: <a href="https://focus-realm.com" style="color:#1e47b8">Focus Realm Education</a> ·
+          <a href="https://misehotel.com" style="color:#1e47b8">Mise</a>
         </p>
-        <p style="margin:24px 0 0;font:13px/1.6 -apple-system,Segoe UI,sans-serif;color:#6b7f7c">
+        <p style="margin:24px 0 0;font:13px/1.6 -apple-system,Segoe UI,sans-serif;color:#5b6175">
           Reference ${escapeHtml(reference)} · Reply to this email to add anything.<br>
           ${escapeHtml(legal.entity)}
         </p>
@@ -166,7 +210,7 @@ export async function POST(request: Request) {
   // Always emit a structured log line. On Vercel this is the durable record
   // if the mail provider is unreachable, so a lead is never silently lost.
   console.log(
-    JSON.stringify({ type: "lead", reference, formId: body.formId, submittedAt, ip, fields }),
+    JSON.stringify({ type: "lead", requestId, reference, formId: body.formId, submittedAt, ip, fields }),
   );
 
   const [internal, auto] = await Promise.all([
@@ -192,5 +236,5 @@ export async function POST(request: Request) {
 
   // The lead is captured in the log even when mail is unconfigured, so the
   // submission is a success from the visitor's point of view either way.
-  return NextResponse.json({ ok: true, reference, notified: internal.sent });
+  return respond({ ok: true, reference, notified: internal.sent }, 200, requestId);
 }

@@ -23,6 +23,8 @@ const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   // No part of this site is meant to be framed, so clickjacking has no surface.
   { key: "X-Frame-Options", value: "DENY" },
+  // Isolates this browsing context from cross-origin popups.
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
   // Send the full URL same-origin, bare origin cross-origin: enough for
   // referrer analytics without leaking paths to third parties.
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
