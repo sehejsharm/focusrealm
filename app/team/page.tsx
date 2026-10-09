@@ -15,9 +15,9 @@ import { site, siteUrl } from "@/lib/site";
 // The layout template appends "· Focus Realm", so the title must not repeat it.
 const title = "Founding team & leadership";
 const description =
-  "Focus Realm was founded by Sehej Sharma (CEO), with co-founders Ali Electricwala (COO) and Aditya Mishra (CTO). Meet the team behind Mise and the education platform.";
+  "Focus Realm was founded by Sehej Sharma (CEO), Ali Electricwala (COO) and Aditya Mishra (CTO). Meet the team behind Mise and the education platform.";
 const ogDescription =
-  "Focus Realm was founded by Sehej Sharma (Founder & CEO), with Ali Electricwala (Co-Founder & COO) and Aditya Mishra (Co-Founder & CTO). The team building Mise for hotels and an AI-driven learning platform for schools and universities.";
+  "Focus Realm was founded by Sehej Sharma (Founder & CEO), Ali Electricwala (Founder & COO) and Aditya Mishra (Founder & CTO). The team building Mise for hotels and an AI-driven learning platform for schools and universities.";
 const pageName = "The founders of Focus Realm";
 
 export const metadata: Metadata = {
@@ -85,7 +85,7 @@ export default function TeamPage() {
             One <span className="text-gradient">discipline.</span>
           </>,
         ]}
-        lede="Focus Realm is built by a founding team that has spent its time in the same argument: what can we remove and still have the product do its job? Everything we ship, in both sectors, survived that question."
+        lede="Focus Realm is built by a founding team that has spent its time in the same argument: what can we remove and still have the product do its job? Everything we ship, in both verticals, survived that question."
       />
 
       {/* Profiles */}

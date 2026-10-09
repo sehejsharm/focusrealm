@@ -22,9 +22,9 @@ export default function TrustedBy() {
           </p>
         </Reveal>
 
-        <ul className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3 lg:grid-cols-6">
+        <ul className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-5">
           {clients.map((client, index) => (
-            <li key={client.name} className="bg-white">
+            <li key={client.name} className="bg-white last:col-span-2 md:last:col-span-1">
               <Reveal delay={index * 60} className="flex h-full flex-col items-center justify-center gap-3 px-4 py-7">
                 {client.logo ? (
                   <span className="flex h-10 w-full items-center justify-center">

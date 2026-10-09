@@ -84,14 +84,14 @@ export const legal = {
 export const nav = [
   { href: "https://focus-realm.com", label: "Education", description: "Learning and capability programmes" },
   { href: "https://misehotel.com", label: "Hospitality", description: "Mise, the service execution platform for hotels" },
-  { href: "/about", label: "About", description: "Why we work in two sectors" },
+  { href: "/about", label: "About", description: "Why we work in two verticals" },
   { href: "/team", label: "Team", description: "The people behind Focus Realm" },
   { href: "/contact", label: "Contact", description: "Talk to the founding team" },
 ] as const;
 
 export const footerNav = [
   {
-    heading: "Sectors",
+    heading: "Verticals",
     links: [
       { href: "https://focus-realm.com", label: "Education", external: true },
       { href: "https://misehotel.com", label: "Hospitality · Mise", external: true },

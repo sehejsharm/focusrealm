@@ -29,7 +29,7 @@ export default function Footer() {
             <div>
               <Eyebrow>Work with Focus Realm</Eyebrow>
               <h2 className="mt-5 text-[clamp(1.9rem,3.6vw,2.9rem)] leading-[1.05] font-bold text-paper">
-                Two sectors.
+                Two verticals.
                 <span className="text-gradient"> One team.</span>
               </h2>
               <p className="mt-5 max-w-xl text-[1rem] leading-relaxed text-muted">

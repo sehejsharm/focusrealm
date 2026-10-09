@@ -142,7 +142,7 @@ export default function HomePage() {
             </Reveal>
             <Reveal delay={60}>
               <h2 className="mt-5 text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] font-bold text-paper">
-                Two product lines. Two sectors.
+                Two product lines. Two verticals.
               </h2>
             </Reveal>
           </div>
@@ -208,7 +208,7 @@ export default function HomePage() {
                   everything switched on, and the people who have to use it every day stop opening it.
                 </p>
                 <p>
-                  We build the opposite way, in both sectors: only what the school or the property
+                  We build the opposite way, in both verticals: only what the school or the property
                   actually uses, shaped around the person doing the work.{" "}
                   <span className="text-paper">If it doesn&rsquo;t help them, it comes out.</span>
                 </p>

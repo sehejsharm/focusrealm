@@ -517,12 +517,12 @@ export const team: Person[] = [
   {
     slug: "ali-electricwala",
     name: "Ali Electricwala",
-    role: "Co-Founder & Chief Operating Officer",
-    shortRole: "Co-Founder & COO",
+    role: "Founder & Chief Operating Officer",
+    shortRole: "Founder & COO",
     initials: "AE",
     headline: "The operator who makes a standard survive week three.",
     bio: [
-      "Ali Electricwala is the Co-Founder and Chief Operating Officer of Focus Realm. He owns how the company's products actually land with the people who use them — pilot design, rollout, and the operating discipline that keeps a product in daily use after the launch enthusiasm wears off, in hotels and in education institutions alike.",
+      "Ali Electricwala is a Founder and the Chief Operating Officer of Focus Realm. He owns how the company's products actually land with the people who use them — pilot design, rollout, and the operating discipline that keeps a product in daily use after the launch enthusiasm wears off, in hotels and in education institutions alike.",
       "In hospitality, his work starts where most operations software stops: the floor. Shift patterns, supervisor load, the realities of a large property running on staff-owned phones and mobile data. Every Mise pilot is scoped so that a property sees evidence accumulating inside the first thirty days — not a rollout plan, actual timestamped proof.",
       "He leads commercial operations and customer success, and he is the route by which the floor's reality gets back into the roadmap. When a standard is being worked around rather than worked, he is usually the first person in the company to know.",
     ],
@@ -546,12 +546,12 @@ export const team: Person[] = [
   {
     slug: "aditya-mishra",
     name: "Aditya Mishra",
-    role: "Co-Founder & Chief Technology Officer",
-    shortRole: "Co-Founder & CTO",
+    role: "Founder & Chief Technology Officer",
+    shortRole: "Founder & CTO",
     initials: "AM",
     headline: "The architect who removes things until the task is all that is left.",
     bio: [
-      "Aditya Mishra is the Co-Founder and Chief Technology Officer of Focus Realm. He leads engineering across both product lines and drives the company's subtraction-first design principle: every screen earns its place, and anything that does not help the person using it finish the job in front of them gets removed before it ships.",
+      "Aditya Mishra is a Founder and the Chief Technology Officer of Focus Realm. He leads engineering across both product lines and drives the company's subtraction-first design principle: every screen earns its place, and anything that does not help the person using it finish the job in front of them gets removed before it ships.",
       "He architected Mise as three deliberately separate role interfaces — a mobile-first staff experience built for a 340px viewport, a desktop-primary manager surface, and a desktop-only authoring workspace — rather than one responsive layout that would have been cheaper to build and worse in all three postures.",
       "Mise runs on Google Cloud and Firebase: web-based, on standard browsers over mobile data, with no high-end hardware and no PMS integration required at this stage. That is a deliberate constraint, not a gap. The product has to work on the phone a room attendant already owns, in daylight, on hotel wifi — and if it does not work there, it does not work.",
     ],
@@ -684,7 +684,6 @@ export const clients: Client[] = [
   { name: "D.A.V. Sr. Sec. School", segment: "Reputed schools", note: "Jaipur" },
   { name: "Recharga", segment: "Fast-growing startups" },
   { name: "TwoKey", segment: "Premium SaaS teams" },
-  { name: "The Hosteller", segment: "Distributed properties" },
 ];
 
 /**
@@ -888,6 +887,6 @@ export const faqs = [
   },
   {
     q: "Who founded Focus Realm Hospitality?",
-    a: "Three co-founders. Sehej Sharma is Co-Founder and CEO, responsible for category, positioning and go-to-market. Ali Electricwala is Co-Founder and COO, responsible for pilot design, customer success and commercial operations. Aditya Mishra is Co-Founder and CTO, responsible for platform architecture and subtraction-first design on Google Cloud and Firebase. The founding discipline: remove it unless it helps the shift.",
+    a: "Three founders. Sehej Sharma is Founder and CEO, responsible for category, positioning and go-to-market. Ali Electricwala is Founder and COO, responsible for pilot design, customer success and commercial operations. Aditya Mishra is Founder and CTO, responsible for platform architecture and subtraction-first design on Google Cloud and Firebase. The founding discipline: remove it unless it helps the shift.",
   },
 ] as const;

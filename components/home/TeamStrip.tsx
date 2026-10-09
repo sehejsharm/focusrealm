@@ -41,11 +41,11 @@ export default function TeamStrip({
                 <Link href="/team/ali-electricwala" className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-brand">
                   Ali Electricwala
                 </Link>{" "}
-                (Co-Founder &amp; COO) and{" "}
+                (Founder &amp; COO) and{" "}
                 <Link href="/team/aditya-mishra" className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-brand">
                   Aditya Mishra
                 </Link>{" "}
-                (Co-Founder &amp; CTO).
+                (Founder &amp; CTO).
               </>
             }
           />

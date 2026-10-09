@@ -12,7 +12,7 @@ import { site } from "@/lib/site";
 
 const title = "Sehej Sharma — Photos";
 const description =
-  "Photo gallery of Sehej Sharma — Co-Founder & CEO, Focus Realm. Speaking, pitching, and equestrian sport (polo, show jumping, dressage).";
+  "Photo gallery of Sehej Sharma — Founder & CEO, Focus Realm. Speaking, pitching, and equestrian sport (polo, show jumping, dressage).";
 
 export const metadata: Metadata = {
   // Absolute: the page title is a fixed string, not a slot in the site template.
@@ -102,7 +102,7 @@ export default function SehejPhotosPage() {
           </Reveal>
           <Reveal delay={140}>
             <p className="mt-4 text-[1.02rem] text-brand-ice">
-              Co-Founder &amp; CEO, {site.shortName} &middot; Jaipur, India
+              Founder &amp; CEO, {site.shortName} &middot; Jaipur, India
             </p>
           </Reveal>
           <Reveal delay={200}>
