@@ -128,7 +128,7 @@ export default async function PersonPage({ params }: Props) {
                 />
               </Reveal>
               <Reveal delay={80}>
-                <h1 className="mt-7 text-[clamp(2.1rem,4.6vw,3.2rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-white">
+                <h1 className="mt-7 text-[clamp(2.1rem,4.6vw,3.2rem)] leading-[1.02] font-bold tracking-[-0.03em] text-paper">
                   {person.name}
                 </h1>
               </Reveal>
@@ -183,7 +183,7 @@ export default async function PersonPage({ params }: Props) {
                   {person.photosPath ? (
                     <Link
                       href={person.photosPath}
-                      className="inline-flex min-h-11 items-center text-[0.88rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white"
+                      className="inline-flex min-h-11 items-center text-[0.88rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-brand"
                     >
                       Photos
                     </Link>
@@ -199,7 +199,7 @@ export default async function PersonPage({ params }: Props) {
 
               {/* Lead sentence doubles as the answer to "who is X" */}
               <Reveal delay={80}>
-                <p className="mt-6 text-[clamp(1.2rem,2.4vw,1.6rem)] leading-[1.34] font-medium text-white">
+                <p className="mt-6 text-[clamp(1.2rem,2.4vw,1.6rem)] leading-[1.34] font-medium text-paper">
                   {person.name} is the {person.role} of {site.name}, the software company behind Mise and the
                   Focus Realm education platform.
                 </p>
@@ -227,7 +227,7 @@ export default async function PersonPage({ params }: Props) {
                 {person.traits.map((trait, index) => (
                   <Reveal key={trait.title} delay={340 + index * 70} className="h-full">
                     <SpotlightCard className="panel h-full p-5">
-                      <h3 className="text-[0.95rem] font-semibold text-white">{trait.title}</h3>
+                      <h3 className="text-[0.95rem] font-bold text-paper">{trait.title}</h3>
                       <p className="mt-2 text-[0.86rem] leading-relaxed text-muted">{trait.body}</p>
                     </SpotlightCard>
                   </Reveal>
@@ -236,7 +236,7 @@ export default async function PersonPage({ params }: Props) {
 
               <Reveal delay={340}>
                 <blockquote className="mt-10 border-l-2 border-brand-bright/50 pl-6">
-                  <p className="text-[clamp(1.1rem,2.2vw,1.45rem)] leading-snug font-medium text-white">
+                  <p className="text-[clamp(1.1rem,2.2vw,1.45rem)] leading-snug font-medium text-paper">
                     &ldquo;{person.quote}&rdquo;
                   </p>
                   <footer className="mt-4 font-mono text-[0.76rem] tracking-[0.14em] text-faint uppercase">
@@ -256,19 +256,19 @@ export default async function PersonPage({ params }: Props) {
                   <div className="mt-6 flex flex-wrap gap-3">
                     <a
                       href="https://misehotel.com"
-                      className="text-[0.85rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white"
+                      className="text-[0.85rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-brand"
                     >
                       Mise
                     </a>
                     <a
                       href="https://focus-realm.com"
-                      className="text-[0.85rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white"
+                      className="text-[0.85rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-brand"
                     >
                       Focus Realm Education
                     </a>
                     <Link
                       href="/about"
-                      className="text-[0.85rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white"
+                      className="text-[0.85rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-brand"
                     >
                       About Focus Realm
                     </Link>
@@ -293,7 +293,7 @@ export default async function PersonPage({ params }: Props) {
                     <div className="flex items-center gap-4">
                       <Avatar person={other} className="size-12" rounded="rounded-xl" sizes="96px" />
                       <div>
-                        <p className="text-[1.05rem] font-semibold text-white">{other.name}</p>
+                        <p className="text-[1.05rem] font-bold text-paper">{other.name}</p>
                         <p className="mt-1 font-mono text-[0.74rem] tracking-[0.14em] text-brand-ice uppercase">
                           {other.shortRole}
                         </p>

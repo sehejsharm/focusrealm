@@ -130,7 +130,7 @@ export default function ConsentBanner() {
     >
       <div className="panel mx-auto flex max-w-3xl flex-col gap-5 p-6 backdrop-blur-xl sm:flex-row sm:items-center sm:gap-8">
         <div>
-          <p id="consent-title" className="text-[0.95rem] font-semibold text-white">
+          <p id="consent-title" className="text-[0.95rem] font-bold text-paper">
             Analytics cookies
           </p>
           <p className="mt-2 text-[0.86rem] leading-relaxed text-muted">
@@ -138,7 +138,7 @@ export default function ConsentBanner() {
             Decline and the site works exactly the same.{" "}
             <Link
               href="/cookies"
-              className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white"
+              className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-brand"
             >
               Cookie Policy
             </Link>

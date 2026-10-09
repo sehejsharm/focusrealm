@@ -1,15 +1,18 @@
 /**
- * The FR mark, drawn as strokes so it stays crisp at 20px and 200px and
- * never depends on a webfont having loaded.
+ * The FR monogram: a deep-blue F interlocked with a lighter-blue R, set in a
+ * white square tile. Drawn as SVG so it stays crisp from favicon to hero and
+ * never depends on a webfont. See BRAND.md.
  */
 export function LogoMark({
   className = "size-9",
   /** Set when a visible wordmark sits beside it — the mark must not add a
    *  second, differently-worded name to the link's accessible name. */
   decorative = false,
+  tile = true,
 }: {
   className?: string;
   decorative?: boolean;
+  tile?: boolean;
 }) {
   return (
     <svg
@@ -19,51 +22,34 @@ export function LogoMark({
       fill="none"
     >
       <defs>
-        {/* Gold from the product's logo tile; plate from its sidebar teal. */}
-        <linearGradient id="fr-mark-stroke" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#e7cd7c" />
-          <stop offset="55%" stopColor="#dbbc5f" />
-          <stop offset="100%" stopColor="#c9a94a" />
-        </linearGradient>
-        <linearGradient id="fr-mark-plate" x1="0" y1="0" x2="0.6" y2="1">
-          <stop offset="0%" stopColor="#1d4044" />
-          <stop offset="100%" stopColor="#0b2126" />
+        <linearGradient id="fr-r" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#5aa8dc" />
+          <stop offset="100%" stopColor="#8ccbe9" />
         </linearGradient>
       </defs>
+      {tile ? (
+        <rect x="1" y="1" width="46" height="46" rx="10" fill="#ffffff" stroke="#dfe3f0" strokeWidth="1.5" />
+      ) : null}
 
-      <rect
-        x="1.5"
-        y="1.5"
-        width="45"
-        height="45"
-        rx="11"
-        fill="url(#fr-mark-plate)"
-        stroke="url(#fr-mark-stroke)"
-        strokeWidth="2.5"
+      {/* R — lighter blue, sitting behind and to the right of the F */}
+      <path
+        fill="url(#fr-r)"
+        d="M21 11h10.2c5.3 0 8.6 2.8 8.6 7.1 0 3.4-2 5.7-5.2 6.6l6.3 10.6c.4.7.9 1.1 1.6 1.2V38h-6.1l-7-12.4h-2.9v9.6c0 .9.5 1.4 1.4 1.5V38h-8.4v-1.3c.9-.1 1.5-.6 1.5-1.5V13.8c0-.9-.6-1.4-1.5-1.5V11zm5.5 2.4v9.8h3.6c3.1 0 4.6-1.7 4.6-4.9s-1.5-4.9-4.6-4.9h-3.6z"
       />
-
-      {/* F */}
-      <g stroke="#ffffff" strokeWidth="3.6" strokeLinecap="butt">
-        <path d="M12 12.5 V 35.5" />
-        <path d="M10.2 14.3 H 21.5" />
-        <path d="M10.2 23.4 H 19.4" />
-      </g>
-
-      {/* R */}
-      <g stroke="url(#fr-mark-stroke)" strokeWidth="3.6" strokeLinecap="butt">
-        <path d="M27 12.5 V 35.5" />
-        <path d="M25.2 14.3 H 31.4 A 4.6 4.6 0 0 1 31.4 23.5 H 25.2" />
-        <path d="M31.2 23.8 L 36.6 35.6" />
-      </g>
+      {/* F — deep navy, in front */}
+      <path
+        fill="#0b3a91"
+        d="M7.5 11h18.6v6.6h-1.6c-.4-2.6-1.6-4.1-4.6-4.1h-4.4v9.2h3.1c1.8 0 2.6-.9 2.8-2.6h1.5v7.8h-1.5c-.2-1.8-1-2.7-2.8-2.7h-3.1v9.9c0 .9.6 1.4 1.7 1.6V38H7.5v-1.3c.9-.2 1.5-.7 1.5-1.6V13.8c0-.9-.6-1.4-1.5-1.5V11z"
+      />
     </svg>
   );
 }
 
+/** Monogram plus the stacked "Focus / Realm" wordmark in bold black. */
 export default function Logo({
   className = "",
   markClassName = "size-9",
   showWordmark = true,
-  showTagline = false,
 }: {
   className?: string;
   markClassName?: string;
@@ -71,18 +57,12 @@ export default function Logo({
   showTagline?: boolean;
 }) {
   return (
-    <span className={`flex items-center gap-3 ${className}`}>
-      <LogoMark className={markClassName} decorative={showWordmark} />
+    <span className={`flex items-center gap-2.5 ${className}`}>
+      <LogoMark className={`${markClassName} drop-shadow-[0_4px_10px_rgba(30,42,90,0.12)]`} decorative={showWordmark} />
       {showWordmark ? (
-        <span className="flex flex-col leading-none">
-          <span className="text-[0.98rem] font-semibold tracking-[-0.02em] text-white">
-            Focus Realm
-          </span>
-          {showTagline ? (
-            <span className="mt-1 font-mono text-[0.76rem] tracking-[0.16em] text-faint uppercase">
-              Every shift, five-star
-            </span>
-          ) : null}
+        <span className="flex flex-col text-[0.95rem] leading-[0.95] font-extrabold tracking-[-0.03em] text-paper">
+          <span>Focus</span>
+          <span>Realm</span>
         </span>
       ) : null}
     </span>

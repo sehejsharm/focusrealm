@@ -22,7 +22,7 @@ export default function NotFound() {
     <Container className="flex min-h-[76vh] flex-col justify-center py-24">
       <Reveal>
         <Eyebrow>Error 404</Eyebrow>
-        <h1 className="mt-6 max-w-2xl text-[clamp(2.2rem,6vw,3.6rem)] leading-[1.05] font-semibold tracking-tight text-white text-balance">
+        <h1 className="mt-6 max-w-2xl text-[clamp(2.2rem,6vw,3.6rem)] leading-[1.05] font-bold tracking-tight text-paper text-balance">
           This page doesn&rsquo;t exist.
         </h1>
         <p className="mt-5 max-w-md text-[0.98rem] leading-relaxed text-muted">
@@ -52,13 +52,13 @@ export default function NotFound() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="group flex items-baseline gap-3 py-1.5 transition-colors hover:text-white"
+                  className="group flex items-baseline gap-3 py-1.5 transition-colors hover:text-brand"
                 >
                   <span className="font-mono text-[0.7rem] text-faint tabular-nums">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <span>
-                    <span className="block text-[0.95rem] text-paper group-hover:text-white">
+                    <span className="block text-[0.95rem] text-paper group-hover:text-brand">
                       {item.label}
                     </span>
                     <span className="block text-[0.8rem] text-faint">{item.description}</span>

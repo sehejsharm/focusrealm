@@ -65,7 +65,7 @@ export default function Avatar({
   return (
     <span
       aria-hidden
-      className={`flex shrink-0 items-center justify-center border border-brand-bright/25 bg-linear-to-br from-brand/30 to-brand-deep/20 font-mono text-white ${rounded} ${className}`}
+      className={`flex shrink-0 items-center justify-center border border-brand-bright/25 bg-linear-to-br from-brand/30 to-brand-deep/20 font-mono text-paper ${rounded} ${className}`}
     >
       {person.initials}
     </span>

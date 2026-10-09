@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins } from "next/font/google";
 
 import CursorField from "@/components/fx/CursorField";
 import { AnalyticsNoScript, AnalyticsScripts, ConsentDefaults } from "@/components/site/Analytics";
@@ -12,8 +12,12 @@ import { isUnindexableHost, site, siteUrl } from "@/lib/site";
 
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"], display: "swap" });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -78,12 +82,12 @@ export const metadata: Metadata = {
   },
   formatDetection: { telephone: false, address: false, email: false },
   other: {
-    "theme-color": "#061417",
+    "theme-color": "#f4f5fb",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#061417",
+  themeColor: "#f4f5fb",
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
@@ -92,7 +96,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${poppins.variable}`}>
       <head>
         {/* Reveals are JS-driven; without it every section must still be visible. */}
         <noscript>

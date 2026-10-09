@@ -19,8 +19,8 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 72,
-          background: "#061417",
-          color: "#f2f6f3",
+          background: "#f4f5fb",
+          color: "#0f1222",
           position: "relative",
         }}
       >
@@ -32,7 +32,7 @@ export default function OpengraphImage() {
             left: 200,
             width: 900,
             height: 620,
-            background: "radial-gradient(circle, rgba(51,146,123,0.55) 0%, rgba(6,20,23,0) 70%)",
+            background: "radial-gradient(circle, rgba(42,91,215,0.55) 0%, rgba(244,245,251,0) 70%)",
             display: "flex",
           }}
         />
@@ -43,7 +43,7 @@ export default function OpengraphImage() {
             right: -120,
             width: 700,
             height: 520,
-            background: "radial-gradient(circle, rgba(148,212,193,0.24) 0%, rgba(6,20,23,0) 70%)",
+            background: "radial-gradient(circle, rgba(42,91,215,0.24) 0%, rgba(244,245,251,0) 70%)",
             display: "flex",
           }}
         />
@@ -58,19 +58,19 @@ export default function OpengraphImage() {
               width: 60,
               height: 60,
               borderRadius: 16,
-              border: "3px solid #dbbc5f",
-              background: "linear-gradient(145deg, #1d4044 0%, #0b2126 100%)",
+              border: "3px solid #2a5bd7",
+              background: "#ffffff",
               fontSize: 28,
               fontWeight: 700,
               letterSpacing: -1,
             }}
           >
             <span>F</span>
-            <span style={{ color: "#dbbc5f" }}>R</span>
+            <span style={{ color: "#2a5bd7" }}>R</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ fontSize: 26, fontWeight: 600 }}>Focus Realm</div>
-            <div style={{ fontSize: 15, letterSpacing: 3, color: "#a8c4c0", textTransform: "uppercase" }}>
+            <div style={{ fontSize: 15, letterSpacing: 3, color: "#3d4256", textTransform: "uppercase" }}>
               Software company
             </div>
           </div>
@@ -87,12 +87,12 @@ export default function OpengraphImage() {
               fontWeight: 700,
               lineHeight: 1.04,
               letterSpacing: -2.4,
-              color: "#dbbc5f",
+              color: "#2a5bd7",
             }}
           >
             that has to go right.
           </div>
-          <div style={{ marginTop: 26, fontSize: 25, color: "#a8c4c0", lineHeight: 1.4, maxWidth: 860 }}>
+          <div style={{ marginTop: 26, fontSize: 25, color: "#3d4256", lineHeight: 1.4, maxWidth: 860 }}>
             Learning and operations platforms. Two product lines: Mise for hotels, and an AI-driven learning
             platform for schools, colleges and universities.
           </div>
@@ -107,14 +107,14 @@ export default function OpengraphImage() {
                   display: "flex",
                   padding: "10px 18px",
                   borderRadius: 999,
-                  border: "1px solid rgba(148,212,193,0.28)",
-                  background: index === 1 ? "rgba(51,146,123,0.22)" : "rgba(255,255,255,0.04)",
-                  color: index === 1 ? "#ffffff" : "#b9e6d8",
+                  border: "1px solid rgba(42,91,215,0.28)",
+                  background: index === 1 ? "#2a5bd7" : "#ffffff",
+                  color: index === 1 ? "#ffffff" : "#1e47b8",
                 }}
               >
                 {step}
               </div>
-              {index < 3 ? <div style={{ display: "flex", color: "#dbbc5f" }}>→</div> : null}
+              {index < 3 ? <div style={{ display: "flex", color: "#2a5bd7" }}>→</div> : null}
             </div>
           ))}
         </div>

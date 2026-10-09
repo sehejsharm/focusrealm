@@ -3,7 +3,7 @@
 import type { ComponentProps, ReactNode } from "react";
 
 const control =
-  "w-full rounded-xl border border-line bg-white/[0.03] px-4 py-3 text-[0.92rem] text-paper placeholder:text-faint/75 transition-all duration-300 outline-none focus:border-brand-bright/70 focus:bg-brand/10 focus:ring-2 focus:ring-brand/30 disabled:opacity-60 aria-[invalid=true]:border-[#ff9b9b]/70 aria-[invalid=true]:bg-[#ff9b9b]/[0.06]";
+  "w-full rounded-xl border border-line bg-white px-4 py-3 text-[0.92rem] text-paper placeholder:text-faint transition-all duration-300 outline-none focus:border-brand-bright/70 focus:bg-white focus:ring-2 focus:ring-brand/30 disabled:opacity-60 aria-[invalid=true]:border-[#c62828]/70 aria-[invalid=true]:bg-[#c62828]/[0.06]";
 
 /** Screen readers get the hint and the error, in that order, if present. */
 function describedBy(id: string, hint?: string, error?: string) {
@@ -49,7 +49,7 @@ function Wrapper({
       </label>
       <div className="mt-2.5">{children}</div>
       {error ? (
-        <p id={`${htmlFor}-error`} role="alert" className="mt-2 text-[0.78rem] text-[#ffb3b3]">
+        <p id={`${htmlFor}-error`} role="alert" className="mt-2 text-[0.78rem] text-[#b71c1c]">
           {error}
         </p>
       ) : null}

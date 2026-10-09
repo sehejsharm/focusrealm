@@ -54,7 +54,7 @@ export default function LegalLayout({
                   <li key={section.id}>
                     <a
                       href={`#${section.id}`}
-                      className="flex gap-3 text-[0.85rem] text-muted transition-colors duration-300 hover:text-white"
+                      className="flex gap-3 text-[0.85rem] text-muted transition-colors duration-300 hover:text-brand"
                     >
                       <span className="font-mono text-[0.78rem] text-brand-ice/70">
                         {String(index + 1).padStart(2, "0")}
@@ -74,7 +74,7 @@ export default function LegalLayout({
                     <li key={item.href}>
                       <Link
                         href={item.href}
-                        className="text-[0.85rem] text-muted transition-colors duration-300 hover:text-white"
+                        className="text-[0.85rem] text-muted transition-colors duration-300 hover:text-brand"
                       >
                         {item.label}
                       </Link>
@@ -93,7 +93,7 @@ export default function LegalLayout({
                       <span className="font-mono text-[0.76rem] tracking-[0.16em] text-brand-ice">
                         {String(index + 1).padStart(2, "0")}
                       </span>
-                      <h2 className="text-[1.3rem] leading-snug font-semibold text-white">{section.heading}</h2>
+                      <h2 className="text-[1.3rem] leading-snug font-bold text-paper">{section.heading}</h2>
                     </div>
                     <div className="mt-4 space-y-4 text-[0.95rem] leading-relaxed text-muted [&_a]:text-brand-cyan [&_a]:underline [&_a]:decoration-brand/40 [&_a]:underline-offset-4 [&_li]:pl-1 [&_strong]:font-medium [&_strong]:text-paper [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-5">
                       {section.body}

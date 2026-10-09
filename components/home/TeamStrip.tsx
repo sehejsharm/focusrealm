@@ -34,15 +34,15 @@ export default function TeamStrip({
             body={
               <>
                 {site.name} was founded by{" "}
-                <Link href="/team/sehej-sharma" className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white">
+                <Link href="/team/sehej-sharma" className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-brand">
                   Sehej Sharma
                 </Link>{" "}
                 (Co-Founder &amp; CEO),{" "}
-                <Link href="/team/ali-electricwala" className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white">
+                <Link href="/team/ali-electricwala" className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-brand">
                   Ali Electricwala
                 </Link>{" "}
                 (Co-Founder &amp; COO) and{" "}
-                <Link href="/team/aditya-mishra" className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white">
+                <Link href="/team/aditya-mishra" className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-brand">
                   Aditya Mishra
                 </Link>{" "}
                 (Co-Founder &amp; CTO).
@@ -72,7 +72,7 @@ export default function TeamStrip({
                     </span>
                   </div>
 
-                  <h3 className="mt-6 text-[1.3rem] leading-tight font-semibold text-white">{person.name}</h3>
+                  <h3 className="mt-6 text-[1.3rem] leading-tight font-bold text-paper">{person.name}</h3>
                   <p className="mt-2 font-mono text-[0.76rem] tracking-[0.14em] text-brand-ice uppercase">
                     {person.shortRole} · {site.shortName}
                   </p>

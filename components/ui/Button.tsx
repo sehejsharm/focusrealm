@@ -13,15 +13,15 @@ const sizes: Record<Size, string> = {
 };
 
 /**
- * Primary is the product's gold on the product's deepest teal — 8.9:1, and
- * the only gold surface on the page, so the CTA is never ambiguous.
+ * Primary is white on brand blue (#2a5bd7, 5.9:1). Blue pills are the only
+ * filled CTAs on the page, so the next step is never ambiguous.
  */
 const variants: Record<Variant, string> = {
   primary:
-    "bg-gold text-[#0e2322] shadow-[0_0_0_1px_color-mix(in_oklab,var(--color-gold)_70%,transparent),0_14px_40px_-14px_color-mix(in_oklab,var(--color-gold)_65%,transparent)] hover:bg-[#e7cd7c] hover:shadow-[0_0_0_1px_color-mix(in_oklab,var(--color-gold)_90%,transparent),0_18px_54px_-12px_color-mix(in_oklab,var(--color-gold)_80%,transparent)] hover:-translate-y-0.5",
+    "bg-brand text-white shadow-[0_10px_30px_-10px_color-mix(in_oklab,var(--color-brand)_70%,transparent)] hover:bg-brand-deep hover:shadow-[0_16px_44px_-12px_color-mix(in_oklab,var(--color-brand)_85%,transparent)] hover:-translate-y-0.5",
   outline:
-    "border border-line-strong bg-white/[0.03] text-paper backdrop-blur-md hover:border-brand-bright/70 hover:bg-brand/12 hover:-translate-y-0.5",
-  ghost: "text-muted hover:text-white",
+    "border border-line-strong bg-white text-paper hover:border-brand hover:text-brand hover:-translate-y-0.5",
+  ghost: "text-muted hover:text-brand",
 };
 
 type ButtonContentProps = { children: ReactNode; variant: Variant };
@@ -32,7 +32,7 @@ function Inner({ children, variant }: ButtonContentProps) {
       {variant === "primary" ? (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/55 to-transparent transition-transform duration-[900ms] ease-out-expo group-hover:translate-x-full"
+          className="pointer-events-none absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/35 to-transparent transition-transform duration-[900ms] ease-out-expo group-hover:translate-x-full"
         />
       ) : null}
       <span className="relative flex items-center gap-2">{children}</span>

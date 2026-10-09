@@ -107,7 +107,7 @@ export default function TeamPage() {
                         sizes="192px"
                         priority={index === 0}
                       />
-                      <h2 className="mt-6 text-[clamp(1.5rem,3vw,2.1rem)] leading-tight font-semibold text-white">
+                      <h2 className="mt-6 text-[clamp(1.5rem,3vw,2.1rem)] leading-tight font-bold text-paper">
                         {person.name}
                       </h2>
                       <p className="mt-2.5 font-mono text-[0.76rem] tracking-[0.14em] text-brand-ice uppercase">
@@ -120,7 +120,7 @@ export default function TeamPage() {
                     </div>
 
                     <div>
-                      <p className="text-[clamp(1.15rem,2.2vw,1.5rem)] leading-snug font-semibold text-white">
+                      <p className="text-[clamp(1.15rem,2.2vw,1.5rem)] leading-snug font-bold text-paper">
                         {person.headline}
                       </p>
                       <p className="mt-5 border-l-2 border-brand/40 pl-5 text-[0.98rem] leading-relaxed text-paper italic">
@@ -172,7 +172,7 @@ export default function TeamPage() {
                       sizes="128px"
                     />
                     <div>
-                      <h3 className="text-[1.2rem] leading-tight font-semibold text-white">
+                      <h3 className="text-[1.2rem] leading-tight font-bold text-paper">
                         {advisor.name}
                       </h3>
                       {advisor.alternateName ? (
@@ -210,7 +210,7 @@ export default function TeamPage() {
           <Reveal>
             <div className="panel flex flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center">
               <div>
-                <p className="text-[1.2rem] font-semibold text-white">Talk to the founding team directly.</p>
+                <p className="text-[1.2rem] font-bold text-paper">Talk to the founding team directly.</p>
                 <p className="mt-2 text-[0.92rem] text-muted">
                   Early conversations go straight to the people building it.
                 </p>

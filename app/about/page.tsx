@@ -93,7 +93,7 @@ export default function AboutPage() {
                   <p className="font-mono text-[0.74rem] tracking-[0.16em] text-brand-cyan uppercase">
                     {line.sector}
                   </p>
-                  <h2 className="mt-4 text-[1.5rem] leading-tight font-semibold text-white">{line.name}</h2>
+                  <h2 className="mt-4 text-[1.5rem] leading-tight font-bold text-paper">{line.name}</h2>
                   <p className="mt-3 text-[0.95rem] leading-relaxed text-muted">{line.body}</p>
                   <a
                     href={line.href}
@@ -124,10 +124,10 @@ export default function AboutPage() {
             {principles.map((principle, index) => (
               <Reveal key={principle.number} delay={index * 90} className="h-full">
                 <SpotlightCard className="panel flex h-full flex-col p-8">
-                  <span aria-hidden className="font-mono text-[2.4rem] leading-none font-semibold text-white/40">
+                  <span aria-hidden className="font-mono text-[2.4rem] leading-none font-bold text-paper/40">
                     {principle.number}
                   </span>
-                  <h3 className="mt-6 text-[1.2rem] leading-snug font-semibold text-white">{principle.title}</h3>
+                  <h3 className="mt-6 text-[1.2rem] leading-snug font-bold text-paper">{principle.title}</h3>
                   <p className="mt-4 text-[0.92rem] leading-relaxed text-muted">{principle.body}</p>
                 </SpotlightCard>
               </Reveal>
@@ -143,7 +143,7 @@ export default function AboutPage() {
           <Reveal>
             <div className="panel flex flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center sm:p-10">
               <div>
-                <p className="text-[clamp(1.3rem,2.6vw,1.8rem)] leading-snug font-semibold text-white">
+                <p className="text-[clamp(1.3rem,2.6vw,1.8rem)] leading-snug font-bold text-paper">
                   Tell us what you are trying to fix.
                 </p>
                 <p className="mt-2 max-w-lg text-[0.95rem] text-muted">

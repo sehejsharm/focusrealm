@@ -96,7 +96,7 @@ export default function SehejPhotosPage() {
             <Eyebrow>Photos</Eyebrow>
           </Reveal>
           <Reveal delay={80}>
-            <h1 className="mt-5 text-[clamp(2.1rem,4.6vw,3.2rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-white">
+            <h1 className="mt-5 text-[clamp(2.1rem,4.6vw,3.2rem)] leading-[1.02] font-bold tracking-[-0.03em] text-paper">
               Sehej Sharma
             </h1>
           </Reveal>
@@ -110,7 +110,7 @@ export default function SehejPhotosPage() {
               Speaking, pitching and equestrian sport. Read the full profile on the{" "}
               <Link
                 href="/team/sehej-sharma"
-                className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white"
+                className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-brand"
               >
                 Sehej Sharma
               </Link>{" "}

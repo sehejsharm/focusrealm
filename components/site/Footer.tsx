@@ -20,7 +20,7 @@ export default function Footer() {
   const commit = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7);
 
   return (
-    <footer className="relative overflow-hidden border-t border-line bg-void">
+    <footer className="relative overflow-hidden border-t border-line bg-white">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-bright/50 to-transparent"
@@ -32,11 +32,11 @@ export default function Footer() {
 
       <Container className="relative pt-20 pb-10">
         {/* Closing CTA */}
-        <Reveal className="panel spotlight overflow-hidden p-8 sm:p-12">
+        <Reveal className="panel overflow-hidden p-8 sm:p-12">
           <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-end">
             <div>
               <Eyebrow>Work with Focus Realm</Eyebrow>
-              <h2 className="mt-5 text-[clamp(1.9rem,3.6vw,2.9rem)] leading-[1.05] font-semibold text-white">
+              <h2 className="mt-5 text-[clamp(1.9rem,3.6vw,2.9rem)] leading-[1.05] font-bold text-paper">
                 Two sectors.
                 <span className="text-gradient"> One team.</span>
               </h2>
@@ -63,7 +63,7 @@ export default function Footer() {
             <Link href="/" className="inline-flex min-h-11 items-center gap-3">
               <LogoMark className="size-10" decorative />
               <span className="flex flex-col leading-none">
-                <span className="text-[0.95rem] font-semibold text-white">Focus Realm</span>
+                <span className="text-[0.95rem] font-bold text-paper">Focus Realm</span>
                 <span className="mt-1 font-mono text-[0.76rem] tracking-[0.16em] text-faint uppercase">
                   Education · Hospitality
                 </span>
@@ -88,14 +88,14 @@ export default function Footer() {
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="-my-1 inline-flex min-h-11 items-center py-1 text-[0.88rem] text-muted transition-colors duration-300 hover:text-white"
+                        className="-my-1 inline-flex min-h-11 items-center py-1 text-[0.88rem] text-muted transition-colors duration-300 hover:text-brand"
                       >
                         {link.label}
                       </a>
                     ) : (
                       <Link
                         href={link.href}
-                        className="-my-1 inline-flex min-h-11 items-center py-1 text-[0.88rem] text-muted transition-colors duration-300 hover:text-white"
+                        className="-my-1 inline-flex min-h-11 items-center py-1 text-[0.88rem] text-muted transition-colors duration-300 hover:text-brand"
                       >
                         {link.label}
                       </Link>
@@ -113,7 +113,7 @@ export default function Footer() {
           className="mt-16 select-none"
           aria-hidden
         >
-          <span className="block bg-linear-to-b from-white/12 to-white/[0.02] bg-clip-text text-[clamp(3.4rem,13vw,11rem)] leading-[0.82] font-semibold tracking-[-0.05em] text-transparent">
+          <span className="block bg-linear-to-b from-brand/14 to-brand/[0.02] bg-clip-text text-[clamp(3.4rem,13vw,11rem)] leading-[0.82] font-bold tracking-[-0.05em] text-transparent">
             FOCUS REALM
           </span>
         </Reveal>
@@ -121,7 +121,7 @@ export default function Footer() {
         <div className="mt-10 flex flex-col gap-5 border-t border-line pt-7 lg:flex-row lg:items-center lg:justify-between">
           <p className="text-[0.78rem] text-faint">
             © {year} Focus Realm. Technology for education and hospitality.
-            <span className="mt-1 block font-mono text-[0.72rem] text-faint/80">
+            <span className="mt-1 block font-mono text-[0.72rem] text-faint">
               Site updated {built}
               {commit ? ` · build ${commit}` : ""}
             </span>
@@ -132,14 +132,14 @@ export default function Footer() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="inline-flex min-h-11 items-center text-[0.78rem] text-muted transition-colors hover:text-white"
+                className="inline-flex min-h-11 items-center text-[0.78rem] text-muted transition-colors hover:text-brand"
               >
                 {item.label}
               </Link>
             ))}
             <a
               href={`mailto:${site.email}`}
-              className="inline-flex min-h-11 items-center text-[0.78rem] text-muted transition-colors hover:text-white"
+              className="inline-flex min-h-11 items-center text-[0.78rem] text-muted transition-colors hover:text-brand"
             >
               {site.email}
             </a>

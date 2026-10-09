@@ -65,7 +65,7 @@ export default function Header() {
             </Link>
 
             <nav aria-label="Primary" className="hidden items-center lg:flex">
-              <ul className="flex items-center gap-1 rounded-full border border-line bg-white/[0.03] p-1 backdrop-blur-md">
+              <ul className="flex items-center gap-1 rounded-full border border-line bg-white/80 p-1 shadow-sm backdrop-blur-md">
                 {nav.map((item) => {
                   const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
                   return (
@@ -74,7 +74,7 @@ export default function Header() {
                         href={item.href}
                         aria-current={active ? "page" : undefined}
                         className={`relative block rounded-full px-4 py-2 text-[0.85rem] tracking-[-0.01em] transition-colors duration-300 ${
-                          active ? "text-white" : "text-muted hover:text-white"
+                          active ? "text-paper" : "text-muted hover:text-brand"
                         }`}
                       >
                         {active ? (
@@ -107,7 +107,7 @@ export default function Header() {
                 aria-expanded={open}
                 aria-controls="mobile-nav"
                 aria-label={open ? "Close menu" : "Open menu"}
-                className="flex size-11 items-center justify-center rounded-full border border-line bg-white/[0.03] lg:hidden"
+                className="flex size-11 items-center justify-center rounded-full border border-line bg-white lg:hidden"
               >
                 <span className="relative block h-3 w-4.5">
                   <span
@@ -151,7 +151,7 @@ export default function Header() {
                   className="group flex items-baseline justify-between gap-4 border-b border-line py-5"
                   style={{ animation: `rise-in 0.6s var(--ease-out-expo) ${index * 60}ms both` }}
                 >
-                  <span className="text-[1.7rem] leading-none font-semibold tracking-[-0.03em] text-white">
+                  <span className="text-[1.7rem] leading-none font-bold tracking-[-0.03em] text-paper">
                     {item.label}
                   </span>
                   <span className="font-mono text-[0.76rem] tracking-[0.14em] text-faint uppercase">
@@ -166,8 +166,8 @@ export default function Header() {
               Talk to us
               <ArrowRight />
             </ButtonLink>
-            <ButtonLink href="/#sectors" variant="outline" size="lg" className="w-full">
-              Our two sectors
+            <ButtonLink href="/#products" variant="outline" size="lg" className="w-full">
+              Our products
             </ButtonLink>
           </div>
         </nav>

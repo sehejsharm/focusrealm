@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 
 import Aurora from "@/components/fx/Aurora";
 import Reveal, { MaskedLines } from "@/components/fx/Reveal";
+import HeroVisual from "@/components/home/HeroVisual";
+import Marquee from "@/components/home/Marquee";
 import TeamStrip from "@/components/home/TeamStrip";
 import TrustedBy from "@/components/home/TrustedBy";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
@@ -93,11 +95,18 @@ export default function HomePage() {
       {/* Hero */}
       <section className="relative isolate overflow-hidden pt-28 pb-14 sm:pt-40 sm:pb-24">
         <Aurora variant="hero" />
-        <Container>
+        <Container className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+          <div>
           <Reveal immediate>
-            <Eyebrow>Focus Realm · Software company</Eyebrow>
+            <span className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 shadow-sm">
+              <span className="relative flex size-2">
+                <span className="anim-ping absolute inset-0 rounded-full bg-brand" />
+                <span className="relative size-2 rounded-full bg-brand" />
+              </span>
+              <Eyebrow>Focus Realm · Software company</Eyebrow>
+            </span>
           </Reveal>
-          <h1 className="mt-6 max-w-4xl text-[clamp(2.6rem,6vw,4.8rem)] leading-[1] font-semibold tracking-[-0.04em] text-white">
+          <h1 className="mt-6 max-w-4xl text-[clamp(2.6rem,6vw,4.8rem)] leading-[1] font-bold tracking-[-0.04em] text-paper">
             <MaskedLines
               lines={[<>Software for the work</>, <span key="b" className="text-gradient">that has to go right.</span>]}
               stagger={80}
@@ -121,8 +130,14 @@ export default function HomePage() {
               </ButtonLink>
             </div>
           </Reveal>
+          </div>
+          <Reveal delay={200} immediate variant="scale">
+            <HeroVisual />
+          </Reveal>
         </Container>
       </section>
+
+      <Marquee />
 
       {/* Products */}
       <section id="products" className="relative scroll-mt-24 overflow-hidden py-14 sm:py-24">
@@ -132,7 +147,7 @@ export default function HomePage() {
               <Eyebrow>Products</Eyebrow>
             </Reveal>
             <Reveal delay={60}>
-              <h2 className="mt-5 text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] font-semibold text-white">
+              <h2 className="mt-5 text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] font-bold text-paper">
                 Two product lines. Two sectors.
               </h2>
             </Reveal>
@@ -141,19 +156,19 @@ export default function HomePage() {
           <div className="mt-12 grid auto-rows-fr gap-5 lg:grid-cols-2 lg:gap-6">
             {products.map((p, i) => (
               <Reveal key={p.id} delay={i * 90} className="h-full">
-                <article id={p.id} className="panel flex h-full scroll-mt-28 flex-col p-7 sm:p-9">
+                <article id={p.id} className="panel glow-border group flex h-full scroll-mt-28 flex-col p-7 transition-transform duration-500 hover:-translate-y-1.5 sm:p-9">
                   <p className="font-mono text-[0.74rem] tracking-[0.16em] text-brand-cyan uppercase">
                     {p.index} · {p.sector}
                   </p>
-                  <h3 className="mt-5 text-[clamp(1.6rem,3vw,2.2rem)] leading-tight font-semibold text-white">
+                  <h3 className="mt-5 text-[clamp(1.6rem,3vw,2.2rem)] leading-tight font-bold text-paper">
                     {p.name}
                   </h3>
                   <p className="mt-3 text-[0.98rem] leading-relaxed text-muted">{p.line}</p>
 
                   <ul className="mt-7 space-y-5">
                     {p.layers.map((layer) => (
-                      <li key={layer.title} className="border-l border-line pl-5">
-                        <p className="text-[0.95rem] font-medium text-white">{layer.title}</p>
+                      <li key={layer.title} className="border-l-2 border-brand/25 pl-5 transition-colors duration-500 group-hover:border-brand">
+                        <p className="text-[0.95rem] font-medium text-paper">{layer.title}</p>
                         <p className="mt-1.5 text-[0.88rem] leading-relaxed text-faint">{layer.body}</p>
                       </li>
                     ))}
@@ -188,7 +203,7 @@ export default function HomePage() {
           <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
             <Reveal>
               <Eyebrow>How we build</Eyebrow>
-              <h2 className="mt-5 text-[clamp(1.8rem,3.6vw,2.6rem)] leading-[1.06] font-semibold text-white">
+              <h2 className="mt-5 text-[clamp(1.8rem,3.6vw,2.6rem)] leading-[1.06] font-bold text-paper">
                 Strategic minimalism.
               </h2>
             </Reveal>

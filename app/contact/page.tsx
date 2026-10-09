@@ -116,7 +116,7 @@ export default function ContactPage() {
                     </p>
                     <a
                       href={`mailto:${route.value}`}
-                      className="mt-3 block text-[1.05rem] font-medium text-white transition-colors hover:text-brand-ice"
+                      className="mt-3 block text-[1.05rem] font-medium text-paper transition-colors hover:text-brand-ice"
                     >
                       {route.value}
                     </a>
@@ -141,7 +141,7 @@ export default function ContactPage() {
                             {person.initials}
                           </span>
                           <span className="flex flex-col leading-tight">
-                            <span className="text-[0.88rem] font-medium text-white">{person.name}</span>
+                            <span className="text-[0.88rem] font-medium text-paper">{person.name}</span>
                             <span className="text-[0.75rem] text-faint">{person.shortRole}</span>
                           </span>
                         </Link>
@@ -193,11 +193,11 @@ export default function ContactPage() {
             ].map((item, index) => (
               <Reveal key={item.title} delay={index * 90}>
                 <div>
-                  <h2 className="text-[1.02rem] font-semibold text-white">{item.title}</h2>
+                  <h2 className="text-[1.02rem] font-bold text-paper">{item.title}</h2>
                   <p className="mt-3 text-[0.9rem] leading-relaxed text-muted">{item.body}</p>
                   <Link
                     href={item.href}
-                    className="mt-4 inline-block text-[0.85rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-white"
+                    className="mt-4 inline-block text-[0.85rem] text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-brand"
                   >
                     {item.cta}
                   </Link>

@@ -14,13 +14,13 @@ export default function AppleIcon() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(145deg, #1d4044 0%, #061417 100%)",
-          color: "#ffffff",
+          background: "#ffffff",
+          color: "#0b3a91",
         }}
       >
         <div style={{ display: "flex", fontSize: 84, fontWeight: 700, letterSpacing: -4 }}>
           <span>F</span>
-          <span style={{ color: "#dbbc5f" }}>R</span>
+          <span style={{ color: "#4f9fd6", marginLeft: -6 }}>R</span>
         </div>
         <div
           style={{

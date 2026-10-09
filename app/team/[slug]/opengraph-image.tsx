@@ -62,8 +62,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 72,
-          background: "#061417",
-          color: "#f2f6f3",
+          background: "#f4f5fb",
+          color: "#0f1222",
           position: "relative",
         }}
       >
@@ -74,7 +74,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             right: -60,
             width: 820,
             height: 600,
-            background: "radial-gradient(circle, rgba(51,146,123,0.45) 0%, rgba(6,20,23,0) 70%)",
+            background: "radial-gradient(circle, rgba(42,91,215,0.45) 0%, rgba(244,245,251,0) 70%)",
             display: "flex",
           }}
         />
@@ -88,16 +88,16 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               width: 52,
               height: 52,
               borderRadius: 14,
-              border: "3px solid #dbbc5f",
-              background: "linear-gradient(145deg, #1d4044 0%, #0b2126 100%)",
+              border: "3px solid #2a5bd7",
+              background: "#ffffff",
               fontSize: 24,
               fontWeight: 700,
             }}
           >
             <span>F</span>
-            <span style={{ color: "#dbbc5f" }}>R</span>
+            <span style={{ color: "#2a5bd7" }}>R</span>
           </div>
-          <div style={{ display: "flex", fontSize: 21, letterSpacing: 2, color: "#a8c4c0" }}>
+          <div style={{ display: "flex", fontSize: 21, letterSpacing: 2, color: "#3d4256" }}>
             {site.name.toUpperCase()}
           </div>
         </div>
@@ -113,7 +113,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                 width: 168,
                 height: 168,
                 borderRadius: 40,
-                border: "2px solid rgba(219,188,95,0.4)",
+                border: "2px solid rgba(42,91,215,0.4)",
                 objectFit: "cover",
                 flexShrink: 0,
               }}
@@ -127,8 +127,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                 width: 168,
                 height: 168,
                 borderRadius: 40,
-                border: "2px solid rgba(219,188,95,0.4)",
-                background: "linear-gradient(145deg, rgba(51,146,123,0.34) 0%, rgba(31,109,91,0.25) 100%)",
+                border: "2px solid rgba(42,91,215,0.4)",
+                background: "linear-gradient(145deg, rgba(42,91,215,0.34) 0%, rgba(30,71,184,0.25) 100%)",
                 fontSize: 62,
                 fontWeight: 700,
                 flexShrink: 0,
@@ -141,7 +141,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             <div style={{ fontSize: 66, fontWeight: 700, letterSpacing: -2.4, lineHeight: 1.04 }}>
               {person?.name ?? site.name}
             </div>
-            <div style={{ marginTop: 14, fontSize: 30, color: "#dbbc5f", lineHeight: 1.2 }}>
+            <div style={{ marginTop: 14, fontSize: 30, color: "#2a5bd7", lineHeight: 1.2 }}>
               {person?.role ?? "Software for education and hospitality"}
             </div>
           </div>
@@ -155,8 +155,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                 display: "flex",
                 padding: "10px 18px",
                 borderRadius: 999,
-                border: "1px solid rgba(148,212,193,0.26)",
-                color: "#b9e6d8",
+                border: "1px solid rgba(42,91,215,0.26)",
+                color: "#1e47b8",
               }}
             >
               {focus}

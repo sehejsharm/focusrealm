@@ -61,7 +61,7 @@ export default function CursorField() {
       className="pointer-events-none fixed inset-0 z-0 opacity-0 transition-opacity duration-700 max-md:hidden"
       style={{
         background:
-          "radial-gradient(520px circle at var(--cx, 50%) var(--cy, 30%), color-mix(in oklab, #33927b 13%, transparent), transparent 70%)",
+          "radial-gradient(520px circle at var(--cx, 50%) var(--cy, 30%), color-mix(in oklab, #2a5bd7 9%, transparent), transparent 70%)",
       }}
     />
   );

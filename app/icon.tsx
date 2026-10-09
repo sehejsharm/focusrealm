@@ -14,17 +14,17 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(145deg, #1d4044 0%, #0b2126 100%)",
-          border: "3px solid #dbbc5f",
+          background: "#ffffff",
+          border: "3px solid #dfe3f0",
           borderRadius: 15,
-          color: "#ffffff",
+          color: "#0b3a91",
           fontSize: 30,
           fontWeight: 700,
           letterSpacing: -1.5,
         }}
       >
         <span>F</span>
-        <span style={{ color: "#dbbc5f" }}>R</span>
+        <span style={{ color: "#4f9fd6", marginLeft: -6 }}>R</span>
       </div>
     ),
     size,

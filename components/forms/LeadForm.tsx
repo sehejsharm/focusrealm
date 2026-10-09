@@ -208,7 +208,7 @@ export default function LeadForm({
             />
           </svg>
         </span>
-        <h3 className="mt-6 text-[1.4rem] font-semibold text-white">
+        <h3 className="mt-6 text-[1.4rem] font-bold text-paper">
           {fell ? "Our form is having a moment." : successTitle}
         </h3>
         <p className="mt-3 max-w-md text-[0.95rem] leading-relaxed text-muted">
@@ -309,7 +309,7 @@ export default function LeadForm({
       </div>
 
       {formError ? (
-        <p role="alert" className="mt-6 rounded-xl border border-[#ff9b9b]/40 bg-[#ff9b9b]/10 px-4 py-3 text-[0.85rem] text-[#ffc4c4]">
+        <p role="alert" className="mt-6 rounded-xl border border-[#c62828]/40 bg-[#c62828]/10 px-4 py-3 text-[0.85rem] text-[#b71c1c]">
           {formError}
         </p>
       ) : null}
