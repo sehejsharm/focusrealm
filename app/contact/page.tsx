@@ -80,12 +80,12 @@ export default function ContactPage() {
         eyebrow="Talk to us"
         breadcrumb={[{ label: "Contact" }]}
         titleLines={[
-          <>Tell us which</>,
+          <>Tell us what</>,
           <>
-            shift <span className="text-gradient">hurts.</span>
+            you need <span className="text-gradient">fixed.</span>
           </>,
         ]}
-        lede="We are early enough that the founders answer the inbox. Bring the specific problem — the floor, the department, the audit that went badly — and we will tell you honestly whether this is the right tool for it."
+        lede="We are early enough that the founders answer the inbox. Bring the specific problem, whether it sits in a classroom, a campus or a hotel floor, and we will tell you honestly whether we have the right product for it."
       />
 
       <section className="relative pb-24 sm:pb-32">

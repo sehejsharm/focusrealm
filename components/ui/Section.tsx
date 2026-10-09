@@ -17,7 +17,7 @@ export function Container({
 export function Eyebrow({
   children,
   className = "",
-  dot = true,
+  dot = false,
 }: {
   children: ReactNode;
   className?: string;
@@ -26,10 +26,7 @@ export function Eyebrow({
   return (
     <span className={`eyebrow inline-flex items-center gap-2.5 ${className}`}>
       {dot ? (
-        <span className="relative flex size-1.5">
-          <span className="absolute inset-0 rounded-full bg-brand-cyan animate-pulse-ring" />
-          <span className="relative size-1.5 rounded-full bg-brand-cyan" />
-        </span>
+        <span className="size-1.5 rounded-full bg-brand" />
       ) : null}
       {children}
     </span>

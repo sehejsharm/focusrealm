@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Poppins } from "next/font/google";
+import { Bodoni_Moda, Poppins } from "next/font/google";
 
-import CursorField from "@/components/fx/CursorField";
 import { AnalyticsNoScript, AnalyticsScripts, ConsentDefaults } from "@/components/site/Analytics";
 import ConsentBanner from "@/components/site/ConsentBanner";
 import RouteTransition from "@/components/fx/RouteTransition";
@@ -12,6 +11,7 @@ import { isUnindexableHost, site, siteUrl } from "@/lib/site";
 
 import "./globals.css";
 
+const logoSerif = Bodoni_Moda({ variable: "--font-logo", subsets: ["latin"], weight: ["500"], display: "block" });
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
@@ -96,7 +96,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${poppins.variable}`}>
+    <html lang="en" className={`${poppins.variable} ${logoSerif.variable}`}>
       <head>
         {/* Reveals are JS-driven; without it every section must still be visible. */}
         <noscript>
@@ -113,7 +113,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: jsonLdGraph(organizationSchema, websiteSchema, softwareSchema, educationSchema),
           }}
         />
-        <CursorField />
         <Header />
         <main id="main">
           <RouteTransition>{children}</RouteTransition>

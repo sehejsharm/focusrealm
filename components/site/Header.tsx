@@ -129,7 +129,7 @@ export default function Header() {
         {/* Reading progress */}
         <div
           aria-hidden
-          className="h-px origin-left bg-linear-to-r from-brand via-brand-bright to-brand-cyan transition-opacity duration-500"
+          className="h-px origin-left bg-brand transition-opacity duration-500"
           style={{ transform: `scaleX(${progress})`, opacity: condensed ? 1 : 0 }}
         />
       </header>

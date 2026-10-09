@@ -278,9 +278,10 @@ p {
 /* Eyebrow labels: monospace, uppercase, letter-spaced. Used everywhere. */
 @utility eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   line-height: 1;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-brand-cyan);
 }
@@ -291,12 +292,7 @@ p {
  * mid-word and read like a rendering fault.
  */
 @utility text-gradient {
-  background-image: linear-gradient(100deg, #1e47b8 0%, #2a5bd7 40%, #4a7cf5 70%, #1e47b8 100%);
-  background-size: 200% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  animation: gradient-pan 6s ease-in-out infinite alternate;
+  color: var(--color-brand);
 }
 
 @utility text-dim-gradient {
@@ -590,4 +586,20 @@ p {
   .glow-border::after, .text-gradient, .animate-marquee, .animate-marquee-slow {
     animation: none !important;
   }
+}
+
+@keyframes grow-y {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+@keyframes tick-fill {
+  0%, 12% { background-color: transparent; border-color: #c9cfe0; }
+  16%, 86% { background-color: #2a5bd7; border-color: #2a5bd7; }
+  92%, 100% { background-color: transparent; border-color: #c9cfe0; }
+}
+.anim-grow { transform-origin: bottom; animation: grow-y 0.9s var(--ease-out-expo) both; }
+.anim-tick { animation: tick-fill 8s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .anim-grow { animation: none; }
+  .anim-tick { animation: none; background-color: #2a5bd7; border-color: #2a5bd7; }
 }

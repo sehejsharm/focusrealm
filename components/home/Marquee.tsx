@@ -15,12 +15,12 @@ const items = [
 export default function Marquee() {
   const row = [...items, ...items];
   return (
-    <div aria-hidden className="edge-fade-x relative overflow-hidden border-y border-line bg-white py-5">
+    <div aria-hidden className="edge-fade-x relative overflow-hidden border-y border-line bg-white py-4">
       <div className="animate-marquee flex w-max gap-10">
         {row.map((item, i) => (
-          <span key={i} className="flex items-center gap-10 text-[clamp(1.1rem,2.2vw,1.6rem)] font-bold tracking-[-0.03em] text-paper whitespace-nowrap">
+          <span key={i} className="flex items-center gap-10 text-[0.95rem] font-semibold tracking-[-0.01em] text-muted whitespace-nowrap">
             {item}
-            <span className={`size-2.5 rotate-45 ${i % 3 === 2 ? "bg-gold" : "bg-brand"}`} />
+            <span className="size-1.5 rounded-full bg-brand/50" />
           </span>
         ))}
       </div>

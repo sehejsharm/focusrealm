@@ -24,7 +24,7 @@ export default function TrustedBy() {
 
         <ul className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3 lg:grid-cols-6">
           {clients.map((client, index) => (
-            <li key={client.name} className="bg-ink/70">
+            <li key={client.name} className="bg-white">
               <Reveal delay={index * 60} className="flex h-full flex-col items-center justify-center gap-3 px-4 py-7">
                 {client.logo ? (
                   <span className="flex h-10 w-full items-center justify-center">

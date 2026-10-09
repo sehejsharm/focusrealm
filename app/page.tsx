@@ -98,15 +98,9 @@ export default function HomePage() {
         <Container className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
           <Reveal immediate>
-            <span className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 shadow-sm">
-              <span className="relative flex size-2">
-                <span className="anim-ping absolute inset-0 rounded-full bg-brand" />
-                <span className="relative size-2 rounded-full bg-brand" />
-              </span>
-              <Eyebrow>Focus Realm · Software company</Eyebrow>
-            </span>
+            <Eyebrow dot>Software company</Eyebrow>
           </Reveal>
-          <h1 className="mt-6 max-w-4xl text-[clamp(2.6rem,6vw,4.8rem)] leading-[1] font-bold tracking-[-0.04em] text-paper">
+          <h1 className="mt-6 max-w-4xl text-[clamp(2.4rem,5.2vw,4.1rem)] leading-[1.04] font-bold tracking-[-0.035em] text-paper">
             <MaskedLines
               lines={[<>Software for the work</>, <span key="b" className="text-gradient">that has to go right.</span>]}
               stagger={80}
@@ -156,7 +150,7 @@ export default function HomePage() {
           <div className="mt-12 grid auto-rows-fr gap-5 lg:grid-cols-2 lg:gap-6">
             {products.map((p, i) => (
               <Reveal key={p.id} delay={i * 90} className="h-full">
-                <article id={p.id} className="panel glow-border group flex h-full scroll-mt-28 flex-col p-7 transition-transform duration-500 hover:-translate-y-1.5 sm:p-9">
+                <article id={p.id} className="panel group flex h-full scroll-mt-28 flex-col p-7 transition-[border-color,transform] duration-500 hover:-translate-y-1 hover:border-brand/40 sm:p-9">
                   <p className="font-mono text-[0.74rem] tracking-[0.16em] text-brand-cyan uppercase">
                     {p.index} · {p.sector}
                   </p>

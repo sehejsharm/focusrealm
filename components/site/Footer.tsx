@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import Reveal from "@/components/fx/Reveal";
-import { LogoMark } from "@/components/site/Logo";
+import Logo from "@/components/site/Logo";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import { Container, Eyebrow } from "@/components/ui/Section";
 import { footerNav, legalNav, site } from "@/lib/site";
@@ -21,14 +21,6 @@ export default function Footer() {
 
   return (
     <footer className="relative overflow-hidden border-t border-line bg-white">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-bright/50 to-transparent"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-40 left-1/2 h-[420px] w-[900px] -translate-x-1/2 rounded-full bg-brand/12 blur-[130px]"
-      />
 
       <Container className="relative pt-20 pb-10">
         {/* Closing CTA */}
@@ -45,7 +37,7 @@ export default function Footer() {
                 we will point you to the right product.
               </p>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-stretch">
+            <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
               <ButtonLink href="/contact" size="lg">
                 Talk to us
                 <ArrowRight />
@@ -60,18 +52,12 @@ export default function Footer() {
         {/* Link matrix */}
         <div className="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_repeat(4,minmax(0,1fr))]">
           <div>
-            <Link href="/" className="inline-flex min-h-11 items-center gap-3">
-              <LogoMark className="size-10" decorative />
-              <span className="flex flex-col leading-none">
-                <span className="text-[0.95rem] font-bold text-paper">Focus Realm</span>
-                <span className="mt-1 font-mono text-[0.76rem] tracking-[0.16em] text-faint uppercase">
-                  Education · Hospitality
-                </span>
-              </span>
+            <Link href="/" aria-label="Focus Realm home" className="inline-flex min-h-11 items-center">
+              <Logo markClassName="size-10" />
             </Link>
             <p className="mt-5 max-w-xs text-[0.88rem] leading-relaxed text-faint">
-              Technology for two sectors: learning and capability programmes in education, and Mise, the
-              service execution platform for hotels.
+              A software company building learning and operations platforms for education and
+              hospitality.
             </p>
           </div>
 
@@ -107,20 +93,9 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Oversized wordmark */}
-        <Reveal
-          variant="scale"
-          className="mt-16 select-none"
-          aria-hidden
-        >
-          <span className="block bg-linear-to-b from-brand/14 to-brand/[0.02] bg-clip-text text-[clamp(3.4rem,13vw,11rem)] leading-[0.82] font-bold tracking-[-0.05em] text-transparent">
-            FOCUS REALM
-          </span>
-        </Reveal>
-
         <div className="mt-10 flex flex-col gap-5 border-t border-line pt-7 lg:flex-row lg:items-center lg:justify-between">
           <p className="text-[0.78rem] text-faint">
-            © {year} Focus Realm. Technology for education and hospitality.
+            © {year} Focus Realm. All rights reserved.
             <span className="mt-1 block font-mono text-[0.72rem] text-faint">
               Site updated {built}
               {commit ? ` · build ${commit}` : ""}

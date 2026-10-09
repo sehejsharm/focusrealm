@@ -29,15 +29,15 @@ export default function TeamStrip({
         <div className="flex flex-wrap items-end justify-between gap-8">
           <SectionHeading
             eyebrow="Founded by"
-            title="The Focus Realm team. One discipline:"
-            accent="remove it unless it helps the shift."
+            title="A small founding team,"
+            accent="building both products."
             body={
               <>
                 {site.name} was founded by{" "}
                 <Link href="/team/sehej-sharma" className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-brand">
                   Sehej Sharma
                 </Link>{" "}
-                (Co-Founder &amp; CEO),{" "}
+                (Founder &amp; CEO),{" "}
                 <Link href="/team/ali-electricwala" className="text-brand-cyan underline decoration-brand/40 underline-offset-4 transition-colors hover:text-brand">
                   Ali Electricwala
                 </Link>{" "}

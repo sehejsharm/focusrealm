@@ -21,35 +21,12 @@ export function LogoMark({
       {...(decorative ? { "aria-hidden": true } : { role: "img", "aria-label": "Focus Realm" })}
       fill="none"
     >
-      <defs>
-        <linearGradient id="fr-f" gradientUnits="userSpaceOnUse" x1="0" y1="10" x2="0" y2="37">
-          <stop offset="0%" stopColor="#0b3a91" />
-          <stop offset="100%" stopColor="#2a6fd0" />
-        </linearGradient>
-        <linearGradient id="fr-r" gradientUnits="userSpaceOnUse" x1="20" y1="16" x2="37" y2="37">
-          <stop offset="0%" stopColor="#3f8fd6" />
-          <stop offset="100%" stopColor="#8ccbe9" />
-        </linearGradient>
-      </defs>
-      {tile ? (
-        <rect x="1" y="1" width="46" height="46" rx="10" fill="#ffffff" stroke="#dfe3f0" strokeWidth="1.5" />
-      ) : null}
-
-      {/* R: light blue, its stem shared with the F's right side */}
-      <g stroke="url(#fr-r)" strokeLinecap="butt" fill="none">
-        <path d="M22.5 17 V 36" strokeWidth="2.6" />
-        <path d="M21 17 H 28.5 C 32.6 17 34.4 19.2 34.4 22.2 C 34.4 25.2 32.6 27.4 28.5 27.4 H 22.5" strokeWidth="2" />
-        <path d="M28 27.4 L 35 36" strokeWidth="2.2" />
-        <path d="M20.5 36 H 25" strokeWidth="1.4" />
-        <path d="M33 36 H 37" strokeWidth="1.4" />
-      </g>
-      {/* F: deep navy, thin serif cut */}
-      <g stroke="url(#fr-f)" strokeLinecap="butt" fill="none">
-        <path d="M15 11 V 36" strokeWidth="2.8" />
-        <path d="M12.5 11 H 27.5" strokeWidth="2" />
-        <path d="M27.5 11 V 14" strokeWidth="1.4" />
-        <path d="M15 22.5 H 21" strokeWidth="1.8" />
-        <path d="M12.5 36 H 18" strokeWidth="1.4" />
+      {tile ? <rect x="0.75" y="0.75" width="46.5" height="46.5" rx="9" fill="#ffffff" stroke="#e1e4ef" strokeWidth="1.5" /> : null}
+      {/* Letterforms from the logo artwork: a high-contrast Didone F in deep
+          blue, with a lighter-blue R overlapping its arm. */}
+      <g style={{ fontFamily: "var(--font-logo), Didot, 'Bodoni 72', Georgia, serif" }} fontSize="33" fontWeight="500">
+        <text x="7.2" y="35.5" fill="#123f8f">F</text>
+        <text x="18.8" y="35.5" fill="#4d97d1">R</text>
       </g>
     </svg>
   );

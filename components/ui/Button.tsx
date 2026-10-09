@@ -18,7 +18,7 @@ const sizes: Record<Size, string> = {
  */
 const variants: Record<Variant, string> = {
   primary:
-    "bg-brand text-white shadow-[0_10px_30px_-10px_color-mix(in_oklab,var(--color-brand)_70%,transparent)] hover:bg-brand-deep hover:shadow-[0_16px_44px_-12px_color-mix(in_oklab,var(--color-brand)_85%,transparent)] hover:-translate-y-0.5",
+    "bg-brand text-white shadow-[0_1px_2px_rgba(15,18,34,0.12)] hover:bg-brand-deep hover:-translate-y-0.5",
   outline:
     "border border-line-strong bg-white text-paper hover:border-brand hover:text-brand hover:-translate-y-0.5",
   ghost: "text-muted hover:text-brand",
