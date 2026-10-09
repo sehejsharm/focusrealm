@@ -1,6 +1,6 @@
 /**
- * The FR monogram: a deep-blue F interlocked with a lighter-blue R, set in a
- * white square tile. Drawn as SVG so it stays crisp from favicon to hero and
+ * The FR monogram, redrawn from the supplied artwork: a thin serif F in deep
+ * blue interlocked with a lighter-blue R, set in a white square tile. Drawn as SVG so it stays crisp from favicon to hero and
  * never depends on a webfont. See BRAND.md.
  */
 export function LogoMark({
@@ -22,8 +22,12 @@ export function LogoMark({
       fill="none"
     >
       <defs>
-        <linearGradient id="fr-r" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#5aa8dc" />
+        <linearGradient id="fr-f" gradientUnits="userSpaceOnUse" x1="0" y1="10" x2="0" y2="37">
+          <stop offset="0%" stopColor="#0b3a91" />
+          <stop offset="100%" stopColor="#2a6fd0" />
+        </linearGradient>
+        <linearGradient id="fr-r" gradientUnits="userSpaceOnUse" x1="20" y1="16" x2="37" y2="37">
+          <stop offset="0%" stopColor="#3f8fd6" />
           <stop offset="100%" stopColor="#8ccbe9" />
         </linearGradient>
       </defs>
@@ -31,16 +35,22 @@ export function LogoMark({
         <rect x="1" y="1" width="46" height="46" rx="10" fill="#ffffff" stroke="#dfe3f0" strokeWidth="1.5" />
       ) : null}
 
-      {/* R — lighter blue, sitting behind and to the right of the F */}
-      <path
-        fill="url(#fr-r)"
-        d="M21 11h10.2c5.3 0 8.6 2.8 8.6 7.1 0 3.4-2 5.7-5.2 6.6l6.3 10.6c.4.7.9 1.1 1.6 1.2V38h-6.1l-7-12.4h-2.9v9.6c0 .9.5 1.4 1.4 1.5V38h-8.4v-1.3c.9-.1 1.5-.6 1.5-1.5V13.8c0-.9-.6-1.4-1.5-1.5V11zm5.5 2.4v9.8h3.6c3.1 0 4.6-1.7 4.6-4.9s-1.5-4.9-4.6-4.9h-3.6z"
-      />
-      {/* F — deep navy, in front */}
-      <path
-        fill="#0b3a91"
-        d="M7.5 11h18.6v6.6h-1.6c-.4-2.6-1.6-4.1-4.6-4.1h-4.4v9.2h3.1c1.8 0 2.6-.9 2.8-2.6h1.5v7.8h-1.5c-.2-1.8-1-2.7-2.8-2.7h-3.1v9.9c0 .9.6 1.4 1.7 1.6V38H7.5v-1.3c.9-.2 1.5-.7 1.5-1.6V13.8c0-.9-.6-1.4-1.5-1.5V11z"
-      />
+      {/* R: light blue, its stem shared with the F's right side */}
+      <g stroke="url(#fr-r)" strokeLinecap="butt" fill="none">
+        <path d="M22.5 17 V 36" strokeWidth="2.6" />
+        <path d="M21 17 H 28.5 C 32.6 17 34.4 19.2 34.4 22.2 C 34.4 25.2 32.6 27.4 28.5 27.4 H 22.5" strokeWidth="2" />
+        <path d="M28 27.4 L 35 36" strokeWidth="2.2" />
+        <path d="M20.5 36 H 25" strokeWidth="1.4" />
+        <path d="M33 36 H 37" strokeWidth="1.4" />
+      </g>
+      {/* F: deep navy, thin serif cut */}
+      <g stroke="url(#fr-f)" strokeLinecap="butt" fill="none">
+        <path d="M15 11 V 36" strokeWidth="2.8" />
+        <path d="M12.5 11 H 27.5" strokeWidth="2" />
+        <path d="M27.5 11 V 14" strokeWidth="1.4" />
+        <path d="M15 22.5 H 21" strokeWidth="1.8" />
+        <path d="M12.5 36 H 18" strokeWidth="1.4" />
+      </g>
     </svg>
   );
 }
