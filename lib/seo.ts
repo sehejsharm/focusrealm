@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 
 import { advisors, faqs, property, team, testimonials } from "@/lib/content";
-import { sehejGalleryPhotos } from "@/lib/gallery";
 import { advisorPhoto, teamPhoto } from "@/lib/team-photos";
 import { absoluteUrl, site, siteUrl } from "@/lib/site";
 
@@ -218,31 +217,6 @@ export function personSchema(slug: string) {
     ...(images.length ? { image: images.length === 1 ? images[0] : images } : {}),
     ...(personSameAs(person.slug).length ? { sameAs: personSameAs(person.slug) } : {}),
     mainEntityOfPage: { "@id": `${siteUrl}/team/${person.slug}#webpage` },
-  };
-}
-
-/**
- * The Person node for the photo page. Same `@id` as the profile node, so the
- * two pages describe one person; `image` carries every photograph as an
- * ImageObject, which is what makes them eligible for image search against
- * his name rather than as anonymous page decoration.
- */
-export function sehejGallerySchema() {
-  const person = team.find((entry) => entry.slug === "sehej-sharma");
-  if (!person) return null;
-
-  return {
-    "@type": "Person",
-    "@id": personId(person.slug),
-    name: person.name,
-    url: absoluteUrl("/about-sehej-sharma"),
-    image: sehejGalleryPhotos.map((photo) => ({
-      "@type": "ImageObject",
-      contentUrl: photo.contentUrl,
-      name: photo.alt,
-      caption: photo.caption,
-    })),
-    sameAs: [...personSameAs(person.slug), absoluteUrl(`/team/${person.slug}`)],
   };
 }
 

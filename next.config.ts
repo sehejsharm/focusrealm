@@ -79,13 +79,17 @@ const miseRedirects: [string, string][] = [
 
 const nextConfig: NextConfig = {
   async redirects() {
-    return miseRedirects.map(([source, path]) => ({
-      source,
-      destination: `${MISE}${path}`,
-      // 301 rather than Next's default 308: both pass equity, but 301 is what
-      // every SEO tool and Search Console report expects to see.
-      statusCode: 301 as const,
-    }));
+    return [
+      // Photo gallery removed at the founder's request.
+      { source: "/about-sehej-sharma", destination: "/team/sehej-sharma", statusCode: 301 as const },
+      ...miseRedirects.map(([source, path]) => ({
+        source,
+        destination: `${MISE}${path}`,
+        // 301 rather than Next's default 308: both pass equity, but 301 is what
+        // every SEO tool and Search Console report expects to see.
+        statusCode: 301 as const,
+      })),
+    ];
   },
   // Removes `X-Powered-By: Next.js` — free information about the stack.
   poweredByHeader: false,

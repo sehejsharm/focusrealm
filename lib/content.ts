@@ -494,7 +494,6 @@ export const team: Person[] = [
     focus: ["Company direction", "Category & positioning", "Go-to-market", "Hospitality & education partnerships", "Founder-led sales"],
     quote:
       "Standards stop being a document nobody reads the moment they become the unit of work a staff member is doing right now.",
-    photosPath: "/about-sehej-sharma",
     profiles: [
       { network: "Instagram", href: "https://www.instagram.com/sehejsharma03" },
       { network: "X (Twitter)", href: "https://x.com/thisissehej" },
@@ -511,7 +510,6 @@ export const team: Person[] = [
       jobTitle: "Founder & CEO",
       description:
         "Founder & CEO of Focus Realm and Founder & CEO of Recharga Chargine. Based in Jaipur, India.",
-      images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Sehej%20Sharma.png"],
     },
   },
   {

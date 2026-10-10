@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
 
 import { team } from "@/lib/content";
-import { sehejGalleryPhotos } from "@/lib/gallery";
 import { teamPhoto } from "@/lib/team-photos";
 import { absoluteUrl } from "@/lib/site";
 
@@ -39,17 +38,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
   });
 
-  // Photo page. Every image is declared so the gallery is eligible for image
-  // search on his name, which is a real entry point for a person query.
-  const gallery: MetadataRoute.Sitemap = [
-    {
-      url: absoluteUrl("/about-sehej-sharma"),
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.6,
-      images: sehejGalleryPhotos.map((photo) => photo.contentUrl),
-    },
-  ];
 
-  return [...core, ...people, ...gallery];
+  return [...core, ...people];
 }
