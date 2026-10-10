@@ -510,6 +510,7 @@ export const team: Person[] = [
       jobTitle: "Founder & CEO",
       description:
         "Founder & CEO of Focus Realm and Founder & CEO of Recharga Chargine. Based in Jaipur, India.",
+      images: ["https://commons.wikimedia.org/wiki/Special:FilePath/Sehej%20Sharma.png"],
     },
   },
   {

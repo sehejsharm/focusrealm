@@ -80,10 +80,8 @@ export default function ContactPage() {
         eyebrow="Talk to us"
         breadcrumb={[{ label: "Contact" }]}
         titleLines={[
-          <>Tell us what</>,
-          <>
-            you need <span className="text-gradient">fixed.</span>
-          </>,
+          <>Contact Focus Realm.</>,
+          <span key="b" className="text-gradient">Talk to the founders.</span>,
         ]}
         lede="We are early enough that the founders answer the inbox. Bring the specific problem, whether it sits in a classroom, a campus or a hotel floor, and we will tell you honestly whether we have the right product for it."
       />

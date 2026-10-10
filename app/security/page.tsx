@@ -76,7 +76,7 @@ export default function SecurityPage() {
       <PageHero
         eyebrow="Trust centre"
         breadcrumb={[{ label: "Security" }]}
-        titleLines={[<>Security and trust,</>, <span key="b" className="text-gradient">stated plainly.</span>]}
+        titleLines={[<>Security and trust</>, <span key="b" className="text-gradient">at Focus Realm.</span>]}
         lede="Schools, universities and hotel groups trust us with their people's data. This page sets out how we protect it, and what to ask us if you need more."
       />
 

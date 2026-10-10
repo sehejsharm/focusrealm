@@ -80,10 +80,8 @@ export default function TeamPage() {
         eyebrow="Founding team"
         breadcrumb={[{ label: "Team" }]}
         titleLines={[
-          <>Three people.</>,
-          <>
-            One <span className="text-gradient">discipline.</span>
-          </>,
+          <>The founders of</>,
+          <span key="b" className="text-gradient">Focus Realm.</span>,
         ]}
         lede="Focus Realm is built by a founding team that has spent its time in the same argument: what can we remove and still have the product do its job? Everything we ship, in both verticals, survived that question."
       />

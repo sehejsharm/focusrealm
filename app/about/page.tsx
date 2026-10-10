@@ -79,7 +79,7 @@ export default function AboutPage() {
       <PageHero
         eyebrow="About"
         breadcrumb={[{ label: "About" }]}
-        titleLines={[<>A software company</>, <span key="b" className="text-gradient">for two verticals.</span>]}
+        titleLines={[<>About Focus Realm:</>, <span key="b" className="text-gradient">education and hospitality software.</span>]}
         lede={site.description}
       />
 

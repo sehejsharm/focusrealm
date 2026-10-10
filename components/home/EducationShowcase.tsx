@@ -19,9 +19,9 @@ const options = [
 
 const students = [
   { name: "Aarav", initials: "AK", base: 1240, tone: "#2a5bd7" },
-  { name: "Meera", initials: "MS", base: 1185, tone: "#4d97d1" },
+  { name: "Meera", initials: "MS", base: 1185, tone: "#2f6fb0" },
   { name: "Kabir", initials: "KR", base: 1120, tone: "#0b3a91" },
-  { name: "Ananya", initials: "AJ", base: 1064, tone: "#8fb0ff" },
+  { name: "Ananya", initials: "AJ", base: 1064, tone: "#3c5fc4" },
 ];
 
 export default function EducationShowcase() {
