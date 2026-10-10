@@ -3,7 +3,9 @@ import Link from "next/link";
 
 import Reveal, { MaskedLines } from "@/components/fx/Reveal";
 import Architecture from "@/components/home/Architecture";
+import ConsoleStage from "@/components/home/ConsoleStage";
 import EducationShowcase from "@/components/home/EducationShowcase";
+import HeroNetwork from "@/components/home/HeroNetwork";
 import MiseShowcase from "@/components/home/MiseShowcase";
 import PlatformConsole from "@/components/home/PlatformConsole";
 import TeamStrip from "@/components/home/TeamStrip";
@@ -11,13 +13,24 @@ import TrustedBy from "@/components/home/TrustedBy";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Section";
 import { allPeopleSchema, jsonLdGraph, organizationSchema, webPageSchema } from "@/lib/seo";
-import { site } from "@/lib/site";
+import { site, siteUrl } from "@/lib/site";
 
 const title = "Focus Realm | Software for Education and Hospitality";
 
 export const metadata: Metadata = {
   title: { absolute: title },
   description: site.shortDescription,
+  keywords: [
+    "Focus Realm",
+    "education software India",
+    "learning management platform for schools",
+    "AI learning platform for universities",
+    "interactive classroom board software",
+    "hotel operations software",
+    "hotel SOP software",
+    "Mise hotel",
+    "Focus Realm Education",
+  ],
   alternates: { canonical: "/" },
   openGraph: { title, description: site.shortDescription, url: "/", type: "website" },
   twitter: { card: "summary_large_image", title, description: site.shortDescription },
@@ -49,6 +62,42 @@ const trust = [
   ["Responsible disclosure", "A published security contact, answered by the founding team."],
 ] as const;
 
+
+/**
+ * Answer-ready FAQ. Rendered on the page and mirrored in FAQPage schema, so
+ * search and answer engines quote the same words a visitor reads.
+ */
+const faqs = [
+  {
+    q: "What is Focus Realm?",
+    a: `Focus Realm is a software company founded in ${site.founded} in India. It builds learning and operations platforms for institutions, with two product lines: Focus Realm Education for schools, colleges and universities, and Mise for hotels.`,
+  },
+  {
+    q: "What products does Focus Realm make?",
+    a: "Focus Realm Education is an AI-driven, gamified learning platform for schools, colleges and universities, built to work with interactive classroom boards. Mise is the service execution platform for hotels: standard operating procedures run as timed tasks on staff phones, with photo evidence and an audit-ready service record.",
+  },
+  {
+    q: "What does Focus Realm Education include?",
+    a: "Three layers: a core academic hub (courses, assignments, grading, attendance and notices), optional modules (AI analytics, gamification, a parent portal, faculty development and timetabling), and an employability layer with certification courses and a skills-led digital résumé.",
+  },
+  {
+    q: "Is Mise a learning management system?",
+    a: "No. A learning management system records that someone completed training. Mise makes sure the work itself gets done on time and to standard, and records the evidence that it was.",
+  },
+  {
+    q: "Who founded Focus Realm?",
+    a: "Focus Realm was founded by Sehej Sharma (Founder & CEO), Ali Electricwala (Founder & COO) and Aditya Mishra (Founder & CTO).",
+  },
+  {
+    q: "How does Focus Realm protect institutional data?",
+    a: "The products run on Google Cloud and Firebase, with encryption in transit and at rest, role-based access, and a timestamped activity record. Personal data is handled under India's DPDP Act, 2023. Details are on the Focus Realm Trust centre at focusrealm.org/security.",
+  },
+  {
+    q: "Where does Focus Realm work?",
+    a: "Focus Realm works with schools, universities and hotels across India, the wider Asia region and the Middle East.",
+  },
+];
+
 function Kicker({ children, dark = false }: { children: React.ReactNode; dark?: boolean }) {
   return (
     <p className={`text-[0.85rem] font-semibold ${dark ? "text-[#a9c1ff]" : "text-brand"}`}>{children}</p>
@@ -65,6 +114,15 @@ export default function HomePage() {
             webPageSchema({ path: "/", name: title, description: site.shortDescription }),
             organizationSchema,
             ...allPeopleSchema(),
+            {
+              "@type": "FAQPage",
+              "@id": `${siteUrl}/#faq`,
+              mainEntity: faqs.map((f) => ({
+                "@type": "Question",
+                name: f.q,
+                acceptedAnswer: { "@type": "Answer", text: f.a },
+              })),
+            },
           ),
         }}
       />
@@ -76,6 +134,7 @@ export default function HomePage() {
           aria-hidden
           className="absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_70%_10%,rgba(42,91,215,0.35),transparent_70%)]"
         />
+        <HeroNetwork />
         <Container>
           <div className="max-w-3xl">
             <Reveal immediate>
@@ -114,7 +173,9 @@ export default function HomePage() {
           </div>
 
           <Reveal delay={250} immediate variant="scale" className="mt-16 sm:mt-20">
-            <PlatformConsole />
+            <ConsoleStage>
+              <PlatformConsole />
+            </ConsoleStage>
           </Reveal>
         </Container>
       </section>
@@ -206,7 +267,7 @@ export default function HomePage() {
         <div aria-hidden className="grid-lines absolute inset-0 -z-10" />
         <Container>
           <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
-            <Reveal>
+            <Reveal className="lg:sticky lg:top-32 lg:self-start">
               <Kicker dark>How we build</Kicker>
               <h2 className="mt-3 text-[clamp(2rem,3.6vw,2.8rem)] leading-[1.08] font-semibold tracking-[-0.03em] text-white">
                 Strategic minimalism, engineered for scale.
@@ -252,6 +313,36 @@ export default function HomePage() {
               </Reveal>
             ))}
           </ul>
+        </Container>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="border-t border-line bg-white py-20 sm:py-28">
+        <Container>
+          <div className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
+            <Reveal>
+              <Kicker>FAQ</Kicker>
+              <h2 className="mt-3 text-[clamp(2rem,3.6vw,2.8rem)] leading-[1.08] font-semibold tracking-[-0.03em] text-paper">
+                Questions institutions ask us first.
+              </h2>
+              <p className="mt-5 text-[1rem] leading-relaxed text-muted">
+                Anything else, <Link href="/contact" className="font-medium text-brand underline underline-offset-4">ask the founders directly</Link>.
+              </p>
+            </Reveal>
+            <div className="divide-y divide-line border-y border-line">
+              {faqs.map((f) => (
+                <details key={f.q} className="group py-5">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-[1.05rem] font-semibold text-paper [&::-webkit-details-marker]:hidden">
+                    <h3>{f.q}</h3>
+                    <span aria-hidden className="flex size-7 shrink-0 items-center justify-center rounded-md border border-line text-brand transition-transform duration-300 group-open:rotate-45">
+                      +
+                    </span>
+                  </summary>
+                  <p className="mt-3 max-w-3xl text-[0.98rem] leading-relaxed text-muted">{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
         </Container>
       </section>
 

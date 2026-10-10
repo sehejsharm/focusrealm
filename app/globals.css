@@ -198,8 +198,12 @@
   --header-h: 4.5rem;
 }
 
-* {
-  border-color: var(--color-line);
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-line);
+  }
 }
 
 html {
@@ -651,4 +655,35 @@ p {
 @media (prefers-reduced-motion: reduce) {
   .anim-draw { animation: none; stroke-dashoffset: 0; }
   .anim-row, .anim-flow { animation: none; }
+}
+
+@keyframes pulse-down {
+  0% { top: -4px; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { top: calc(100% - 2px); opacity: 0; }
+}
+.anim-pulse-down { animation: pulse-down 1.8s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .anim-pulse-down { animation: none; opacity: 0; }
+}
+
+/* Hero console: a light beam that runs around the frame. */
+.beam-border {
+  padding: 1px;
+  background: conic-gradient(from var(--angle), transparent 0 70%, rgba(127, 166, 255, 0.9) 82%, rgba(255, 255, 255, 0.9) 86%, transparent 92%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation: border-spin 6s linear infinite;
+  z-index: 2;
+}
+@keyframes toast-in {
+  0% { opacity: 0; transform: translate3d(0, 14px, 0) scale(0.96); }
+  12%, 82% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: translate3d(0, -10px, 0); }
+}
+.toast-in { animation: toast-in 3.2s var(--ease-out-expo) both; }
+@media (prefers-reduced-motion: reduce) {
+  .beam-border, .toast-in { animation: none; }
 }
