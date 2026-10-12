@@ -1,5 +1,10 @@
 import type { StaticImageData } from "next/image";
 
+import clarksLogo from "@/assets/clients/clarks.png";
+import davJaipurLogo from "@/assets/clients/dav-jaipur.png";
+import rechargaLogo from "@/assets/clients/recharga.png";
+import renuMehraLogo from "@/assets/clients/renu-mehra.png";
+import twokeyLogo from "@/assets/clients/twokey.png";
 import authorCreateStandard from "@/assets/platform/author-create-standard.jpg";
 import authorFeedbackInbox from "@/assets/platform/author-feedback-inbox.jpg";
 import authorPilotFoundation from "@/assets/platform/author-pilot-foundation.jpg";
@@ -678,11 +683,12 @@ export const clients: Client[] = [
     name: "Clarks Amer",
     segment: "Hotel chains",
     note: "Hotel & Brij Convention Centre",
+    logo: clarksLogo,
   },
-  { name: "Renu Mehra's", segment: "Corporate trainers", note: "'ALL' of finesse" },
-  { name: "D.A.V. Sr. Sec. School", segment: "Reputed schools", note: "Jaipur" },
-  { name: "Recharga", segment: "Fast-growing startups" },
-  { name: "TwoKey", segment: "Premium SaaS teams" },
+  { name: "Renu Mehra's", segment: "Corporate trainers", note: "'ALL' of finesse", logo: renuMehraLogo },
+  { name: "D.A.V. Sr. Sec. School", segment: "Reputed schools", note: "Jaipur", logo: davJaipurLogo },
+  { name: "Recharga", segment: "Fast-growing startups", logo: rechargaLogo },
+  { name: "TwoKey", segment: "Premium SaaS teams", logo: twokeyLogo },
 ];
 
 /**

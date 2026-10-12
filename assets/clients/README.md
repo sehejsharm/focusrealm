@@ -1,30 +1,26 @@
 # Client logos
 
-Drop logo files here, then import them in `lib/content.ts` and set each one as
-that client's `logo`.
+Logos for the trusted-by strip on the home page
+(`components/home/TrustedBy.tsx`). Each file is imported in `lib/content.ts`
+and set as that client's `logo`.
 
-| Suggested file | Client | Segment |
+| File | Client | Segment |
 |---|---|---|
-| `clarks-amer.png` | Clarks Amer — Hotel & Brij Convention Centre | Hotel chains |
+| `clarks.png` | Clarks Amer — Hotel & Brij Convention Centre | Hotel chains |
 | `renu-mehra.png` | Renu Mehra's 'ALL' of finesse | Corporate trainers |
 | `dav-jaipur.png` | D.A.V. Sr. Secondary School, Jaipur | Reputed schools |
 | `recharga.png` | Recharga | Fast-growing startups |
 | `twokey.png` | TwoKey | Premium SaaS teams |
-| `the-hosteller.png` | The Hosteller | Distributed properties |
+
+To add a client:
 
 ```ts
 // lib/content.ts
-import clarksAmer from "@/assets/clients/clarks-amer.png";
+import newClientLogo from "@/assets/clients/new-client.png";
 
-{ name: "Clarks Amer", segment: "Hotel chains", note: "Hotel & Brij Convention Centre", logo: clarksAmer },
+{ name: "New Client", segment: "Segment", logo: newClientLogo },
 ```
 
-**Specs:** transparent PNG or SVG, roughly 400px on the long edge, and light or
-white marks — the strip sits on a near-black background, so a logo locked to a
-white rectangle will show as a bright block. If only a dark-on-white version
-exists, ask the client for a reversed/mono version, or the wordmark fallback
-below usually looks better than a boxed logo.
-
-Until a file is added, `components/home/TrustedBy.tsx` renders the client's name
-as a wordmark tile. That still carries the name in the HTML for crawlers, so
-this is a design upgrade rather than a missing feature.
+**Specs:** transparent PNG or SVG, trimmed to the mark with no outer margin.
+The strip is white and shows each logo at up to 64px tall, so full-colour
+logos work. A client without a `logo` renders as its name alone.
