@@ -111,8 +111,8 @@ export const organizationSchema = {
   ],
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Pune",
-    addressRegion: "Maharashtra",
+    addressLocality: "Jaipur",
+    addressRegion: "Rajasthan",
     addressCountry: "IN",
   },
   founder: team
