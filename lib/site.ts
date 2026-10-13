@@ -52,7 +52,7 @@ export const site = {
     "Focus Realm is a software company building bespoke learning and operations platforms. It runs two product lines: Mise, the service execution platform for hotels, and the Focus Realm education platform for schools, colleges and universities.",
   /** Kept under 155 characters — this is the default meta description. */
   shortDescription:
-    "Focus Realm is a software company with two product lines: Mise for hotel operations, and an AI-driven learning platform for schools and universities.",
+    "Focus Realm builds education and hospitality software: Focus Realm Education for schools, colleges and universities, and Mise for hotels.",
   /**
    * One public address, one domain. Everything on the site — footer, contact
    * routes, demo form, JSON-LD contactPoint, the policy pages — reads from
