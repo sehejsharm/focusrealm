@@ -6,19 +6,20 @@ import TeamStrip from "@/components/home/TeamStrip";
 import { ArrowRight, ButtonLink } from "@/components/ui/Button";
 import PageHero from "@/components/ui/PageHero";
 import { Container, Rule, SectionHeading } from "@/components/ui/Section";
-import { breadcrumbSchema, jsonLdGraph, organizationSchema, webPageSchema } from "@/lib/seo";
+import { breadcrumbSchema, jsonLdGraph, organizationSchema, webPageSchema, shareImage } from "@/lib/seo";
 import { site } from "@/lib/site";
 
-const title = "About Focus Realm";
+// The template appends "· Focus Realm", so the brand is not repeated here.
+const title = "About Us";
 const description =
-  "Focus Realm is a software company building learning and operations platforms: Mise for hotels, and an AI-driven learning platform for schools and universities.";
+  "Focus Realm is an Indian software company with two products: Mise, for hotel operations, and an AI learning platform for schools and universities.";
 
 export const metadata: Metadata = {
   title,
   description,
   keywords: ["about Focus Realm", "Focus Realm software company", "Focus Realm Mise", "Focus Realm education"],
   alternates: { canonical: "/about" },
-  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/about", type: "website" },
+  openGraph: { title: `About ${site.name}`, description, url: "/about", type: "website", images: [shareImage] },
   twitter: { card: "summary_large_image", description },
 };
 

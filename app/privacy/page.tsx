@@ -2,17 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import LegalLayout, { type LegalSection } from "@/components/legal/LegalLayout";
-import { breadcrumbSchema, jsonLdGraph, webPageSchema } from "@/lib/seo";
+import { breadcrumbSchema, jsonLdGraph, webPageSchema, shareImage } from "@/lib/seo";
 import { legal, site } from "@/lib/site";
 
 const title = "Privacy Policy";
-const description = `How ${site.name} collects, uses, stores and protects personal data across this website and the Focus Realm service execution platform, and the rights you have over that data.`;
+const description = `How ${site.name} collects, uses and protects personal data across this website, Mise and Focus Realm Education, and the rights you have over it.`;
 
 export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: "/privacy" },
-  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/privacy", type: "website" },
+  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/privacy", type: "website", images: [shareImage] },
+  twitter: { card: "summary_large_image", title: `${title} · ${site.shortName}`, description },
   robots: { index: true, follow: true },
 };
 
@@ -24,7 +25,8 @@ const sections: LegalSection[] = [
       <>
         <p>
           {legal.entity} (&ldquo;Focus Realm&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;) operates this website
-          and the Focus Realm service execution platform for hotel operations.
+          and its products: Mise, the service execution platform for hotels, and Focus Realm Education, the
+          learning platform for schools, colleges and universities.
         </p>
         <p>
           For data submitted through this website — a demo request, a contact message — we are the{" "}

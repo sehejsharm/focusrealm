@@ -5,18 +5,18 @@ import Reveal from "@/components/fx/Reveal";
 import { ButtonLink, ArrowRight } from "@/components/ui/Button";
 import PageHero from "@/components/ui/PageHero";
 import { Container } from "@/components/ui/Section";
-import { breadcrumbSchema, jsonLdGraph, organizationSchema, webPageSchema } from "@/lib/seo";
+import { breadcrumbSchema, jsonLdGraph, organizationSchema, webPageSchema, shareImage } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 const title = "Security and Trust";
 const description =
-  "How Focus Realm protects institutional data across Focus Realm Education and Mise: encryption, access control, activity records, data protection and responsible disclosure.";
+  "How Focus Realm protects data in Mise and Focus Realm Education: encryption, role-based access, activity records, DPDP Act compliance and disclosure.";
 
 export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: "/security" },
-  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/security", type: "website" },
+  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/security", type: "website", images: [shareImage] },
   twitter: { card: "summary_large_image", description },
 };
 

@@ -62,6 +62,17 @@ const educationId = `${siteUrl}/#education`;
  * human. Always go through this — a reference that does not match the node's
  * own `@id` silently creates a second, empty entity.
  */
+/**
+ * The site-wide share card. A page that sets its own `openGraph` replaces the
+ * root one wholesale, image included, so every page passes this back in.
+ */
+export const shareImage = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: "Focus Realm — software for education and hospitality",
+};
+
 export function personId(slug: string) {
   return team.find((entry) => entry.slug === slug)?.schema?.id ?? `${siteUrl}/team/${slug}#person`;
 }
@@ -80,8 +91,12 @@ export const organizationSchema = {
   logo: {
     "@type": "ImageObject",
     "@id": `${siteUrl}/#logo`,
-    url: absoluteUrl("/logo.svg"),
-    contentUrl: absoluteUrl("/logo.svg"),
+    // A raster logo: Google's logo guidelines want at least 112×112 in a
+    // format Google Images indexes, and PNG is the safe choice.
+    url: absoluteUrl("/icon-512.png"),
+    contentUrl: absoluteUrl("/icon-512.png"),
+    width: 512,
+    height: 512,
     caption: `${site.name} logo`,
   },
   image: absoluteUrl("/opengraph-image"),
@@ -105,7 +120,7 @@ export const organizationSchema = {
     .map((person) => ({ "@id": personId(person.slug) })),
   employee: team.map((person) => ({ "@id": personId(person.slug) })),
   brand: [
-    { "@type": "Brand", name: site.shortName, logo: absoluteUrl("/logo.svg") },
+    { "@type": "Brand", name: site.shortName, logo: absoluteUrl("/icon-512.png") },
     { "@type": "Brand", name: "Mise", url: "https://misehotel.com" },
     { "@type": "Brand", name: "Focus Realm Education", url: "https://focus-realm.com" },
   ],

@@ -8,7 +8,7 @@ import Avatar from "@/components/ui/Avatar";
 import PageHero from "@/components/ui/PageHero";
 import { Container, Rule, SectionHeading } from "@/components/ui/Section";
 import { advisors, team } from "@/lib/content";
-import { allAdvisorsSchema, breadcrumbSchema, jsonLdGraph, personSchema, webPageSchema } from "@/lib/seo";
+import { allAdvisorsSchema, breadcrumbSchema, jsonLdGraph, personSchema, webPageSchema, shareImage } from "@/lib/seo";
 import { advisorPhoto } from "@/lib/team-photos";
 import { site, siteUrl } from "@/lib/site";
 
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     "Renu Mehra",
   ],
   alternates: { canonical: "/team" },
-  openGraph: { title: `${pageName} · ${site.shortName}`, description: ogDescription, url: "/team", type: "website" },
+  openGraph: { title: pageName, description: ogDescription, url: "/team", type: "website", images: [shareImage] },
   twitter: { card: "summary_large_image", description: ogDescription },
 };
 

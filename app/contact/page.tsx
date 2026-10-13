@@ -7,10 +7,11 @@ import SpotlightCard from "@/components/fx/SpotlightCard";
 import PageHero from "@/components/ui/PageHero";
 import { Container, Eyebrow, Rule } from "@/components/ui/Section";
 import { team } from "@/lib/content";
-import { breadcrumbSchema, jsonLdGraph, organizationSchema, webPageSchema } from "@/lib/seo";
+import { breadcrumbSchema, jsonLdGraph, organizationSchema, webPageSchema, shareImage } from "@/lib/seo";
 import { site } from "@/lib/site";
 
-const title = "Contact Focus Realm";
+// The template appends "· Focus Realm", so the brand is not repeated here.
+const title = "Contact Us";
 const description =
   "Talk to the founders of Focus Realm about Mise for hotels, the education platform, partnerships or press. One inbox, answered within a working day.";
 const ogDescription =
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
   description,
   keywords: ["contact Focus Realm", "Focus Realm contact", "Mise enquiry", "Focus Realm education enquiry"],
   alternates: { canonical: "/contact" },
-  openGraph: { title: `${title} · ${site.shortName}`, description: ogDescription, url: "/contact", type: "website" },
+  openGraph: { title: `Contact ${site.name}`, description: ogDescription, url: "/contact", type: "website", images: [shareImage] },
   twitter: { card: "summary_large_image", description: ogDescription },
 };
 

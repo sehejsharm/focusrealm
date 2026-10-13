@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import LegalLayout, { type LegalSection } from "@/components/legal/LegalLayout";
-import { breadcrumbSchema, jsonLdGraph, webPageSchema } from "@/lib/seo";
+import { breadcrumbSchema, jsonLdGraph, webPageSchema, shareImage } from "@/lib/seo";
 import { site } from "@/lib/site";
 
 const title = "Cookie Policy";
@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   title,
   description,
   alternates: { canonical: "/cookies" },
-  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/cookies", type: "website" },
+  openGraph: { title: `${title} · ${site.shortName}`, description, url: "/cookies", type: "website", images: [shareImage] },
+  twitter: { card: "summary_large_image", title: `${title} · ${site.shortName}`, description },
 };
 
 const sections: LegalSection[] = [
